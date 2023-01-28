@@ -76,4 +76,23 @@ public class ArmazenamentoTest {
 				    + "{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
 					+ "{\"tipo\":\"estrela\",\"pontos\":9,\"usuario\":\"guerra\"}]", dados);
 	}
+	@Test
+	public void armazenaPontuacoesDiferentesTipos() {
+		Armazenamento a = new Armazenamento();
+		a.guardarPontos("guerra", 10, "estrela");
+		a.guardarPontos("guerra", 5, "estrela");
+		a.guardarPontos("guerra", 1, "curtida");
+		a.guardarPontos("guerra", 9, "favorito");
+		String dados = "";
+		try {
+			dados = lerDadosBrutosArmazenamento();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
+					+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"guerra\"},"
+				    + "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"guerra\"},"
+					+ "{\"tipo\":\"favorito\",\"pontos\":9,\"usuario\":\"guerra\"}]", dados);
+	}
 }
