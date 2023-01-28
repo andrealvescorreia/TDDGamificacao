@@ -7,7 +7,7 @@ import org.json.simple.JSONArray;
 
 public class Armazenamento {
 	public static final String CAMINHO_ARQUIVO = "saida.json";
-	private JSONArray dados =  new JSONArray();
+	private JSONArray dados =  new JSONArray();// cache dos dados que também ficam no arquivo
 	
 	@SuppressWarnings("unchecked")
 	public void guardarPontos(String usuario, int pontos, String tipo) {
