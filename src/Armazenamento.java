@@ -29,4 +29,15 @@ public class Armazenamento {
 		}
 	}
 
+	public int recuperarPontos(String usuario, String tipo) {
+		int pontuacaoTotal = 0;
+		for (int i = 0; i < dados.size(); i++) {
+			JSONObject pontuacao = (JSONObject) dados.get(i);
+			if(pontuacao.get("usuario") == usuario && pontuacao.get("tipo") == tipo) {
+				pontuacaoTotal += (int) pontuacao.get("pontos");
+			}
+		}
+		return pontuacaoTotal;
+	}
+
 }

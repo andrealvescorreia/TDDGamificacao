@@ -113,5 +113,28 @@ public class ArmazenamentoTest {
 				+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"marco\"},"
 				+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"tadeu\"}]", lerDadosBrutosArmazenamento());
 	}
-
+	
+	@Test
+	public void recuperaPontuacaoSimples() {
+		armazenamento.guardarPontos("guerra", 10, "estrela");
+		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
+	}
+	
+	@Test
+	public void recuperaPontuacaoTotal() {
+		armazenamento.guardarPontos("guerra", 10, "estrela");
+		armazenamento.guardarPontos("guerra", 4, "estrela");
+		armazenamento.guardarPontos("guerra", 7, "estrela");
+		assertEquals(21, armazenamento.recuperarPontos("guerra", "estrela"));
+	}
+	
+	@Test
+	public void recuperaPontuacaoDeTipoEspecifico() {
+		armazenamento.guardarPontos("guerra", 10, "estrela");
+		armazenamento.guardarPontos("guerra", 5, "estrela");
+		armazenamento.guardarPontos("guerra", 24, "comentario");
+		armazenamento.guardarPontos("guerra", 1, "comentario");
+		assertEquals(15, armazenamento.recuperarPontos("guerra", "estrela"));
+	}
+	
 }
