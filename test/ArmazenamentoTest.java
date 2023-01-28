@@ -2,8 +2,12 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 /*
  * A classe Armazenamento deve ser capaz de realizar as seguintes operações:
@@ -33,32 +37,48 @@ Independente da abordagem de armazenar no arquivo, você pode também guardar um
  */
 
 public class ArmazenamentoTest {
-	
-	public String lerDadosBrutosArmazenamento() throws FileNotFoundException {		
-		Scanner leitor = new Scanner(new File(Armazenamento.CAMINHO_ARQUIVO));
+
+	public String lerDadosBrutosArmazenamento() {
 		String dados = "";
-		while (leitor.hasNextLine()) {
-			dados += leitor.nextLine();
+		Scanner leitor;
+		try {
+			leitor = new Scanner(new File(Armazenamento.CAMINHO_ARQUIVO));
+			while (leitor.hasNextLine()) {
+				dados += leitor.nextLine();
+			}
+			leitor.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			fail();
 		}
-		leitor.close();
 		return dados;
+	}
+
+	@After
+	public void limparArmazenamento() {
+		try {
+			FileWriter fileWriter = new FileWriter(Armazenamento.CAMINHO_ARQUIVO);
+			fileWriter.write("");
+			fileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
 	}
 
 	@Test
 	public void armazenaPontuacao() {
 		Armazenamento a = new Armazenamento();
 		a.guardarPontos("guerra", 10, "estrela");
-		
+
 		String dados = "";
-		try {
-			dados = lerDadosBrutosArmazenamento();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			fail();
-		}
+
+		dados = lerDadosBrutosArmazenamento();
+
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"}]", dados);
 	}
-	
+
 	@Test
 	public void armazenaPontuacoes() {
 		Armazenamento a = new Armazenamento();
@@ -66,16 +86,14 @@ public class ArmazenamentoTest {
 		a.guardarPontos("guerra", 1, "estrela");
 		a.guardarPontos("guerra", 9, "estrela");
 		String dados = "";
-		try {
-			dados = lerDadosBrutosArmazenamento();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			fail();
-		}
+
+		dados = lerDadosBrutosArmazenamento();
+
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
-				    + "{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
-					+ "{\"tipo\":\"estrela\",\"pontos\":9,\"usuario\":\"guerra\"}]", dados);
+				+ "{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
+				+ "{\"tipo\":\"estrela\",\"pontos\":9,\"usuario\":\"guerra\"}]", dados);
 	}
+
 	@Test
 	public void armazenaPontuacoesDiferentesTipos() {
 		Armazenamento a = new Armazenamento();
@@ -84,17 +102,15 @@ public class ArmazenamentoTest {
 		a.guardarPontos("guerra", 1, "curtida");
 		a.guardarPontos("guerra", 9, "favorito");
 		String dados = "";
-		try {
-			dados = lerDadosBrutosArmazenamento();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			fail();
-		}
+
+		dados = lerDadosBrutosArmazenamento();
+
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
-					+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"guerra\"},"
-				    + "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"guerra\"},"
-					+ "{\"tipo\":\"favorito\",\"pontos\":9,\"usuario\":\"guerra\"}]", dados);
+				+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"guerra\"},"
+				+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"guerra\"},"
+				+ "{\"tipo\":\"favorito\",\"pontos\":9,\"usuario\":\"guerra\"}]", dados);
 	}
+
 	@Test
 	public void armazenaPontuacoesDiferentesUsuarios() {
 		Armazenamento a = new Armazenamento();
@@ -102,14 +118,11 @@ public class ArmazenamentoTest {
 		a.guardarPontos("marco", 5, "estrela");
 		a.guardarPontos("tadeu", 1, "curtida");
 		String dados = "";
-		try {
-			dados = lerDadosBrutosArmazenamento();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			fail();
-		}
+
+		dados = lerDadosBrutosArmazenamento();
+
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
-					+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"marco\"},"
-				    + "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"tadeu\"}]" , dados);
+				+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"marco\"},"
+				+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"tadeu\"}]", dados);
 	}
 }
