@@ -6,8 +6,8 @@ import org.json.simple.JSONArray;
 
 
 public class Armazenamento {
-	
 	public static final String CAMINHO_ARQUIVO = "saida.json";
+	private JSONArray dados =  new JSONArray();
 	
 	@SuppressWarnings("unchecked")
 	public void guardarPontos(String usuario, int pontos, String tipo) {
@@ -17,7 +17,7 @@ public class Armazenamento {
 		pontuacao.put("pontos", pontos);
 		pontuacao.put("usuario", usuario);
 		
-		JSONArray dados = new JSONArray();
+		
 		dados.add(pontuacao);
 		
 		try {

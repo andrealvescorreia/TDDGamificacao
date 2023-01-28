@@ -45,7 +45,7 @@ public class ArmazenamentoTest {
 	}
 
 	@Test
-	public void armazenaPontos() {
+	public void armazenaPontuacao() {
 		Armazenamento a = new Armazenamento();
 		a.guardarPontos("guerra", 10, "estrela");
 		
@@ -58,5 +58,22 @@ public class ArmazenamentoTest {
 		}
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"}]", dados);
 	}
-
+	
+	@Test
+	public void armazenaPontuacoes() {
+		Armazenamento a = new Armazenamento();
+		a.guardarPontos("guerra", 10, "estrela");
+		a.guardarPontos("guerra", 1, "estrela");
+		a.guardarPontos("guerra", 9, "estrela");
+		String dados = "";
+		try {
+			dados = lerDadosBrutosArmazenamento();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
+				    + "{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
+					+ "{\"tipo\":\"estrela\",\"pontos\":9,\"usuario\":\"guerra\"}]", dados);
+	}
 }
