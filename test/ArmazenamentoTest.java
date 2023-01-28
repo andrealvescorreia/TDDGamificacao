@@ -37,6 +37,7 @@ Independente da abordagem de armazenar no arquivo, você pode também guardar um
  */
 
 public class ArmazenamentoTest {
+	Armazenamento armazenamento;
 
 	public String lerDadosBrutosArmazenamento() {
 		String dados = "";
@@ -55,6 +56,11 @@ public class ArmazenamentoTest {
 		return dados;
 	}
 
+	@Before
+	public void criarArmazenamento() {
+		armazenamento = new Armazenamento();
+	}
+
 	@After
 	public void limparArmazenamento() {
 		try {
@@ -69,60 +75,49 @@ public class ArmazenamentoTest {
 
 	@Test
 	public void armazenaPontuacao() {
-		Armazenamento a = new Armazenamento();
-		a.guardarPontos("guerra", 10, "estrela");
-
-		String dados = "";
-
-		dados = lerDadosBrutosArmazenamento();
-
-		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"}]", dados);
+		armazenamento.guardarPontos("guerra", 10, "estrela");
+		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"}]", lerDadosBrutosArmazenamento());
 	}
 
 	@Test
 	public void armazenaPontuacoes() {
-		Armazenamento a = new Armazenamento();
-		a.guardarPontos("guerra", 10, "estrela");
-		a.guardarPontos("guerra", 1, "estrela");
-		a.guardarPontos("guerra", 9, "estrela");
-		String dados = "";
 
-		dados = lerDadosBrutosArmazenamento();
+		armazenamento.guardarPontos("guerra", 10, "estrela");
+		armazenamento.guardarPontos("guerra", 1, "estrela");
+		armazenamento.guardarPontos("guerra", 9, "estrela");
 
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
 				+ "{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
-				+ "{\"tipo\":\"estrela\",\"pontos\":9,\"usuario\":\"guerra\"}]", dados);
+				+ "{\"tipo\":\"estrela\",\"pontos\":9,\"usuario\":\"guerra\"}]", lerDadosBrutosArmazenamento());
 	}
 
 	@Test
 	public void armazenaPontuacoesDiferentesTipos() {
-		Armazenamento a = new Armazenamento();
-		a.guardarPontos("guerra", 10, "estrela");
-		a.guardarPontos("guerra", 5, "estrela");
-		a.guardarPontos("guerra", 1, "curtida");
-		a.guardarPontos("guerra", 9, "favorito");
-		String dados = "";
 
-		dados = lerDadosBrutosArmazenamento();
+		armazenamento.guardarPontos("guerra", 10, "estrela");
+		armazenamento.guardarPontos("guerra", 5, "estrela");
+		armazenamento.guardarPontos("guerra", 1, "curtida");
+		armazenamento.guardarPontos("guerra", 9, "favorito");
 
-		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
-				+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"guerra\"},"
-				+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"guerra\"},"
-				+ "{\"tipo\":\"favorito\",\"pontos\":9,\"usuario\":\"guerra\"}]", dados);
+		assertEquals(
+				"[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
+						+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"guerra\"},"
+						+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"guerra\"},"
+						+ "{\"tipo\":\"favorito\",\"pontos\":9,\"usuario\":\"guerra\"}]",
+				lerDadosBrutosArmazenamento());
+
 	}
 
 	@Test
 	public void armazenaPontuacoesDiferentesUsuarios() {
-		Armazenamento a = new Armazenamento();
-		a.guardarPontos("guerra", 10, "estrela");
-		a.guardarPontos("marco", 5, "estrela");
-		a.guardarPontos("tadeu", 1, "curtida");
-		String dados = "";
 
-		dados = lerDadosBrutosArmazenamento();
+		armazenamento.guardarPontos("guerra", 10, "estrela");
+		armazenamento.guardarPontos("marco", 5, "estrela");
+		armazenamento.guardarPontos("tadeu", 1, "curtida");
 
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
 				+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"marco\"},"
-				+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"tadeu\"}]", dados);
+				+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"tadeu\"}]", lerDadosBrutosArmazenamento());
 	}
+
 }
