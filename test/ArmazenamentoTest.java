@@ -38,17 +38,19 @@ Independente da abordagem de armazenar no arquivo, você pode também guardar um
 
 public class ArmazenamentoTest {
 	Armazenamento armazenamento;
-
+	
+	@Before
+	public void criarArmazenamento() {
+		armazenamento = new Armazenamento();
+	}
+	
 	public String lerDadosBrutosArmazenamento() {
 		String dados = "";
-		Scanner leitor;
 		try {
-			leitor = new Scanner(new File(Armazenamento.CAMINHO_ARQUIVO));
-			while (leitor.hasNextLine()) {
+			Scanner leitor = new Scanner(new File(Armazenamento.CAMINHO_ARQUIVO));
+			while (leitor.hasNextLine())
 				dados += leitor.nextLine();
-			}
 			leitor.close();
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			fail();
@@ -56,10 +58,6 @@ public class ArmazenamentoTest {
 		return dados;
 	}
 
-	@Before
-	public void criarArmazenamento() {
-		armazenamento = new Armazenamento();
-	}
 
 	@After
 	public void limparArmazenamento() {
@@ -81,7 +79,6 @@ public class ArmazenamentoTest {
 
 	@Test
 	public void armazenaPontuacoes() {
-
 		armazenamento.guardarPontos("guerra", 10, "estrela");
 		armazenamento.guardarPontos("guerra", 1, "estrela");
 		armazenamento.guardarPontos("guerra", 9, "estrela");
@@ -93,7 +90,6 @@ public class ArmazenamentoTest {
 
 	@Test
 	public void armazenaPontuacoesDiferentesTipos() {
-
 		armazenamento.guardarPontos("guerra", 10, "estrela");
 		armazenamento.guardarPontos("guerra", 5, "estrela");
 		armazenamento.guardarPontos("guerra", 1, "curtida");
@@ -105,12 +101,10 @@ public class ArmazenamentoTest {
 						+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"guerra\"},"
 						+ "{\"tipo\":\"favorito\",\"pontos\":9,\"usuario\":\"guerra\"}]",
 				lerDadosBrutosArmazenamento());
-
 	}
 
 	@Test
 	public void armazenaPontuacoesDiferentesUsuarios() {
-
 		armazenamento.guardarPontos("guerra", 10, "estrela");
 		armazenamento.guardarPontos("marco", 5, "estrela");
 		armazenamento.guardarPontos("tadeu", 1, "curtida");
