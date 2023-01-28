@@ -6,25 +6,24 @@ import org.json.simple.JSONArray;
 
 
 public class Armazenamento {
-
+	
+	public static final String CAMINHO_ARQUIVO = "saida.json";
+	
 	@SuppressWarnings("unchecked")
 	public void guardarPontos(String usuario, int pontos, String tipo) {
-		JSONObject jsonObject = new JSONObject();
-		JSONArray ja = new JSONArray();
+		JSONObject pontuacao = new JSONObject();
 		
+		pontuacao.put("tipo", tipo);
+		pontuacao.put("pontos", pontos);
+		pontuacao.put("usuario", usuario);
 		
-		jsonObject.put("tipo", tipo);
-		jsonObject.put("pontos", pontos);
-		jsonObject.put("usuario", usuario);
+		JSONArray dados = new JSONArray();
+		dados.add(pontuacao);
 		
-		
-		ja.add(jsonObject);
-		
-		FileWriter writeFile = null;
 		try {
-			writeFile = new FileWriter("saida.json");
-			writeFile.write(ja.toJSONString());
-			writeFile.close();
+			FileWriter fileWriter = new FileWriter(CAMINHO_ARQUIVO);
+			fileWriter.write(dados.toJSONString());
+			fileWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

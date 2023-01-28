@@ -33,28 +33,30 @@ Independente da abordagem de armazenar no arquivo, você pode também guardar um
  */
 
 public class ArmazenamentoTest {
+	
+	public String lerDadosBrutosArmazenamento() throws FileNotFoundException {		
+		Scanner leitor = new Scanner(new File(Armazenamento.CAMINHO_ARQUIVO));
+		String dados = "";
+		while (leitor.hasNextLine()) {
+			dados += leitor.nextLine();
+		}
+		leitor.close();
+		return dados;
+	}
 
 	@Test
 	public void armazenaPontos() {
 		Armazenamento a = new Armazenamento();
 		a.guardarPontos("guerra", 10, "estrela");
-
-		Scanner myReader = null;
+		
+		String dados = "";
 		try {
-			myReader = new Scanner(new File("saida.json"));
+			dados = lerDadosBrutosArmazenamento();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			fail();
 		}
-
-		String data = "";
-		while (myReader.hasNextLine()) {
-			data += myReader.nextLine();
-		}
-		myReader.close();
-		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"}]", data);
-
-		// assertEquals(10, a.recuperarPontos("guerra", "estrela"));
+		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"}]", dados);
 	}
 
 }
