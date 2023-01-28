@@ -137,4 +137,15 @@ public class ArmazenamentoTest {
 		assertEquals(15, armazenamento.recuperarPontos("guerra", "estrela"));
 	}
 	
+	@Test
+	public void recuperaPontuacaoDeTipoEUsuarioEspecifico() {
+		armazenamento.guardarPontos("guerra", 6, "estrela");
+		armazenamento.guardarPontos("guerra", 3, "comentario");
+		armazenamento.guardarPontos("marco", 24, "estrela");
+		armazenamento.guardarPontos("tadeu", 1, "comentario");
+		armazenamento.guardarPontos("marco", 5, "estrela");
+		armazenamento.guardarPontos("guerra", 4, "estrela");
+		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
+	}
+	
 }
