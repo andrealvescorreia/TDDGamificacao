@@ -41,6 +41,7 @@ public class ArmazenamentoTest {
 	
 	@Before
 	public void criarArmazenamento() {
+		limparArmazenamento();
 		armazenamento = new Armazenamento();
 	}
 	
@@ -58,7 +59,7 @@ public class ArmazenamentoTest {
 		return dados;
 	}
 
-
+	
 	@After
 	public void limparArmazenamento() {
 		try {
@@ -74,7 +75,7 @@ public class ArmazenamentoTest {
 	@Test
 	public void armazenaPontuacao() {
 		armazenamento.guardarPontos("guerra", 10, "estrela");
-		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"}]", lerDadosBrutosArmazenamento());
+		assertEquals("{\"dados\":[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"}]}", lerDadosBrutosArmazenamento());
 	}
 
 	@Test
@@ -83,9 +84,9 @@ public class ArmazenamentoTest {
 		armazenamento.guardarPontos("guerra", 1, "estrela");
 		armazenamento.guardarPontos("guerra", 9, "estrela");
 
-		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
+		assertEquals("{\"dados\":[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
 				+ "{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
-				+ "{\"tipo\":\"estrela\",\"pontos\":9,\"usuario\":\"guerra\"}]", lerDadosBrutosArmazenamento());
+				+ "{\"tipo\":\"estrela\",\"pontos\":9,\"usuario\":\"guerra\"}]}", lerDadosBrutosArmazenamento());
 	}
 
 	@Test
@@ -95,12 +96,10 @@ public class ArmazenamentoTest {
 		armazenamento.guardarPontos("guerra", 1, "curtida");
 		armazenamento.guardarPontos("guerra", 9, "favorito");
 
-		assertEquals(
-				"[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
-						+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"guerra\"},"
-						+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"guerra\"},"
-						+ "{\"tipo\":\"favorito\",\"pontos\":9,\"usuario\":\"guerra\"}]",
-				lerDadosBrutosArmazenamento());
+		assertEquals("{\"dados\":[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
+				+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"guerra\"},"
+				+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"guerra\"},"
+				+ "{\"tipo\":\"favorito\",\"pontos\":9,\"usuario\":\"guerra\"}]}", lerDadosBrutosArmazenamento());
 	}
 
 	@Test
@@ -109,9 +108,9 @@ public class ArmazenamentoTest {
 		armazenamento.guardarPontos("marco", 5, "estrela");
 		armazenamento.guardarPontos("tadeu", 1, "curtida");
 
-		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
+		assertEquals("{\"dados\":[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
 				+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"marco\"},"
-				+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"tadeu\"}]", lerDadosBrutosArmazenamento());
+				+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"tadeu\"}]}", lerDadosBrutosArmazenamento());
 	}
 	
 	@Test
@@ -147,5 +146,20 @@ public class ArmazenamentoTest {
 		armazenamento.guardarPontos("guerra", 4, "estrela");
 		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
 	}
+	
+	@Test
+	public void simularArmazenamentoCaiu() {
+		armazenamento.guardarPontos("guerra", 6, "estrela");
+		armazenamento.guardarPontos("guerra", 3, "comentario");
+		armazenamento.guardarPontos("marco", 24, "estrela");
+		armazenamento.guardarPontos("tadeu", 1, "comentario");
+		armazenamento.guardarPontos("marco", 5, "estrela");
+		armazenamento.guardarPontos("guerra", 4, "estrela");
+		
+		armazenamento = new Armazenamento();// limpa o cache, forçando que os dados sejam recuperados do arquivo.
+		
+		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
+	}
+	
 	
 }
