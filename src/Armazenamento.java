@@ -13,28 +13,21 @@ public class Armazenamento {
 	
 	public Armazenamento(){
 		// recupera dados salvos em arquivo (se houver algum)
-		
 		try {
 			JSONParser parser = new JSONParser();
 			dados = (JSONArray) parser.parse(new FileReader(CAMINHO_ARQUIVO));
-			
 		}
 		catch (Exception e){
-			System.out.println("deu ruim para parse");
-			e.printStackTrace();
 			criarArquivoLimpo();
 		}
-
-	
 	}
 	
 	
 	private void criarArquivoLimpo() {
 		try {
 			FileWriter fileWriter = new FileWriter(CAMINHO_ARQUIVO);
-			fileWriter.write((new JSONArray()).toJSONString());
+			fileWriter.write("");
 			fileWriter.close();
-			System.out.println("criado arquivo limpoASSSSSSSSSS");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -62,19 +55,14 @@ public class Armazenamento {
 	
 	public int recuperarPontos(String usuario, String tipo) {
 		int pontuacaoTotal = 0;
-		for (int i = 0; i < dados.size(); i++) {
-			
+		for (int i = 0; i < dados.size(); i++) {			
 			JSONObject pontuacao = (JSONObject) dados.get(i);
-
 			if(usuario.equals((String) pontuacao.get("usuario")) && tipo.equals((String) pontuacao.get("tipo"))) {
-				System.out.println(pontuacao.get("pontos"));
-				
 				if(pontuacao.get("pontos") instanceof Integer) {
 					pontuacaoTotal += (int) pontuacao.get("pontos");
 				} else {
 					pontuacaoTotal += Math.toIntExact((long) pontuacao.get("pontos"));
 				}
-				
 			}
 		}
 		return pontuacaoTotal;
