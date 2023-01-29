@@ -22,7 +22,7 @@ Retornar todos os usuários que já receberam algum tipo de ponto.
 Retornar todos os tipos de ponto que já foram registrados para algum usuário.
 
 Observação: os dados devem ser armazenados em um arquivo e como serão armazenados fica a critério do aprendiz. A seção "Formas de implementar o armazenamento em arquivo" dá algumas sugestões.
- 
+
 Os testes da classe Armazenamento devem ser feitos utilizando arquivos.
  
 É deixado livre a forma como os dados de pontuação do usuário serão armazenado em um arquivo, desde que os requisitos sejam cumpridos. 
@@ -48,16 +48,20 @@ public class ArmazenamentoTest {
 
 	@After
 	public void limparArquivoDeArmazenamento() {
+		escreverNoArquivoDeArmazenamento("");
+	}
+	
+	public void escreverNoArquivoDeArmazenamento(String conteudo) {
 		try {
 			FileWriter fileWriter = new FileWriter(Armazenamento.CAMINHO_ARQUIVO);
-			fileWriter.write("");
+			fileWriter.write(conteudo);
 			fileWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
 		}
 	}
-
+	
 	public String lerDadosBrutosArmazenamento() {
 		String dados = "";
 		try {
@@ -176,8 +180,6 @@ public class ArmazenamentoTest {
 	}
 	
 	
-	//Retornar todos os usuários que já receberam algum tipo de ponto.
-	
 	@Test
 	public void recuperaUmUsuario() {
 		ArrayList<String> usuariosEsperados = new ArrayList<String>();
@@ -185,11 +187,10 @@ public class ArmazenamentoTest {
 		armazenamento.guardarPontos("guerra", 1, "estrela");
 		
 		assertEquals(usuariosEsperados, armazenamento.recuperarUsuariosRegistrados());
-		
 	}
 	
 	@Test
-	public void recuperaVariosUsuario() {
+	public void recuperaVariosUsuarios() {
 		ArrayList<String> usuariosEsperados = new ArrayList<String>();
 		usuariosEsperados.add("guerra");
 		usuariosEsperados.add("maria");
@@ -201,5 +202,22 @@ public class ArmazenamentoTest {
 		
 		assertEquals(usuariosEsperados, armazenamento.recuperarUsuariosRegistrados());
 		
+	}
+	
+	@Test
+	public void simularArquivoInvalido() {
+		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
+		assertEquals("Esse Texto É Invalido!", lerDadosBrutosArmazenamento());
+		armazenamento = new Armazenamento();
+		armazenamento.guardarPontos("guerra", 1, "estrela");
+		armazenamento.guardarPontos("maria", 1, "comentario");
+		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
+		assertEquals("Esse Texto É Invalido!", lerDadosBrutosArmazenamento());
+		armazenamento.guardarPontos("guerra", 1, "favorito");
+		
+		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
+			    	+ "{\"tipo\":\"comentario\",\"pontos\":1,\"usuario\":\"maria\"},"
+			    	+ "{\"tipo\":\"favorito\",\"pontos\":1,\"usuario\":\"guerra\"}]"
+			    	, lerDadosBrutosArmazenamento());
 	}
 }
