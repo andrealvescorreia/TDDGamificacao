@@ -85,9 +85,19 @@ public class ArmazenamentoTest {
 	}
 
 	@Test
-	public void armazenaPontuacaoInvalida() {
+	public void armazenaPontuacaoPontosInvalidos() {
 		try {
 			armazenamento.guardarPontos("guerra", -1, "estrela");
+			fail();
+		} catch (PontuacaoInvalidaException e) {}
+		
+		assertEquals("", lerDadosBrutosArmazenamento());
+	}
+	
+	@Test
+	public void armazenaPontuacaoUsuarioInvalido() {
+		try {
+			armazenamento.guardarPontos("", 1, "estrela");
 			fail();
 		} catch (PontuacaoInvalidaException e) {}
 		

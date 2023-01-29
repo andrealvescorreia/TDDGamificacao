@@ -42,6 +42,10 @@ public class Armazenamento {
 			throw new PontuacaoInvalidaException("Pontos não podem ser inferiores a 1");
 		}
 		
+		if(usuario.equals("")) {
+			throw new PontuacaoInvalidaException("Usuário invalido (\"\") ");
+		}
+		
 		JSONObject pontuacao = new JSONObject();
 		
 		pontuacao.put("tipo", tipo);
