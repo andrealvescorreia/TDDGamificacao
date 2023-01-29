@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import excecoes.PontuacaoInvalidaException;
 
-public class ArmazenamentoTest {
+public class ArmazenamentoArquivoTest {
 	Armazenamento armazenamento;
 
 	@Before
