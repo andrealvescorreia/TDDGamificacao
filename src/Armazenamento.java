@@ -13,13 +13,16 @@ import org.json.simple.JSONArray;
 
 public class Armazenamento {
 	public static final String CAMINHO_ARQUIVO = "saida.json";
-	private JSONArray _dados = new JSONArray();// cache dos dados que também ficam no arquivo
-	//private ArrayList<Pontuacao> _pontuacoes = new ArrayList<Pontuacao>();
+	private ArrayList<Pontuacao> _cachePontuacoes = new ArrayList<Pontuacao>();// cache dos dados que também ficam no arquivo
 	public Armazenamento(){
 		// recupera dados salvos em arquivo (se houver algum)
 		try {
 			JSONParser parser = new JSONParser();
-			_dados = (JSONArray) parser.parse(new FileReader(CAMINHO_ARQUIVO));
+			JSONArray jsonPontuacoes = (JSONArray) parser.parse(new FileReader(CAMINHO_ARQUIVO));
+			for (int i = 0; i < jsonPontuacoes.size(); i++) {
+				Pontuacao pontuacao = new Pontuacao( (JSONObject)jsonPontuacoes.get(i) );
+				_cachePontuacoes.add(pontuacao);
+			}
 		}
 		catch (Exception e){
 			criarArquivoLimpo();
@@ -37,14 +40,17 @@ public class Armazenamento {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+
 	public void guardarPontuacao(String usuario, long pontos, String tipo) 
 			throws PontuacaoInvalidaException {
 		Pontuacao pontuacao = new Pontuacao(usuario, pontos, tipo);
-		_dados.add(pontuacao.toJSONObject());
+		_cachePontuacoes.add(pontuacao);
+		
+		JSONArray jsonPontuacoes = jsonCachePontuacoes();
+		
 		try {
 			FileWriter fileWriter = new FileWriter(CAMINHO_ARQUIVO);
-			fileWriter.write(_dados.toJSONString());
+			fileWriter.write(jsonPontuacoes.toJSONString());
 			fileWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -53,8 +59,8 @@ public class Armazenamento {
 
 	public long recuperarPontos(String usuario, String tipo) {
 		long totalPontosRecuperados = 0;
-		for (int i = 0; i < _dados.size(); i++) {
-			Pontuacao pontuacao = new Pontuacao( (JSONObject)_dados.get(i) );
+		for (int i = 0; i < _cachePontuacoes.size(); i++) {
+			Pontuacao pontuacao = _cachePontuacoes.get(i);
 			if(usuario.equals(pontuacao.getUsuario()) && tipo.equals(pontuacao.getTipo())) {
 				totalPontosRecuperados += pontuacao.getPontos();
 			}
@@ -64,8 +70,8 @@ public class Armazenamento {
 
 	public ArrayList<String> recuperarUsuariosRegistrados() {
 		ArrayList<String> usuarios = new ArrayList<String>();
-		for (int i = 0; i < _dados.size(); i++) {
-			Pontuacao pontuacao = new Pontuacao( (JSONObject)_dados.get(i) );
+		for (int i = 0; i < _cachePontuacoes.size(); i++) {
+			Pontuacao pontuacao = _cachePontuacoes.get(i);
 			String usuario = pontuacao.getUsuario();
 			if(usuarios.contains(usuario) == false) {
 				usuarios.add(usuario);
@@ -76,14 +82,22 @@ public class Armazenamento {
 
 	public ArrayList<String> recuperarTiposPontuacao(String usuario) {
 		ArrayList<String> tiposDePontuacaoDoUsuario = new ArrayList<>();
-		for (int i = 0; i < _dados.size(); i++) {
-			JSONObject pontuacao = (JSONObject) _dados.get(i);
-			String tipoDaPontuacao = (String)pontuacao.get("tipo");
-			String usuarioDaPontuacao = (String)pontuacao.get("usuario");
-			if(usuario.equals(usuarioDaPontuacao) && tiposDePontuacaoDoUsuario.contains(tipoDaPontuacao) == false) {
-				tiposDePontuacaoDoUsuario.add(tipoDaPontuacao);
-			}
+		for (int i = 0; i < _cachePontuacoes.size(); i++) {
+			Pontuacao pontuacao = _cachePontuacoes.get(i);
+			if(tiposDePontuacaoDoUsuario.contains(pontuacao.getTipo()))
+				continue;// (pula para a proxima iteracao do for loop)
+			if(usuario.equals(pontuacao.getUsuario()))
+				tiposDePontuacaoDoUsuario.add(pontuacao.getTipo());
 		}
 		return tiposDePontuacaoDoUsuario;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private JSONArray jsonCachePontuacoes() {
+		JSONArray jsonArrayPontuacoes = new JSONArray();
+		for (int i = 0; i < _cachePontuacoes.size(); i++) {
+			jsonArrayPontuacoes.add(_cachePontuacoes.get(i).toJSONObject());
+		}
+		return jsonArrayPontuacoes;
 	}
 }
