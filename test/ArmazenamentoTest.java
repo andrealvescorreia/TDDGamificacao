@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import org.junit.After;
@@ -246,6 +248,43 @@ public class ArmazenamentoTest {
 		ArrayList<String> tiposRecuperados = armazenamento.recuperarTiposPontuacao("guerra");
 		assertEquals(1, tiposRecuperados.size());
 		assertEquals("estrela", tiposRecuperados.get(0));
+	}
+	
+	@Test
+	public void recuperaVariosTiposDePontuacao() {
+		armazenamento.guardarPontos("guerra", 5, "estrela");
+		armazenamento.guardarPontos("guerra", 5, "estrela");
+		armazenamento.guardarPontos("guerra", 5, "comentario");
+		armazenamento.guardarPontos("guerra", 5, "moeda");
 		
+		ArrayList<String> tiposEsperados = new ArrayList<>(Arrays.asList("estrela", "comentario", "moeda"));
+
+		ArrayList<String> tiposRecuperados = armazenamento.recuperarTiposPontuacao("guerra");
+		assertEquals(tiposEsperados, tiposRecuperados);
+	}
+	
+	@Test
+	public void recuperaVariosTiposDePontuacaoUsuariosDiferentes() {
+		armazenamento.guardarPontos("guerra", 5, "estrela");
+		armazenamento.guardarPontos("guerra", 5, "estrela");
+		armazenamento.guardarPontos("guerra", 5, "comentario");
+		armazenamento.guardarPontos("guerra", 5, "moeda");
+		
+		armazenamento.guardarPontos("maria", 5, "curtida");
+		armazenamento.guardarPontos("tadeu", 5, "estrela");
+		armazenamento.guardarPontos("jose", 5, "moeda");
+		armazenamento.guardarPontos("jose", 5, "compartilhamento");
+		
+		ArrayList<String> tiposEsperadosGuerra = new ArrayList<>(Arrays.asList("estrela", "comentario", "moeda"));
+		ArrayList<String> tiposRecuperadosGuerra = armazenamento.recuperarTiposPontuacao("guerra");
+		assertEquals(tiposEsperadosGuerra, tiposRecuperadosGuerra);
+		
+		ArrayList<String> tiposEsperadosMaria = new ArrayList<>(Arrays.asList("curtida"));
+		ArrayList<String> tiposRecuperadosMaria = armazenamento.recuperarTiposPontuacao("maria");
+		assertEquals(tiposEsperadosMaria, tiposRecuperadosMaria);
+		
+		ArrayList<String> tiposEsperadosJose = new ArrayList<>(Arrays.asList("moeda", "compartilhamento"));
+		ArrayList<String> tiposRecuperadosJose = armazenamento.recuperarTiposPontuacao("jose");
+		assertEquals(tiposEsperadosJose, tiposRecuperadosJose);
 	}
 }

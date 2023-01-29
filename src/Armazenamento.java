@@ -83,9 +83,17 @@ public class Armazenamento {
 	}
 
 
-	public ArrayList<String> recuperarTiposPontuacao(String string) {
-		ArrayList<String> tiposRecuperados = new ArrayList<String>();
-		tiposRecuperados.add("estrela");
+	public ArrayList<String> recuperarTiposPontuacao(String usuario) {
+		ArrayList<String> tiposRecuperados = new ArrayList<>();
+		for (int i = 0; i < dados.size(); i++) {
+			JSONObject pontuacao = (JSONObject) dados.get(i);
+			String tipoPontuacao = (String)pontuacao.get("tipo");
+			String usuarioPontuacao = (String)pontuacao.get("usuario");
+			if(usuario.equals(usuarioPontuacao) && tiposRecuperados.contains(tipoPontuacao) == false) {
+				tiposRecuperados.add(tipoPontuacao);
+			}
+		}
+
 		return tiposRecuperados;
 	}
 
