@@ -120,8 +120,8 @@ public class Armazenamento {
 	public ArrayList<String> recuperarUsuariosRegistrados() {
 		ArrayList<String> usuarios = new ArrayList<String>();
 		for (int i = 0; i < dados.size(); i++) {
-			JSONObject pontuacao = (JSONObject) dados.get(i);
-			String usuario = (String) pontuacao.get("usuario");
+			Pontuacao pontuacao = new Pontuacao( (JSONObject)dados.get(i) );
+			String usuario = pontuacao.getUsuario();
 			if(usuarios.contains(usuario) == false) {
 				usuarios.add(usuario);
 			}
