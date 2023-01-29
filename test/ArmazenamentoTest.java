@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.junit.After;
@@ -173,5 +174,32 @@ public class ArmazenamentoTest {
 		assertEquals(3, armazenamento.recuperarPontos("guerra", "comentario"));
 		assertEquals(50, armazenamento.recuperarPontos("maria", "estrela"));
 	}
-
+	
+	
+	//Retornar todos os usuários que já receberam algum tipo de ponto.
+	
+	@Test
+	public void recuperaUmUsuario() {
+		ArrayList<String> usuariosEsperados = new ArrayList<String>();
+		usuariosEsperados.add("guerra");
+		armazenamento.guardarPontos("guerra", 1, "estrela");
+		
+		assertEquals(usuariosEsperados, armazenamento.recuperarUsuariosRegistrados());
+		
+	}
+	
+	@Test
+	public void recuperaVariosUsuario() {
+		ArrayList<String> usuariosEsperados = new ArrayList<String>();
+		usuariosEsperados.add("guerra");
+		usuariosEsperados.add("maria");
+		usuariosEsperados.add("jose");
+		armazenamento.guardarPontos("guerra", 1, "estrela");
+		armazenamento.guardarPontos("maria", 1, "comentario");
+		armazenamento.guardarPontos("jose", 1, "estrela");
+		armazenamento.guardarPontos("jose", 10, "curtida");
+		
+		assertEquals(usuariosEsperados, armazenamento.recuperarUsuariosRegistrados());
+		
+	}
 }

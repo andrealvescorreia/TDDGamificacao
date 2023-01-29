@@ -1,6 +1,8 @@
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
@@ -66,6 +68,19 @@ public class Armazenamento {
 			}
 		}
 		return pontuacaoTotal;
+	}
+
+
+	public ArrayList<String> recuperarUsuariosRegistrados() {
+		ArrayList<String> usuarios = new ArrayList<String>();
+		for (int i = 0; i < dados.size(); i++) {
+			JSONObject pontuacao = (JSONObject) dados.get(i);
+			String usuario = (String) pontuacao.get("usuario");
+			if(usuarios.contains(usuario) == false) {
+				usuarios.add(usuario);
+			}
+		}
+		return usuarios;
 	}
 
 }
