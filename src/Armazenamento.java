@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import excecoes.PontuacaoInvalidaException;
+
 import org.json.simple.JSONArray;
 
 
@@ -92,9 +95,7 @@ public class Armazenamento {
 	@SuppressWarnings("unchecked")
 	public void guardarPontuacao(String usuario, long pontos, String tipo) {
 		Pontuacao pontuacao = new Pontuacao(usuario, pontos, tipo);
-	
 		dados.add(pontuacao.toJSONObject());
-		
 		try {
 			FileWriter fileWriter = new FileWriter(CAMINHO_ARQUIVO);
 			fileWriter.write(dados.toJSONString());

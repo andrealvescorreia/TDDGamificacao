@@ -38,6 +38,8 @@ Independente da abordagem de armazenar no arquivo, você pode também guardar um
  *
  */
 
+import excecoes.PontuacaoInvalidaException;
+
 public class ArmazenamentoTest {
 	Armazenamento armazenamento;
 
