@@ -49,29 +49,26 @@ public class Armazenamento {
 			if(tipo.equals("")) 
 				throw new PontuacaoInvalidaException("Tipo inválido (\"\") ");
 			
-			this.setUsuario(usuario);
-			this.setPontos(pontos);
-			this.setTipo(tipo);
-		}
-		public String getUsuario() {
-			return usuario;
-		}
-		public void setUsuario(String usuario) {
 			this.usuario = usuario;
-		}
-		public long getPontos() {
-			return pontos;
-		}
-		public void setPontos(long pontos) {
 			this.pontos = pontos;
-		}
-		public String getTipo() {
-			return tipo;
-		}
-		public void setTipo(String tipo) {
 			this.tipo = tipo;
 		}
-		
+		Pontuacao(JSONObject json){
+			long pontos = (long) json.get("pontos");
+			String usuario = (String) json.get("usuario");
+			String tipo = (String) json.get("tipo");
+			
+			if(pontos < 1) 
+				throw new PontuacaoInvalidaException("Pontos não podem ser inferiores a 1");
+			if(usuario.equals("")) 
+				throw new PontuacaoInvalidaException("Usuário inválido (\"\") ");
+			if(tipo.equals("")) 
+				throw new PontuacaoInvalidaException("Tipo inválido (\"\") ");
+			
+			this.usuario = usuario;
+			this.pontos = pontos;
+			this.tipo = tipo;
+		}
 		@SuppressWarnings("unchecked")
 		public JSONObject toJSONObject() {
 			JSONObject jsonObj = new JSONObject();
@@ -79,6 +76,16 @@ public class Armazenamento {
 			jsonObj.put("pontos", pontos);
 			jsonObj.put("tipo", tipo);
 			return jsonObj;
+		}
+		
+		public String getUsuario() {
+			return this.usuario;
+		}
+		public String getTipo() {
+			return this.tipo;
+		}
+		public long getPontos() {
+			return this.pontos;
 		}
 	}
 	
@@ -100,12 +107,10 @@ public class Armazenamento {
 	
 	public long recuperarPontos(String usuario, String tipo) {
 		long totalPontosRecuperados = 0;
-		for (int i = 0; i < dados.size(); i++) {			
-			JSONObject pontuacao = (JSONObject) dados.get(i);
-			String tipoDaPontuacao = (String) pontuacao.get("tipo");
-			String usuarioDaPontuacao = (String) pontuacao.get("usuario");
-			if(usuario.equals(usuarioDaPontuacao) && tipo.equals(tipoDaPontuacao)) {
-				totalPontosRecuperados += (long) pontuacao.get("pontos");
+		for (int i = 0; i < dados.size(); i++) {
+			Pontuacao pontuacao = new Pontuacao( (JSONObject)dados.get(i) );
+			if(usuario.equals(pontuacao.getUsuario()) && tipo.equals(pontuacao.getTipo())) {
+				totalPontosRecuperados += pontuacao.getPontos();
 			}
 		}
 		return totalPontosRecuperados;
