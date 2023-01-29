@@ -154,7 +154,24 @@ public class ArmazenamentoTest {
 		armazenamento.guardarPontos("guerra", 4, "estrela");
 		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
 	}
-
+	
+	// recupera pontuacao de usuario e/ou tipo inexistente 
+	
+	@Test
+	public void recuperaPontuacaoDeUsuarioInexistente() {
+		assertEquals(0, armazenamento.recuperarPontos("xablau", "estrela"));
+	}
+	
+	@Test
+	public void recuperaPontuacaoDeTipoInexistenteParaUsuario() {
+		armazenamento.guardarPontos("guerra", 1, "estrela");
+		armazenamento.guardarPontos("guerra", 1, "comentario");
+		
+		assertEquals(0, armazenamento.recuperarPontos("guerra", "moeda"));
+		armazenamento.guardarPontos("maria", 1, "moeda");
+		assertEquals(0, armazenamento.recuperarPontos("guerra", "moeda"));
+	}
+	
 	@Test
 	public void simularArmazenamentoCaiu() {
 		armazenamento.guardarPontos("guerra", 6, "estrela");
@@ -167,7 +184,9 @@ public class ArmazenamentoTest {
 		// aqui ocorre a simulação:
 		// limpa o cache, forçando que os dados sejam recuperados do arquivo.
 		armazenamento = new Armazenamento();
-
+		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
+		
+		
 		armazenamento.guardarPontos("guerra", 5, "estrela");
 		armazenamento.guardarPontos("tadeu", 2, "comentario");
 		armazenamento.guardarPontos("maria", 50, "estrela");
