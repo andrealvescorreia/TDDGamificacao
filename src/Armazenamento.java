@@ -13,6 +13,7 @@ public class Armazenamento {
 	private JSONArray dados = new JSONArray();// cache dos dados que também ficam no arquivo
 	
 	
+	
 	public Armazenamento(){
 		// recupera dados salvos em arquivo (se houver algum)
 		try {
@@ -36,7 +37,7 @@ public class Armazenamento {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void guardarPontos(String usuario, int pontos, String tipo) {
+	public void guardarPontos(String usuario, long pontos, String tipo) {
 		JSONObject pontuacao = new JSONObject();
 		
 		pontuacao.put("tipo", tipo);
@@ -55,19 +56,17 @@ public class Armazenamento {
 	}
 
 	
-	public int recuperarPontos(String usuario, String tipo) {
-		int pontuacaoTotal = 0;
+	public long recuperarPontos(String usuario, String tipo) {
+		long totalPontosRecuperados = 0;
 		for (int i = 0; i < dados.size(); i++) {			
 			JSONObject pontuacao = (JSONObject) dados.get(i);
-			if(usuario.equals((String) pontuacao.get("usuario")) && tipo.equals((String) pontuacao.get("tipo"))) {
-				if(pontuacao.get("pontos") instanceof Integer) {
-					pontuacaoTotal += (int) pontuacao.get("pontos");
-				} else {
-					pontuacaoTotal += Math.toIntExact((long) pontuacao.get("pontos"));
-				}
+			String tipoDaPontuacao = (String) pontuacao.get("tipo");
+			String usuarioDaPontuacao = (String) pontuacao.get("usuario");
+			if(usuario.equals(usuarioDaPontuacao) && tipo.equals(tipoDaPontuacao)) {
+				totalPontosRecuperados += (long) pontuacao.get("pontos");
 			}
 		}
-		return pontuacaoTotal;
+		return totalPontosRecuperados;
 	}
 
 
