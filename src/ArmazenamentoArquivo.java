@@ -40,7 +40,7 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	}
 	
 	
-
+	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) 
 			throws PontuacaoInvalidaException {
 		Pontuacao pontuacao = new Pontuacao(usuario, pontos, tipo);
@@ -68,6 +68,7 @@ public class ArmazenamentoArquivo implements Armazenamento {
 		return jsonArrayPontuacoes;
 	}
 	
+	@Override
 	public long recuperarPontos(String usuario, String tipo) {
 		long totalPontosRecuperados = 0;
 		for (int i = 0; i < _cachePontuacoes.size(); i++) {
@@ -78,7 +79,8 @@ public class ArmazenamentoArquivo implements Armazenamento {
 		}
 		return totalPontosRecuperados;
 	}
-
+	
+	@Override
 	public ArrayList<String> recuperarUsuariosRegistrados() {
 		ArrayList<String> usuarios = new ArrayList<String>();
 		for (int i = 0; i < _cachePontuacoes.size(); i++) {
@@ -89,7 +91,8 @@ public class ArmazenamentoArquivo implements Armazenamento {
 		}
 		return usuarios;
 	}
-
+	
+	@Override
 	public ArrayList<String> recuperarTiposPontuacao(String usuario) {
 		ArrayList<String> tiposDePontuacaoDoUsuario = new ArrayList<>();
 		for (int i = 0; i < _cachePontuacoes.size(); i++) {
