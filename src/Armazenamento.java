@@ -73,9 +73,8 @@ public class Armazenamento {
 		for (int i = 0; i < _cachePontuacoes.size(); i++) {
 			Pontuacao pontuacao = _cachePontuacoes.get(i);
 			String usuario = pontuacao.getUsuario();
-			if(usuarios.contains(usuario) == false) {
-				usuarios.add(usuario);
-			}
+			if(usuarios.contains(usuario)) continue;
+			usuarios.add(usuario);
 		}
 		return usuarios;
 	}
@@ -84,8 +83,8 @@ public class Armazenamento {
 		ArrayList<String> tiposDePontuacaoDoUsuario = new ArrayList<>();
 		for (int i = 0; i < _cachePontuacoes.size(); i++) {
 			Pontuacao pontuacao = _cachePontuacoes.get(i);
-			if(tiposDePontuacaoDoUsuario.contains(pontuacao.getTipo()))
-				continue;// (pula para a proxima iteracao do for loop)
+			if(tiposDePontuacaoDoUsuario.contains(pontuacao.getTipo())) 
+				continue;
 			if(usuario.equals(pontuacao.getUsuario()))
 				tiposDePontuacaoDoUsuario.add(pontuacao.getTipo());
 		}
