@@ -79,7 +79,7 @@ public class ArmazenamentoTest {
 
 	@Test
 	public void armazenaPontuacao() {
-		armazenamento.guardarPontos("guerra", 10, "estrela");
+		armazenamento.guardarPontuacao("guerra", 10, "estrela");
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"}]"
 					, lerDadosBrutosArmazenamento());
 	}
@@ -87,7 +87,7 @@ public class ArmazenamentoTest {
 	@Test
 	public void armazenaPontuacaoPontosInvalidos() {
 		try {
-			armazenamento.guardarPontos("guerra", -1, "estrela");
+			armazenamento.guardarPontuacao("guerra", -1, "estrela");
 			fail();
 		} catch (PontuacaoInvalidaException e) {}
 		
@@ -97,7 +97,17 @@ public class ArmazenamentoTest {
 	@Test
 	public void armazenaPontuacaoUsuarioInvalido() {
 		try {
-			armazenamento.guardarPontos("", 1, "estrela");
+			armazenamento.guardarPontuacao("", 1, "estrela");
+			fail();
+		} catch (PontuacaoInvalidaException e) {}
+		
+		assertEquals("", lerDadosBrutosArmazenamento());
+	}
+	
+	@Test
+	public void armazenaPontuacaoTipoInvalido() {
+		try {
+			armazenamento.guardarPontuacao("guerra", 1, "");
 			fail();
 		} catch (PontuacaoInvalidaException e) {}
 		
@@ -106,9 +116,9 @@ public class ArmazenamentoTest {
 	
 	@Test
 	public void armazenaPontuacoes() {
-		armazenamento.guardarPontos("guerra", 10, "estrela");
-		armazenamento.guardarPontos("guerra", 1, "estrela");
-		armazenamento.guardarPontos("guerra", 9, "estrela");
+		armazenamento.guardarPontuacao("guerra", 10, "estrela");
+		armazenamento.guardarPontuacao("guerra", 1, "estrela");
+		armazenamento.guardarPontuacao("guerra", 9, "estrela");
 
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
 				    + "{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
@@ -118,10 +128,10 @@ public class ArmazenamentoTest {
 
 	@Test
 	public void armazenaPontuacoesDiferentesTipos() {
-		armazenamento.guardarPontos("guerra", 10, "estrela");
-		armazenamento.guardarPontos("guerra", 5, "estrela");
-		armazenamento.guardarPontos("guerra", 1, "curtida");
-		armazenamento.guardarPontos("guerra", 9, "favorito");
+		armazenamento.guardarPontuacao("guerra", 10, "estrela");
+		armazenamento.guardarPontuacao("guerra", 5, "estrela");
+		armazenamento.guardarPontuacao("guerra", 1, "curtida");
+		armazenamento.guardarPontuacao("guerra", 9, "favorito");
 
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
 					+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"guerra\"},"
@@ -132,9 +142,9 @@ public class ArmazenamentoTest {
 
 	@Test
 	public void armazenaPontuacoesDiferentesUsuarios() {
-		armazenamento.guardarPontos("guerra", 10, "estrela");
-		armazenamento.guardarPontos("marco", 5, "estrela");
-		armazenamento.guardarPontos("tadeu", 1, "curtida");
+		armazenamento.guardarPontuacao("guerra", 10, "estrela");
+		armazenamento.guardarPontuacao("marco", 5, "estrela");
+		armazenamento.guardarPontuacao("tadeu", 1, "curtida");
 
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
 					+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"marco\"},"
@@ -144,35 +154,35 @@ public class ArmazenamentoTest {
 
 	@Test
 	public void recuperaPontuacaoSimples() {
-		armazenamento.guardarPontos("guerra", 10, "estrela");
+		armazenamento.guardarPontuacao("guerra", 10, "estrela");
 		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
 	}
 
 	@Test
 	public void recuperaPontuacaoTotal() {
-		armazenamento.guardarPontos("guerra", 10, "estrela");
-		armazenamento.guardarPontos("guerra", 4, "estrela");
-		armazenamento.guardarPontos("guerra", 7, "estrela");
+		armazenamento.guardarPontuacao("guerra", 10, "estrela");
+		armazenamento.guardarPontuacao("guerra", 4, "estrela");
+		armazenamento.guardarPontuacao("guerra", 7, "estrela");
 		assertEquals(21, armazenamento.recuperarPontos("guerra", "estrela"));
 	}
 
 	@Test
 	public void recuperaPontuacaoDeTipoEspecifico() {
-		armazenamento.guardarPontos("guerra", 10, "estrela");
-		armazenamento.guardarPontos("guerra", 5, "estrela");
-		armazenamento.guardarPontos("guerra", 24, "comentario");
-		armazenamento.guardarPontos("guerra", 1, "comentario");
+		armazenamento.guardarPontuacao("guerra", 10, "estrela");
+		armazenamento.guardarPontuacao("guerra", 5, "estrela");
+		armazenamento.guardarPontuacao("guerra", 24, "comentario");
+		armazenamento.guardarPontuacao("guerra", 1, "comentario");
 		assertEquals(15, armazenamento.recuperarPontos("guerra", "estrela"));
 	}
 
 	@Test
 	public void recuperaPontuacaoDeTipoEUsuarioEspecifico() {
-		armazenamento.guardarPontos("guerra", 6, "estrela");
-		armazenamento.guardarPontos("guerra", 3, "comentario");
-		armazenamento.guardarPontos("marco", 24, "estrela");
-		armazenamento.guardarPontos("tadeu", 1, "comentario");
-		armazenamento.guardarPontos("marco", 5, "estrela");
-		armazenamento.guardarPontos("guerra", 4, "estrela");
+		armazenamento.guardarPontuacao("guerra", 6, "estrela");
+		armazenamento.guardarPontuacao("guerra", 3, "comentario");
+		armazenamento.guardarPontuacao("marco", 24, "estrela");
+		armazenamento.guardarPontuacao("tadeu", 1, "comentario");
+		armazenamento.guardarPontuacao("marco", 5, "estrela");
+		armazenamento.guardarPontuacao("guerra", 4, "estrela");
 		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
 	}
 	
@@ -183,22 +193,22 @@ public class ArmazenamentoTest {
 	
 	@Test
 	public void recuperaPontuacaoDeTipoInexistenteParaUsuario() {
-		armazenamento.guardarPontos("guerra", 1, "estrela");
-		armazenamento.guardarPontos("guerra", 1, "comentario");
+		armazenamento.guardarPontuacao("guerra", 1, "estrela");
+		armazenamento.guardarPontuacao("guerra", 1, "comentario");
 		
 		assertEquals(0, armazenamento.recuperarPontos("guerra", "moeda"));
-		armazenamento.guardarPontos("maria", 1, "moeda");
+		armazenamento.guardarPontuacao("maria", 1, "moeda");
 		assertEquals(0, armazenamento.recuperarPontos("guerra", "moeda"));
 	}
 	
 	@Test
 	public void simularArmazenamentoCaiu() {
-		armazenamento.guardarPontos("guerra", 6, "estrela");
-		armazenamento.guardarPontos("guerra", 3, "comentario");
-		armazenamento.guardarPontos("marco", 24, "estrela");
-		armazenamento.guardarPontos("tadeu", 1, "comentario");
-		armazenamento.guardarPontos("marco", 5, "estrela");
-		armazenamento.guardarPontos("guerra", 4, "estrela");
+		armazenamento.guardarPontuacao("guerra", 6, "estrela");
+		armazenamento.guardarPontuacao("guerra", 3, "comentario");
+		armazenamento.guardarPontuacao("marco", 24, "estrela");
+		armazenamento.guardarPontuacao("tadeu", 1, "comentario");
+		armazenamento.guardarPontuacao("marco", 5, "estrela");
+		armazenamento.guardarPontuacao("guerra", 4, "estrela");
 		
 		// aqui ocorre a simulação:
 		// limpa o cache, forçando que os dados sejam recuperados do arquivo.
@@ -206,9 +216,9 @@ public class ArmazenamentoTest {
 		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
 		
 		
-		armazenamento.guardarPontos("guerra", 5, "estrela");
-		armazenamento.guardarPontos("tadeu", 2, "comentario");
-		armazenamento.guardarPontos("maria", 50, "estrela");
+		armazenamento.guardarPontuacao("guerra", 5, "estrela");
+		armazenamento.guardarPontuacao("tadeu", 2, "comentario");
+		armazenamento.guardarPontuacao("maria", 50, "estrela");
 		
 		assertEquals(15, armazenamento.recuperarPontos("guerra", "estrela"));
 		assertEquals(3, armazenamento.recuperarPontos("tadeu", "comentario"));
@@ -222,7 +232,7 @@ public class ArmazenamentoTest {
 	public void recuperaUmUsuario() {
 		ArrayList<String> usuariosEsperados = new ArrayList<String>();
 		usuariosEsperados.add("guerra");
-		armazenamento.guardarPontos("guerra", 1, "estrela");
+		armazenamento.guardarPontuacao("guerra", 1, "estrela");
 		
 		assertEquals(usuariosEsperados, armazenamento.recuperarUsuariosRegistrados());
 	}
@@ -233,11 +243,11 @@ public class ArmazenamentoTest {
 		usuariosEsperados.add("guerra");
 		usuariosEsperados.add("maria");
 		usuariosEsperados.add("jose");
-		armazenamento.guardarPontos("guerra", 1, "estrela");
-		armazenamento.guardarPontos("maria", 1, "comentario");
-		armazenamento.guardarPontos("maria", 1, "comentario");
-		armazenamento.guardarPontos("jose", 1, "estrela");
-		armazenamento.guardarPontos("jose", 10, "curtida");
+		armazenamento.guardarPontuacao("guerra", 1, "estrela");
+		armazenamento.guardarPontuacao("maria", 1, "comentario");
+		armazenamento.guardarPontuacao("maria", 1, "comentario");
+		armazenamento.guardarPontuacao("jose", 1, "estrela");
+		armazenamento.guardarPontuacao("jose", 10, "curtida");
 		
 		assertEquals(usuariosEsperados, armazenamento.recuperarUsuariosRegistrados());
 		
@@ -248,11 +258,11 @@ public class ArmazenamentoTest {
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
 		assertEquals("Esse Texto É Invalido!", lerDadosBrutosArmazenamento());
 		armazenamento = new Armazenamento();
-		armazenamento.guardarPontos("guerra", 1, "estrela");
-		armazenamento.guardarPontos("maria", 1, "comentario");
+		armazenamento.guardarPontuacao("guerra", 1, "estrela");
+		armazenamento.guardarPontuacao("maria", 1, "comentario");
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
 		assertEquals("Esse Texto É Invalido!", lerDadosBrutosArmazenamento());
-		armazenamento.guardarPontos("guerra", 1, "favorito");
+		armazenamento.guardarPontuacao("guerra", 1, "favorito");
 		
 		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
 			    	+ "{\"tipo\":\"comentario\",\"pontos\":1,\"usuario\":\"maria\"},"
@@ -263,7 +273,7 @@ public class ArmazenamentoTest {
 	
 	@Test
 	public void recuperaUmTipoDePontuacao() {
-		armazenamento.guardarPontos("guerra", 5, "estrela");
+		armazenamento.guardarPontuacao("guerra", 5, "estrela");
 		ArrayList<String> tiposRecuperados = armazenamento.recuperarTiposPontuacao("guerra");
 		assertEquals(1, tiposRecuperados.size());
 		assertEquals("estrela", tiposRecuperados.get(0));
@@ -271,10 +281,10 @@ public class ArmazenamentoTest {
 	
 	@Test
 	public void recuperaVariosTiposDePontuacao() {
-		armazenamento.guardarPontos("guerra", 5, "estrela");
-		armazenamento.guardarPontos("guerra", 5, "estrela");
-		armazenamento.guardarPontos("guerra", 5, "comentario");
-		armazenamento.guardarPontos("guerra", 5, "moeda");
+		armazenamento.guardarPontuacao("guerra", 5, "estrela");
+		armazenamento.guardarPontuacao("guerra", 5, "estrela");
+		armazenamento.guardarPontuacao("guerra", 5, "comentario");
+		armazenamento.guardarPontuacao("guerra", 5, "moeda");
 		
 		ArrayList<String> tiposEsperados = new ArrayList<>(Arrays.asList("estrela", "comentario", "moeda"));
 
@@ -284,15 +294,15 @@ public class ArmazenamentoTest {
 	
 	@Test
 	public void recuperaVariosTiposDePontuacaoUsuariosDiferentes() {
-		armazenamento.guardarPontos("guerra", 5, "estrela");
-		armazenamento.guardarPontos("guerra", 5, "estrela");
-		armazenamento.guardarPontos("guerra", 5, "comentario");
-		armazenamento.guardarPontos("guerra", 5, "moeda");
+		armazenamento.guardarPontuacao("guerra", 5, "estrela");
+		armazenamento.guardarPontuacao("guerra", 5, "estrela");
+		armazenamento.guardarPontuacao("guerra", 5, "comentario");
+		armazenamento.guardarPontuacao("guerra", 5, "moeda");
 		
-		armazenamento.guardarPontos("maria", 5, "curtida");
-		armazenamento.guardarPontos("tadeu", 5, "estrela");
-		armazenamento.guardarPontos("jose", 5, "moeda");
-		armazenamento.guardarPontos("jose", 5, "compartilhamento");
+		armazenamento.guardarPontuacao("maria", 5, "curtida");
+		armazenamento.guardarPontuacao("tadeu", 5, "estrela");
+		armazenamento.guardarPontuacao("jose", 5, "moeda");
+		armazenamento.guardarPontuacao("jose", 5, "compartilhamento");
 		
 		ArrayList<String> tiposEsperadosGuerra = new ArrayList<>(Arrays.asList("estrela", "comentario", "moeda"));
 		ArrayList<String> tiposRecuperadosGuerra = armazenamento.recuperarTiposPontuacao("guerra");
