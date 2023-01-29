@@ -45,9 +45,11 @@ public class Armazenamento {
 			throws PontuacaoInvalidaException {
 		Pontuacao pontuacao = new Pontuacao(usuario, pontos, tipo);
 		_cachePontuacoes.add(pontuacao);
-		
-		JSONArray jsonPontuacoes = jsonCachePontuacoes();
-		
+		salvarCacheNoArquivo();
+	}
+	
+	private void salvarCacheNoArquivo() {
+		JSONArray jsonPontuacoes = jsonDoCachePontuacoes();
 		try {
 			FileWriter fileWriter = new FileWriter(CAMINHO_ARQUIVO);
 			fileWriter.write(jsonPontuacoes.toJSONString());
@@ -56,7 +58,16 @@ public class Armazenamento {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	private JSONArray jsonDoCachePontuacoes() {
+		JSONArray jsonArrayPontuacoes = new JSONArray();
+		for (int i = 0; i < _cachePontuacoes.size(); i++) {
+			jsonArrayPontuacoes.add(_cachePontuacoes.get(i).toJSONObject());
+		}
+		return jsonArrayPontuacoes;
+	}
+	
 	public long recuperarPontos(String usuario, String tipo) {
 		long totalPontosRecuperados = 0;
 		for (int i = 0; i < _cachePontuacoes.size(); i++) {
@@ -91,12 +102,5 @@ public class Armazenamento {
 		return tiposDePontuacaoDoUsuario;
 	}
 	
-	@SuppressWarnings("unchecked")
-	private JSONArray jsonCachePontuacoes() {
-		JSONArray jsonArrayPontuacoes = new JSONArray();
-		for (int i = 0; i < _cachePontuacoes.size(); i++) {
-			jsonArrayPontuacoes.add(_cachePontuacoes.get(i).toJSONObject());
-		}
-		return jsonArrayPontuacoes;
-	}
+	
 }
