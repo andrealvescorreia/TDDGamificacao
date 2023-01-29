@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 import org.junit.After;
@@ -85,6 +84,16 @@ public class ArmazenamentoTest {
 					, lerDadosBrutosArmazenamento());
 	}
 
+	@Test
+	public void armazenaPontuacaoInvalida() {
+		try {
+			armazenamento.guardarPontos("guerra", -1, "estrela");
+			fail();
+		} catch (PontuacaoInvalidaException e) {}
+		
+		assertEquals("", lerDadosBrutosArmazenamento());
+	}
+	
 	@Test
 	public void armazenaPontuacoes() {
 		armazenamento.guardarPontos("guerra", 10, "estrela");
@@ -216,6 +225,7 @@ public class ArmazenamentoTest {
 		usuariosEsperados.add("jose");
 		armazenamento.guardarPontos("guerra", 1, "estrela");
 		armazenamento.guardarPontos("maria", 1, "comentario");
+		armazenamento.guardarPontos("maria", 1, "comentario");
 		armazenamento.guardarPontos("jose", 1, "estrela");
 		armazenamento.guardarPontos("jose", 10, "curtida");
 		
@@ -240,7 +250,6 @@ public class ArmazenamentoTest {
 			    	, lerDadosBrutosArmazenamento());
 	}
 	
-	//Retornar todos os tipos de ponto que já foram registrados para algum usuário.
 	
 	@Test
 	public void recuperaUmTipoDePontuacao() {

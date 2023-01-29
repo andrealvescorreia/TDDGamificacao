@@ -38,6 +38,10 @@ public class Armazenamento {
 	
 	@SuppressWarnings("unchecked")
 	public void guardarPontos(String usuario, long pontos, String tipo) {
+		if(pontos < 1) {
+			throw new PontuacaoInvalidaException("Pontos não podem ser inferiores a 1");
+		}
+		
 		JSONObject pontuacao = new JSONObject();
 		
 		pontuacao.put("tipo", tipo);
