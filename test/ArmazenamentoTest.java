@@ -15,12 +15,12 @@ import org.junit.Test;
 import excecoes.PontuacaoInvalidaException;
 
 public class ArmazenamentoTest {
-	ArmazenamentoPontuacao armazenamento;
+	Armazenamento armazenamento;
 
 	@Before
 	public void criarArmazenamento() {
 		limparArquivoDeArmazenamento();
-		armazenamento = new ArmazenamentoPontuacao();
+		armazenamento = new ArmazenamentoArquivo();
 	}
 
 	@After
@@ -30,7 +30,7 @@ public class ArmazenamentoTest {
 	
 	public void escreverNoArquivoDeArmazenamento(String conteudo) {
 		try {
-			FileWriter fileWriter = new FileWriter(ArmazenamentoPontuacao.CAMINHO_ARQUIVO);
+			FileWriter fileWriter = new FileWriter(ArmazenamentoArquivo.CAMINHO_ARQUIVO);
 			fileWriter.write(conteudo);
 			fileWriter.close();
 		} catch (IOException e) {
@@ -42,7 +42,7 @@ public class ArmazenamentoTest {
 	public String lerDadosBrutosArmazenamento() {
 		String dados = "";
 		try {
-			Scanner leitor = new Scanner(new File(ArmazenamentoPontuacao.CAMINHO_ARQUIVO));
+			Scanner leitor = new Scanner(new File(ArmazenamentoArquivo.CAMINHO_ARQUIVO));
 			while (leitor.hasNextLine())
 				dados += leitor.nextLine();
 			leitor.close();
@@ -188,7 +188,7 @@ public class ArmazenamentoTest {
 		
 		// aqui ocorre a simulação:
 		// limpa o cache, forçando que os dados sejam recuperados do arquivo.
-		armazenamento = new ArmazenamentoPontuacao();
+		armazenamento = new ArmazenamentoArquivo();
 		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
 		
 		
@@ -233,7 +233,7 @@ public class ArmazenamentoTest {
 	public void simularArquivoInvalido() {
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
 		assertEquals("Esse Texto É Invalido!", lerDadosBrutosArmazenamento());
-		armazenamento = new ArmazenamentoPontuacao();
+		armazenamento = new ArmazenamentoArquivo();
 		armazenamento.guardarPontuacao("guerra", 1, "estrela");
 		armazenamento.guardarPontuacao("maria", 1, "comentario");
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");

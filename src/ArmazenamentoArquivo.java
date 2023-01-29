@@ -11,10 +11,10 @@ import excecoes.PontuacaoInvalidaException;
 import org.json.simple.JSONArray;
 
 
-public class ArmazenamentoPontuacao implements Armazenamento {
+public class ArmazenamentoArquivo implements Armazenamento {
 	public static final String CAMINHO_ARQUIVO = "saida.json";
 	private ArrayList<Pontuacao> _cachePontuacoes = new ArrayList<Pontuacao>();// cache dos dados que também ficam no arquivo
-	public ArmazenamentoPontuacao(){
+	public ArmazenamentoArquivo(){
 		// recupera dados salvos em arquivo (se houver algum)
 		try {
 			JSONParser parser = new JSONParser();
