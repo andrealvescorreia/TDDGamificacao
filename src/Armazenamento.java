@@ -36,22 +36,57 @@ public class Armazenamento {
 		}
 	}
 	
+	private class Pontuacao{
+		private String usuario;
+		private long pontos;
+		private String tipo;
+		
+		Pontuacao(String usuario, long pontos, String tipo){
+			if(pontos < 1) 
+				throw new PontuacaoInvalidaException("Pontos não podem ser inferiores a 1");
+			if(usuario.equals("")) 
+				throw new PontuacaoInvalidaException("Usuário inválido (\"\") ");
+			if(tipo.equals("")) 
+				throw new PontuacaoInvalidaException("Tipo inválido (\"\") ");
+			
+			this.setUsuario(usuario);
+			this.setPontos(pontos);
+			this.setTipo(tipo);
+		}
+		public String getUsuario() {
+			return usuario;
+		}
+		public void setUsuario(String usuario) {
+			this.usuario = usuario;
+		}
+		public long getPontos() {
+			return pontos;
+		}
+		public void setPontos(long pontos) {
+			this.pontos = pontos;
+		}
+		public String getTipo() {
+			return tipo;
+		}
+		public void setTipo(String tipo) {
+			this.tipo = tipo;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public JSONObject toJSONObject() {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("usuario", usuario);
+			jsonObj.put("pontos", pontos);
+			jsonObj.put("tipo", tipo);
+			return jsonObj;
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void guardarPontuacao(String usuario, long pontos, String tipo) {
-		if(pontos < 1) 
-			throw new PontuacaoInvalidaException("Pontos não podem ser inferiores a 1");
-		if(usuario.equals("")) 
-			throw new PontuacaoInvalidaException("Usuário inválido (\"\") ");
-		if(tipo.equals("")) 
-			throw new PontuacaoInvalidaException("Tipo inválido (\"\") ");
-		
-		JSONObject pontuacao = new JSONObject();
-		
-		pontuacao.put("tipo", tipo);
-		pontuacao.put("pontos", pontos);
-		pontuacao.put("usuario", usuario);
+		Pontuacao pontuacao = new Pontuacao(usuario, pontos, tipo);
 	
-		dados.add(pontuacao);
+		dados.add(pontuacao.toJSONObject());
 		
 		try {
 			FileWriter fileWriter = new FileWriter(CAMINHO_ARQUIVO);
