@@ -155,8 +155,6 @@ public class ArmazenamentoTest {
 		assertEquals(10, armazenamento.recuperarPontos("guerra", "estrela"));
 	}
 	
-	// recupera pontuacao de usuario e/ou tipo inexistente 
-	
 	@Test
 	public void recuperaPontuacaoDeUsuarioInexistente() {
 		assertEquals(0, armazenamento.recuperarPontos("xablau", "estrela"));
@@ -238,5 +236,16 @@ public class ArmazenamentoTest {
 			    	+ "{\"tipo\":\"comentario\",\"pontos\":1,\"usuario\":\"maria\"},"
 			    	+ "{\"tipo\":\"favorito\",\"pontos\":1,\"usuario\":\"guerra\"}]"
 			    	, lerDadosBrutosArmazenamento());
+	}
+	
+	//Retornar todos os tipos de ponto que já foram registrados para algum usuário.
+	
+	@Test
+	public void recuperaUmTipoDePontuacao() {
+		armazenamento.guardarPontos("guerra", 5, "estrela");
+		ArrayList<String> tiposRecuperados = armazenamento.recuperarTiposPontuacao("guerra");
+		assertEquals(1, tiposRecuperados.size());
+		assertEquals("estrela", tiposRecuperados.get(0));
+		
 	}
 }
