@@ -13,8 +13,6 @@ public class Armazenamento {
 	public static final String CAMINHO_ARQUIVO = "saida.json";
 	private JSONArray dados = new JSONArray();// cache dos dados que também ficam no arquivo
 	
-	
-	
 	public Armazenamento(){
 		// recupera dados salvos em arquivo (se houver algum)
 		try {
@@ -26,7 +24,6 @@ public class Armazenamento {
 		}
 	}
 	
-	
 	private void criarArquivoLimpo() {
 		try {
 			FileWriter fileWriter = new FileWriter(CAMINHO_ARQUIVO);
@@ -36,7 +33,6 @@ public class Armazenamento {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	
 	@SuppressWarnings("unchecked")
@@ -52,7 +48,6 @@ public class Armazenamento {
 		}
 	}
 
-	
 	public long recuperarPontos(String usuario, String tipo) {
 		long totalPontosRecuperados = 0;
 		for (int i = 0; i < dados.size(); i++) {
@@ -63,7 +58,6 @@ public class Armazenamento {
 		}
 		return totalPontosRecuperados;
 	}
-
 
 	public ArrayList<String> recuperarUsuariosRegistrados() {
 		ArrayList<String> usuarios = new ArrayList<String>();
@@ -77,7 +71,6 @@ public class Armazenamento {
 		return usuarios;
 	}
 
-
 	public ArrayList<String> recuperarTiposPontuacao(String usuario) {
 		ArrayList<String> tiposRecuperados = new ArrayList<>();
 		for (int i = 0; i < dados.size(); i++) {
@@ -88,8 +81,6 @@ public class Armazenamento {
 				tiposRecuperados.add(tipoPontuacao);
 			}
 		}
-
 		return tiposRecuperados;
 	}
-
 }
