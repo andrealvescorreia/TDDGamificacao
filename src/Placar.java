@@ -5,24 +5,23 @@ import excecoes.PontuacaoInvalidaException;
 
 public class Placar {
 	
-	private Armazenamento armazenamentoPontuacoes;
+	private Armazenamento armazenamento;
 	
 	public Placar(Armazenamento armazenamento) {
-		armazenamentoPontuacoes = armazenamento;
+		this.armazenamento = armazenamento;
 	}
 
 	public void adicionarPontuacao(String usuario, long pontos, String tipo) 
 			throws PontuacaoInvalidaException {
-		armazenamentoPontuacoes.guardarPontuacao(usuario, pontos, tipo);
+		armazenamento.guardarPontuacao(usuario, pontos, tipo);
 	}
 
 	public HashMap<String, Integer> pontuacoes(String usuario) {
-		ArrayList<String> tiposDePontosDoUsuario = armazenamentoPontuacoes.recuperarTiposPontuacao(usuario);
 		HashMap<String, Integer> pontuacoesDoUsuario = new HashMap<String, Integer>();
-		
+		ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposPontuacao(usuario);
 		for(int i = 0; i < tiposDePontosDoUsuario.size(); i++) {
 			String tipo = tiposDePontosDoUsuario.get(i);
-			int pontos = (int) armazenamentoPontuacoes.recuperarPontos(usuario, tipo);
+			int pontos = (int) armazenamento.recuperarPontos(usuario, tipo);
 			pontuacoesDoUsuario.put(tipo, pontos);
 		}
 		

@@ -26,7 +26,7 @@ public class PlacarTest {
 			Arrays.asList("guerra 10 estrela")
 		);
 		// assegura que a classe Placar realmente manda os dados para serem salvos pelo Armazenamento.
-		mockArmazenamento.verifica(execucaoEsperada);
+		mockArmazenamento.verificaChamadasGuardarPontuacao(execucaoEsperada);
 	}
 	
 	@Test
@@ -45,7 +45,7 @@ public class PlacarTest {
 						  "maria 4 estrela",
 						  "maria 2 curtida")
 		);
-		mockArmazenamento.verifica(execucoesEsperadas);
+		mockArmazenamento.verificaChamadasGuardarPontuacao(execucoesEsperadas);
 	}
 	
 	@Test
@@ -67,7 +67,7 @@ public class PlacarTest {
 		HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
 		pontuacoesUsuarioGuerra.put("estrela", 10);
 		
-		mockArmazenamento.setPontuacoesUsuario(pontuacoesUsuarioGuerra);
+		mockArmazenamento.setPontuacoesDoUsuario(pontuacoesUsuarioGuerra);
 		assertEquals(pontuacoesUsuarioGuerra, placar.pontuacoes("guerra"));
 	}
 	
@@ -78,7 +78,7 @@ public class PlacarTest {
 		pontuacoesUsuarioGuerra.put("moeda", 25);
 		pontuacoesUsuarioGuerra.put("curtida", 404);
 		
-		mockArmazenamento.setPontuacoesUsuario(pontuacoesUsuarioGuerra);
+		mockArmazenamento.setPontuacoesDoUsuario(pontuacoesUsuarioGuerra);
 		assertEquals(pontuacoesUsuarioGuerra, placar.pontuacoes("guerra"));
 	}
 }
