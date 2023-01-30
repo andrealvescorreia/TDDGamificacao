@@ -39,6 +39,7 @@ public class ArmazenamentoArquivoTest {
 		}
 	}
 	
+	
 	public String lerDadosBrutosArmazenamento() {
 		String dados = "";
 		try {
