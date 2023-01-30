@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import excecoes.PontuacaoInvalidaException;
 
 public class MockArmazenamento implements Armazenamento {
-	private String usuarioRecebido;
-	private long pontosRecebido;
-	private String tipoRecebido;
+	ArrayList<String> execucoes = new ArrayList<String>();
+	
+	
 	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) throws PontuacaoInvalidaException {
-		usuarioRecebido = usuario;
-		pontosRecebido = pontos;
-		tipoRecebido = tipo;
+		execucoes.add(usuario + " " + pontos + " " + tipo);
 	}
 
 	@Override
@@ -33,10 +31,9 @@ public class MockArmazenamento implements Armazenamento {
 		return null;
 	}
 	
-	public void verificaPedido(String usuarioEsperado, long pontosEsperado, String tipoEsperado) {
-		assertEquals(usuarioEsperado, usuarioRecebido);
-		assertEquals(pontosEsperado, pontosRecebido);
-		assertEquals(tipoEsperado, tipoRecebido);
+	public void verificaExecucoes(ArrayList<String> execucoesEsperadas) {
+		assertEquals(execucoesEsperadas, execucoes);
+	
 	}
 
 }
