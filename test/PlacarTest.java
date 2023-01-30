@@ -2,8 +2,8 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,8 +52,18 @@ public class PlacarTest {
 	public void adicionarPontuacaoInvalida() {
 		mockArmazenamento.simulePontuacaoInvalida();
 		try {
-			placar.adicionarPontuacao("guerra", 0, "estrela");
+			placar.adicionarPontuacao("INVALIDA", 0, "INVALIDA");
 			fail();
 		} catch(PontuacaoInvalidaException e) {}
 	}
+	
+	@Test
+	public void usuarioSemPontuacao() {
+		assertEquals(new HashMap<String, Integer>(), placar.pontuacoes("jeremias"));
+		/*HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
+		pontuacoesUsuarioGuerra.put("estrela", 10);
+		pontuacoesUsuarioGuerra.put("curtida", 1);*/
+		
+	}
+	
 }

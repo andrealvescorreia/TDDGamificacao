@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 import excecoes.PontuacaoInvalidaException;
 
 public class Placar {
@@ -11,6 +13,10 @@ public class Placar {
 	public void adicionarPontuacao(String usuario, long pontos, String tipo) 
 			throws PontuacaoInvalidaException {
 		armazenamentoPontuacoes.guardarPontuacao(usuario, pontos, tipo);
+	}
+
+	public HashMap<String, Integer> pontuacoes(String usuario) {
+		return new HashMap<String, Integer>();
 	}
 
 }
