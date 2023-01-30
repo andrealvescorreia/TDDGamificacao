@@ -7,7 +7,6 @@ import excecoes.PontuacaoInvalidaException;
 public class MockArmazenamento implements Armazenamento {
 	ArrayList<String> execucoes = new ArrayList<String>();
 	
-	
 	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) throws PontuacaoInvalidaException {
 		execucoes.add(usuario + " " + pontos + " " + tipo);
@@ -31,7 +30,7 @@ public class MockArmazenamento implements Armazenamento {
 		return null;
 	}
 	
-	public void verificaExecucoes(ArrayList<String> execucoesEsperadas) {
+	public void verifica(ArrayList<String> execucoesEsperadas) {
 		assertEquals(execucoesEsperadas, execucoes);
 	
 	}
