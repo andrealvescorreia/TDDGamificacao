@@ -7,6 +7,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import excecoes.PontuacaoInvalidaException;
+
 public class PlacarTest {
 	MockArmazenamento mockArmazenamento;
 	Placar placar;
@@ -46,4 +48,12 @@ public class PlacarTest {
 		mockArmazenamento.verifica(execucoesEsperadas);
 	}
 	
+	@Test
+	public void adicionarPontuacaoInvalida() {
+		mockArmazenamento.simulePontuacaoInvalida();
+		try {
+			placar.adicionarPontuacao("guerra", 0, "estrela");
+			fail();
+		} catch(PontuacaoInvalidaException e) {}
+	}
 }

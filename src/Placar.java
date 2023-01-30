@@ -1,3 +1,4 @@
+import excecoes.PontuacaoInvalidaException;
 
 public class Placar {
 	
@@ -7,7 +8,8 @@ public class Placar {
 		armazenamentoPontuacoes = armazenamento;
 	}
 
-	public void adicionarPontuacao(String usuario, long pontos, String tipo) {
+	public void adicionarPontuacao(String usuario, long pontos, String tipo) 
+			throws PontuacaoInvalidaException {
 		armazenamentoPontuacoes.guardarPontuacao(usuario, pontos, tipo);
 	}
 

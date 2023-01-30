@@ -6,9 +6,13 @@ import excecoes.PontuacaoInvalidaException;
 
 public class MockArmazenamento implements Armazenamento {
 	ArrayList<String> execucoes = new ArrayList<String>();
+	private boolean pontuacaoInvalida;
 	
 	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) throws PontuacaoInvalidaException {
+		if(pontuacaoInvalida) {
+			throw new PontuacaoInvalidaException("Simulação do mock de pontuacao invalida");
+		}
 		execucoes.add(usuario + " " + pontos + " " + tipo);
 	}
 
@@ -33,6 +37,11 @@ public class MockArmazenamento implements Armazenamento {
 	public void verifica(ArrayList<String> execucoesEsperadas) {
 		assertEquals(execucoesEsperadas, execucoes);
 	
+	}
+
+	public void simulePontuacaoInvalida() {
+		// TODO Auto-generated method stub
+		pontuacaoInvalida = true;
 	}
 
 }
