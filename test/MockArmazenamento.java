@@ -1,12 +1,15 @@
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import excecoes.PontuacaoInvalidaException;
 
 public class MockArmazenamento implements Armazenamento {
-	ArrayList<String> execucoes = new ArrayList<String>();
+	private ArrayList<String> execucoes = new ArrayList<String>();
 	private boolean pontuacaoInvalida;
+	private ArrayList<String> tiposDePontoDoUsuario = new ArrayList<String>();
+	private Integer pontosDoTipo;
 	
 	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) throws PontuacaoInvalidaException {
@@ -18,8 +21,7 @@ public class MockArmazenamento implements Armazenamento {
 
 	@Override
 	public long recuperarPontos(String usuario, String tipo) {
-		// TODO Auto-generated method stub
-		return 0;
+		return pontosDoTipo;
 	}
 
 	@Override
@@ -30,8 +32,7 @@ public class MockArmazenamento implements Armazenamento {
 
 	@Override
 	public ArrayList<String> recuperarTiposPontuacao(String usuario) {
-		// TODO Auto-generated method stub
-		return null;
+		return tiposDePontoDoUsuario;
 	}
 	
 	public void verifica(ArrayList<String> execucoesEsperadas) {
@@ -40,8 +41,15 @@ public class MockArmazenamento implements Armazenamento {
 	}
 
 	public void simulePontuacaoInvalida() {
-		// TODO Auto-generated method stub
 		pontuacaoInvalida = true;
+	}
+
+	
+	public void setPontuacoesUsuario(HashMap<String, Integer> pontuacoesUsuario) {
+		for ( String tipo : pontuacoesUsuario.keySet() ) {
+		    this.tiposDePontoDoUsuario.add(tipo);
+		    this.pontosDoTipo = pontuacoesUsuario.get(tipo);
+		}
 	}
 
 }

@@ -60,10 +60,15 @@ public class PlacarTest {
 	@Test
 	public void usuarioSemPontuacao() {
 		assertEquals(new HashMap<String, Integer>(), placar.pontuacoes("jeremias"));
-		/*HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
+	}
+	@Test
+	public void usuarioComUmaPontuacao() {
+		HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
 		pontuacoesUsuarioGuerra.put("estrela", 10);
-		pontuacoesUsuarioGuerra.put("curtida", 1);*/
+		
+		mockArmazenamento.setPontuacoesUsuario(pontuacoesUsuarioGuerra);
+		assertEquals(pontuacoesUsuarioGuerra, placar.pontuacoes("guerra"));
+		
 		
 	}
-	
 }

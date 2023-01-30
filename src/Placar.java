@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import excecoes.PontuacaoInvalidaException;
@@ -16,7 +17,16 @@ public class Placar {
 	}
 
 	public HashMap<String, Integer> pontuacoes(String usuario) {
-		return new HashMap<String, Integer>();
+		ArrayList<String> tiposDePontosDoUsuario = armazenamentoPontuacoes.recuperarTiposPontuacao(usuario);
+		HashMap<String, Integer> pontuacoesDoUsuario = new HashMap<String, Integer>();
+		
+		for(int i = 0; i < tiposDePontosDoUsuario.size(); i++) {
+			String tipo = tiposDePontosDoUsuario.get(i);
+			int pontos = (int) armazenamentoPontuacoes.recuperarPontos(usuario, tipo);
+			pontuacoesDoUsuario.put(tipo, pontos);
+		}
+		
+		return pontuacoesDoUsuario;
 	}
 
 }
