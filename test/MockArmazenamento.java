@@ -38,21 +38,19 @@ public class MockArmazenamento implements Armazenamento {
 	@Override
 	public ArrayList<String> recuperarUsuariosRegistrados() {
 		ArrayList<String> usuarios = new ArrayList<String>();
-		
-		for (String str : _pontuacoesUsuarios.keySet())  
-		    usuarios.add(str);
+		for (String usuario : _pontuacoesUsuarios.keySet())  
+		    usuarios.add(usuario);
 		return usuarios;
 	}
 	
 	@Override
 	public ArrayList<String> recuperarTiposDePonto(String usuario) {
-		if(usuarioNaoExiste(usuario))
-			return new ArrayList<String>();
-		
 		ArrayList<String> tiposDePontoDoUsuario = new ArrayList<String>();
-		for ( String chaveTipo : this._pontuacoesUsuarios.get(usuario).keySet() ) {
-			tiposDePontoDoUsuario.add(chaveTipo);
-		}
+		if(usuarioNaoExiste(usuario))
+			return tiposDePontoDoUsuario;// vazio
+		
+		for ( String tipo : this._pontuacoesUsuarios.get(usuario).keySet() )
+			tiposDePontoDoUsuario.add(tipo);
 		
 		return tiposDePontoDoUsuario;
 	}
@@ -67,5 +65,4 @@ public class MockArmazenamento implements Armazenamento {
 	public void setPontuacoesUsuarios(HashMap<String, HashMap<String, Integer>> pontuacoesDoUsuario) {
 		this._pontuacoesUsuarios = pontuacoesDoUsuario;
 	}
-
 }
