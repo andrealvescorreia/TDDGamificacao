@@ -28,13 +28,23 @@ public class Placar {
 		return pontuacoesDoUsuario;
 	}
 
-	public HashMap<String, Integer> ranking(String tipoDePonto) {
+	public ArrayList<String> ranking(String tipoDePonto) {
+		// ArrayList<String[]> a = new ArrayList<String[]>();
 		ArrayList<String> usuarios = armazenamento.recuperarUsuariosRegistrados();
 		if(usuarios == null || usuarios.size() == 0) {
-			return new HashMap<String, Integer>();// vazio
+			return new ArrayList<String>();// vazio
 		}
-		HashMap<String, Integer> rankingDoTipoDePonto = new HashMap<String, Integer>();
-		rankingDoTipoDePonto.put("guerra", 10);
+		
+		ArrayList<String> rankingDoTipoDePonto = new ArrayList<String>();
+		for(String usuario: usuarios) {
+			ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposPontuacao(usuario);
+			if(tiposDePontosDoUsuario.contains(tipoDePonto) == false) {
+				continue;
+			}
+			//rankingDoTipoDePonto.p
+			
+		}
+
 		return rankingDoTipoDePonto;
 	}
 
