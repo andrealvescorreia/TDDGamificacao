@@ -166,4 +166,23 @@ public class PlacarTest {
 	}
 	
 	
+	@Test
+	public void quandoHaVariosUsuariosETodosTemOTipoEstrelaEntaoORankingEstrelaTemTodosOsUsuarios() {
+		HashMap<String, Integer> pontuacoesDoUsuarioGuerra = new HashMap<String, Integer>();
+		pontuacoesDoUsuarioGuerra.put("estrela", 10);
+		pontuacoesDoUsuarioGuerra.put("comentario", 8);
+		pontuacoesDoUsuarioGuerra.put("favorito", 1);
+		
+		HashMap<String, Integer> pontuacoesDoUsuarioTadeu = new HashMap<String, Integer>();
+		pontuacoesDoUsuarioTadeu.put("favorito", 5);
+		pontuacoesDoUsuarioTadeu.put("curtida", 11);
+		pontuacoesDoUsuarioTadeu.put("moeda", 2);
+		pontuacoesDoUsuarioTadeu.put("estrela", 25);
+		
+		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
+		pontuacoesUsuarios.put("tadeu", pontuacoesDoUsuarioTadeu);
+		
+		assertEquals("tadeu 25", placar.ranking("estrela").get(0));// 1°
+		assertEquals("guerra 10", placar.ranking("estrela").get(1));// 2°
+	}
 }
