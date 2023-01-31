@@ -84,13 +84,11 @@ public class PlacarTest {
 	@Test
 	public void pontuacoesDeUsuarioComUmTipoDePonto() {
 		guerraPontuacoes.put("estrela", 10);
-		
-		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
 		assertEquals(guerraPontuacoes, placar.pontuacoes("guerra"));
 	}
 	
 	@Test
-	public void pontuacoesDeUsuarioComMultiplosTiposDePonto() {
+	public void pontuacoesDeUsuarioComMultiplosTiposDePontos() {
 		guerraPontuacoes.put("estrela", 10);
 		guerraPontuacoes.put("moeda", 25);
 		guerraPontuacoes.put("curtida", 404);
