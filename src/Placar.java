@@ -28,8 +28,8 @@ public class Placar {
 		return pontuacoesDoUsuario;
 	}
 
-	public ArrayList<HashMap<String, Integer>> ranking(String tipoDePonto) {
-		return new ArrayList<HashMap<String, Integer>>();
+	public HashMap<String, Integer> ranking(String tipoDePonto) {
+		return new HashMap<String, Integer>();
 	}
 
 }

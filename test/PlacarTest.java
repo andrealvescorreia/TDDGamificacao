@@ -90,7 +90,7 @@ public class PlacarTest {
 	}
 	@Test
 	public void quandoNaoHaUsuariosEntaoNaoHaRanking() {
-		ArrayList<HashMap<String, Integer>> rankingVazio = new ArrayList<HashMap<String, Integer>>();
+		HashMap<String, Integer> rankingVazio = new HashMap<String, Integer>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
 	}
 	
@@ -108,7 +108,7 @@ public class PlacarTest {
 		
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
 		
-		ArrayList<HashMap<String, Integer>> rankingVazio = new ArrayList<HashMap<String, Integer>>();
+		HashMap<String, Integer> rankingVazio = new HashMap<String, Integer>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
 	}
 	
@@ -131,7 +131,7 @@ public class PlacarTest {
 		
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
 		
-		ArrayList<HashMap<String, Integer>> rankingVazio = new ArrayList<HashMap<String, Integer>>();
+		HashMap<String, Integer> rankingVazio = new HashMap<String, Integer>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
 	}
 	
@@ -145,10 +145,10 @@ public class PlacarTest {
 		
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
 		
-		HashMap<String, HashMap<String, Integer>> rankingEsperado = new HashMap<String, HashMap<String, Integer>>();
+		ArrayList<HashMap<String, Integer>> rankingEsperado = new ArrayList<HashMap<String, Integer>>();
 		
 		HashMap<String, Integer> primeiraPosicaoNoRankingEstrela = new HashMap<String, Integer>();
 		primeiraPosicaoNoRankingEstrela.put("guerra", 10);
-		rankingEsperado.put("1°", primeiraPosicaoNoRankingEstrela);
+		rankingEsperado.add(primeiraPosicaoNoRankingEstrela);
 	}*/
 }
