@@ -7,9 +7,10 @@ import excecoes.PontuacaoInvalidaException;
 
 public class MockArmazenamento implements Armazenamento {
 	
+	private HashMap<String, HashMap<String, Integer>> _pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 	private ArrayList<String> _chamadasRecebidasParaGuardarPontuacao = new ArrayList<String>();
 	private boolean _simulacaoPontuacaoInvalida;
-	private HashMap<String, HashMap<String, Integer>> _pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
+	
 	
 	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) throws PontuacaoInvalidaException {
@@ -20,17 +21,18 @@ public class MockArmazenamento implements Armazenamento {
 	
 	@Override
 	public long recuperarPontos(String usuario, String tipo) {
-		int pontos = 0;
-		for ( String chaveUsuario : this._pontuacoesUsuarios.keySet() ) {
-			if(chaveUsuario.equals(usuario)) {
-				/*if(_pontuacoesUsuarios.get(chaveUsuario).get(tipo)) {
-					
-				}*/
-			}
-		    /*if(chaveUsuario.equals(tipo) && usuario.equals()) 
-		    	pontos = _pontuacoesUsuarios.get(chaveTipo);*/
-		}
-		return pontos;
+		if(usuarioComTipoDePontoNaoExiste(usuario, tipo))
+			return 0;
+		return _pontuacoesUsuarios.get(usuario).get(tipo);
+		
+	}
+	
+	private boolean usuarioComTipoDePontoNaoExiste(String usuario, String tipoDePonto) {
+		if(usuarioNaoExiste(usuario)) return true;
+		return !_pontuacoesUsuarios.get(usuario).containsKey(tipoDePonto);
+	}
+	private boolean usuarioNaoExiste(String usuario) {
+		return !_pontuacoesUsuarios.containsKey(usuario);
 	}
 	
 	@Override
@@ -41,14 +43,16 @@ public class MockArmazenamento implements Armazenamento {
 	
 	@Override
 	public ArrayList<String> recuperarTiposPontuacao(String usuario) {
+		if(usuarioNaoExiste(usuario))
+			return new ArrayList<String>();
+		
 		ArrayList<String> tiposDePontoDoUsuario = new ArrayList<String>();
-		for ( String tipo : this._pontuacoesUsuarios.keySet() ) {
-		    tiposDePontoDoUsuario.add(tipo);
+		for ( String chaveTipo : this._pontuacoesUsuarios.get(usuario).keySet() ) {
+			tiposDePontoDoUsuario.add(chaveTipo);
 		}
+		
 		return tiposDePontoDoUsuario;
 	}
-	
-	
 	
 	public void verificaChamadasGuardarPontuacao(ArrayList<String> chamadasEsperadas) {
 		assertEquals(chamadasEsperadas, _chamadasRecebidasParaGuardarPontuacao);
@@ -56,7 +60,7 @@ public class MockArmazenamento implements Armazenamento {
 	public void simulePontuacaoInvalida() {
 		_simulacaoPontuacaoInvalida = true;
 	}
-	//                          <usuario (ex:guerra), <tipo (ex:moeda), pontos (ex: 2)>>
+	//                          <usuario (ex:"guerra"), <tipo (ex:"moeda"), pontos (ex: 2)>>
 	public void setPontuacoesUsuarios(HashMap<String, HashMap<String, Integer>> pontuacoesDoUsuario) {
 		this._pontuacoesUsuarios = pontuacoesDoUsuario;
 	}

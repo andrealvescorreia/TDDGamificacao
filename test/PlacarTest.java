@@ -121,11 +121,11 @@ public class PlacarTest {
 		pontuacoesUsuarioGuerra.put("favorito", 10);
 		
 		HashMap<String, Integer> pontuacoesUsuarioTadeu = new HashMap<String, Integer>();
-		pontuacoesUsuarioTadeu.put("curtida", 5);
-		pontuacoesUsuarioTadeu.put("comentario", 10);
+		pontuacoesUsuarioTadeu.put("favorito", 5);
+		pontuacoesUsuarioTadeu.put("curtida", 10);
 		pontuacoesUsuarioTadeu.put("moeda", 10);
 		
-		HashMap<String, HashMap<String, Integer>> pontuacoesUsuarios =  new HashMap<String, HashMap<String, Integer>>();
+		HashMap<String, HashMap<String, Integer>> pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 		pontuacoesUsuarios.put("guerra", pontuacoesUsuarioGuerra);
 		pontuacoesUsuarios.put("tadeu", pontuacoesUsuarioTadeu);
 		
