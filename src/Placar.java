@@ -28,4 +28,8 @@ public class Placar {
 		return pontuacoesDoUsuario;
 	}
 
+	public HashMap<String, HashMap<String, Integer>> ranking(String tipoDePonto) {
+		return new HashMap<String, HashMap<String, Integer>>();
+	}
+
 }

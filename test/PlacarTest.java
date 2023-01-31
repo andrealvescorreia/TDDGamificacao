@@ -12,6 +12,7 @@ import excecoes.PontuacaoInvalidaException;
 public class PlacarTest {
 	MockArmazenamento mockArmazenamento;
 	Placar placar;
+	
 	@Before
 	public void antes() {
 		mockArmazenamento = new MockArmazenamento();
@@ -81,6 +82,16 @@ public class PlacarTest {
 		mockArmazenamento.setPontuacoesDoUsuario(pontuacoesUsuarioGuerra);
 		assertEquals(pontuacoesUsuarioGuerra, placar.pontuacoes("guerra"));
 	}
+	@Test
+	public void quandoNaoHaUsuariosEntaoNaoHaRanking() {
+		HashMap<String, HashMap<String, Integer>> rankingVazio = new HashMap<String, HashMap<String, Integer>>();
+		assertEquals(rankingVazio, placar.ranking("estrela"));
+	}
+	
+	
+	
+	
+	
 	
 	
 }
