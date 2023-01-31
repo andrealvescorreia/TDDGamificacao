@@ -139,6 +139,8 @@ public class PlacarTest {
 	public void quandoHaApenasUmUsuarioEEleTemOTipoEstrelaEntaoORankingEstrelaTemApenasEle() {
 		HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
 		pontuacoesUsuarioGuerra.put("estrela", 10);
+		pontuacoesUsuarioGuerra.put("moeda", 2);
+		pontuacoesUsuarioGuerra.put("curtida", 3);
 		
 		HashMap<String, HashMap<String, Integer>> pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 		pontuacoesUsuarios.put("guerra", pontuacoesUsuarioGuerra);
@@ -148,6 +150,11 @@ public class PlacarTest {
 		ArrayList<String> rankingEsperado = new ArrayList<String>();
 		rankingEsperado.add("guerra 10");
 		assertEquals(rankingEsperado, placar.ranking("estrela"));
-	
 	}
+	
+	
+	
+	
+	
+	
 }

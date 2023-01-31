@@ -19,33 +19,24 @@ public class Placar {
 	public HashMap<String, Integer> pontuacoes(String usuario) {
 		HashMap<String, Integer> pontuacoesDoUsuario = new HashMap<String, Integer>();
 		ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposPontuacao(usuario);
-		for(int i = 0; i < tiposDePontosDoUsuario.size(); i++) {
-			String tipo = tiposDePontosDoUsuario.get(i);
+		for(String tipo: tiposDePontosDoUsuario) {
 			int pontos = (int) armazenamento.recuperarPontos(usuario, tipo);
 			pontuacoesDoUsuario.put(tipo, pontos);
 		}
-		
 		return pontuacoesDoUsuario;
 	}
 
 	public ArrayList<String> ranking(String tipoDePonto) {
-		// ArrayList<String[]> a = new ArrayList<String[]>();
-		ArrayList<String> usuarios = armazenamento.recuperarUsuariosRegistrados();
-		if(usuarios == null || usuarios.size() == 0) {
-			return new ArrayList<String>();// vazio
-		}
-		
 		ArrayList<String> rankingDoTipoDePonto = new ArrayList<String>();
-		for(String usuario: usuarios) {
+		ArrayList<String> todosOsUsuarios = armazenamento.recuperarUsuariosRegistrados();
+		
+		for(String usuario: todosOsUsuarios) {
 			ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposPontuacao(usuario);
-			if(tiposDePontosDoUsuario.contains(tipoDePonto) == false) {
-				continue;
+			if(tiposDePontosDoUsuario.contains(tipoDePonto)) {
+				long pontuacaoDoUsuario = armazenamento.recuperarPontos(usuario, tipoDePonto);
+				rankingDoTipoDePonto.add(usuario+" "+pontuacaoDoUsuario);
 			}
-			long pontuacaoDoUsuario = armazenamento.recuperarPontos(usuario, tipoDePonto);
-			rankingDoTipoDePonto.add(usuario+" "+pontuacaoDoUsuario);
-			
 		}
-
 		return rankingDoTipoDePonto;
 	}
 
