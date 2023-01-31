@@ -58,12 +58,12 @@ public class PlacarTest {
 	}
 	
 	@Test
-	public void usuarioSemPontos() {
+	public void pontuacoesDeUsuarioSemPontos() {
 		assertEquals(new HashMap<String, Integer>(), placar.pontuacoes("jeremias"));
 	}
 	
 	@Test
-	public void usuarioComUmTipoDePonto() {
+	public void pontuacoesDeUsuarioComUmTipoDePonto() {
 		HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
 		pontuacoesUsuarioGuerra.put("estrela", 10);
 		
@@ -72,7 +72,7 @@ public class PlacarTest {
 	}
 	
 	@Test
-	public void usuarioComMultiplosTiposDePontos() {
+	public void pontuacoesDeUsuarioComMultiplosTiposDePontos() {
 		HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
 		pontuacoesUsuarioGuerra.put("estrela", 10);
 		pontuacoesUsuarioGuerra.put("moeda", 25);
@@ -81,4 +81,6 @@ public class PlacarTest {
 		mockArmazenamento.setPontuacoesDoUsuario(pontuacoesUsuarioGuerra);
 		assertEquals(pontuacoesUsuarioGuerra, placar.pontuacoes("guerra"));
 	}
+	
+	
 }
