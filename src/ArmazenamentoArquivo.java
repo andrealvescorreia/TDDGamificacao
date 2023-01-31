@@ -62,8 +62,8 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	@SuppressWarnings("unchecked")
 	private JSONArray jsonDoCachePontuacoes() {
 		JSONArray jsonArrayPontuacoes = new JSONArray();
-		for (int i = 0; i < _cachePontuacoes.size(); i++) {
-			jsonArrayPontuacoes.add(_cachePontuacoes.get(i).toJSONObject());
+		for(Pontuacao pontuacao : _cachePontuacoes) {
+			jsonArrayPontuacoes.add(pontuacao.toJSONObject());
 		}
 		return jsonArrayPontuacoes;
 	}
@@ -71,8 +71,7 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	@Override
 	public long recuperarPontos(String usuario, String tipo) {
 		long totalPontosRecuperados = 0;
-		for (int i = 0; i < _cachePontuacoes.size(); i++) {
-			Pontuacao pontuacao = _cachePontuacoes.get(i);
+		for(Pontuacao pontuacao : _cachePontuacoes) {
 			if(usuario.equals(pontuacao.getUsuario()) && tipo.equals(pontuacao.getTipo())) {
 				totalPontosRecuperados += pontuacao.getPontos();
 			}
@@ -83,8 +82,7 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	@Override
 	public ArrayList<String> recuperarUsuariosRegistrados() {
 		ArrayList<String> usuarios = new ArrayList<String>();
-		for (int i = 0; i < _cachePontuacoes.size(); i++) {
-			Pontuacao pontuacao = _cachePontuacoes.get(i);
+		for(Pontuacao pontuacao : _cachePontuacoes) {
 			String usuario = pontuacao.getUsuario();
 			if(usuarios.contains(usuario)) continue;
 			usuarios.add(usuario);
@@ -95,8 +93,7 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	@Override
 	public ArrayList<String> recuperarTiposDePonto(String usuario) {
 		ArrayList<String> tiposDePontuacaoDoUsuario = new ArrayList<>();
-		for (int i = 0; i < _cachePontuacoes.size(); i++) {
-			Pontuacao pontuacao = _cachePontuacoes.get(i);
+		for(Pontuacao pontuacao : _cachePontuacoes) {
 			if(tiposDePontuacaoDoUsuario.contains(pontuacao.getTipo())) 
 				continue;
 			if(usuario.equals(pontuacao.getUsuario()))
