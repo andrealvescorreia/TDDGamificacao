@@ -135,7 +135,7 @@ public class PlacarTest {
 		assertEquals(rankingVazio, placar.ranking("estrela"));
 	}
 	
-	/*@Test
+	@Test
 	public void quandoHaApenasUmUsuarioEEleTemOTipoEstrelaEntaoORankingEstrelaTemApenasEle() {
 		HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
 		pontuacoesUsuarioGuerra.put("estrela", 10);
@@ -144,11 +144,10 @@ public class PlacarTest {
 		pontuacoesUsuarios.put("guerra", pontuacoesUsuarioGuerra);
 		
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
-		
-		ArrayList<HashMap<String, Integer>> rankingEsperado = new ArrayList<HashMap<String, Integer>>();
-		
-		HashMap<String, Integer> primeiraPosicaoNoRankingEstrela = new HashMap<String, Integer>();
-		primeiraPosicaoNoRankingEstrela.put("guerra", 10);
-		rankingEsperado.add(primeiraPosicaoNoRankingEstrela);
-	}*/
+			
+		HashMap<String, Integer> rankingEsperado = new HashMap<String, Integer>();
+		rankingEsperado.put("guerra", 10);
+		assertEquals(rankingEsperado, placar.ranking("estrela"));
+	
+	}
 }

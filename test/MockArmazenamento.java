@@ -37,8 +37,11 @@ public class MockArmazenamento implements Armazenamento {
 	
 	@Override
 	public ArrayList<String> recuperarUsuariosRegistrados() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> usuarios = new ArrayList<String>();
+		
+		for (String str : _pontuacoesUsuarios.keySet())  
+		    usuarios.add(str);
+		return usuarios;
 	}
 	
 	@Override

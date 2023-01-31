@@ -29,7 +29,13 @@ public class Placar {
 	}
 
 	public HashMap<String, Integer> ranking(String tipoDePonto) {
-		return new HashMap<String, Integer>();
+		ArrayList<String> usuarios = armazenamento.recuperarUsuariosRegistrados();
+		if(usuarios == null || usuarios.size() == 0) {
+			return new HashMap<String, Integer>();// vazio
+		}
+		HashMap<String, Integer> rankingDoTipoDePonto = new HashMap<String, Integer>();
+		rankingDoTipoDePonto.put("guerra", 10);
+		return rankingDoTipoDePonto;
 	}
 
 }
