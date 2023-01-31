@@ -9,7 +9,7 @@ public class MockArmazenamento implements Armazenamento {
 	
 	private ArrayList<String> _chamadasRecebidasParaGuardarPontuacao = new ArrayList<String>();
 	private boolean _simulacaoPontuacaoInvalida;
-	private HashMap<String, Integer> _pontuacoesDoUsuario = new HashMap<String, Integer>();
+	private HashMap<String, HashMap<String, Integer>> _pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 	
 	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) throws PontuacaoInvalidaException {
@@ -21,9 +21,14 @@ public class MockArmazenamento implements Armazenamento {
 	@Override
 	public long recuperarPontos(String usuario, String tipo) {
 		int pontos = 0;
-		for ( String chaveTipo : this._pontuacoesDoUsuario.keySet() ) {
-		    if(chaveTipo.equals(tipo)) 
-		    	pontos = _pontuacoesDoUsuario.get(chaveTipo);
+		for ( String chaveUsuario : this._pontuacoesUsuarios.keySet() ) {
+			if(chaveUsuario.equals(usuario)) {
+				/*if(_pontuacoesUsuarios.get(chaveUsuario).get(tipo)) {
+					
+				}*/
+			}
+		    /*if(chaveUsuario.equals(tipo) && usuario.equals()) 
+		    	pontos = _pontuacoesUsuarios.get(chaveTipo);*/
 		}
 		return pontos;
 	}
@@ -37,11 +42,12 @@ public class MockArmazenamento implements Armazenamento {
 	@Override
 	public ArrayList<String> recuperarTiposPontuacao(String usuario) {
 		ArrayList<String> tiposDePontoDoUsuario = new ArrayList<String>();
-		for ( String tipo : this._pontuacoesDoUsuario.keySet() ) {
+		for ( String tipo : this._pontuacoesUsuarios.keySet() ) {
 		    tiposDePontoDoUsuario.add(tipo);
 		}
 		return tiposDePontoDoUsuario;
 	}
+	
 	
 	
 	public void verificaChamadasGuardarPontuacao(ArrayList<String> chamadasEsperadas) {
@@ -50,8 +56,9 @@ public class MockArmazenamento implements Armazenamento {
 	public void simulePontuacaoInvalida() {
 		_simulacaoPontuacaoInvalida = true;
 	}
-	public void setPontuacoesDoUsuario(HashMap<String, Integer> pontuacoesDoUsuario) {
-		this._pontuacoesDoUsuario = pontuacoesDoUsuario;
+	//                          <usuario (ex:guerra), <tipo (ex:moeda), pontos (ex: 2)>>
+	public void setPontuacoesUsuarios(HashMap<String, HashMap<String, Integer>> pontuacoesDoUsuario) {
+		this._pontuacoesUsuarios = pontuacoesDoUsuario;
 	}
 
 }
