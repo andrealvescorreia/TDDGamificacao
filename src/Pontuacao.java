@@ -14,11 +14,11 @@ public class Pontuacao{
 			this.pontos = pontos;
 			this.tipo = tipo;
 		}
-		Pontuacao(JSONObject json) 
+		Pontuacao(JSONObject jsonPontuacao) 
 				throws PontuacaoInvalidaException {
-			long pontos = (long) json.get("pontos");
-			String usuario = (String) json.get("usuario");
-			String tipo = (String) json.get("tipo");
+			long pontos = (long) jsonPontuacao.get("pontos");
+			String usuario = (String) jsonPontuacao.get("usuario");
+			String tipo = (String) jsonPontuacao.get("tipo");
 			validarPontuacao(usuario, pontos, tipo);
 			this.usuario = usuario;
 			this.pontos = pontos;
