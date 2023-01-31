@@ -145,7 +145,25 @@ public class PlacarTest {
 	
 	
 	
-	
+	@Test
+	public void quandoHaVariosUsuariosPoremApenasUmTemOTipoEstrelaEntaoORankingEstrelaTemApenasEle(){
+		HashMap<String, Integer> pontuacoesDoUsuarioGuerra = new HashMap<String, Integer>();
+		pontuacoesDoUsuarioGuerra.put("estrela", 10);
+		pontuacoesDoUsuarioGuerra.put("comentario", 8);
+		pontuacoesDoUsuarioGuerra.put("favorito", 1);
+		
+		HashMap<String, Integer> pontuacoesDoUsuarioTadeu = new HashMap<String, Integer>();
+		pontuacoesDoUsuarioTadeu.put("favorito", 5);
+		pontuacoesDoUsuarioTadeu.put("curtida", 11);
+		pontuacoesDoUsuarioTadeu.put("moeda", 2);
+		
+		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
+		pontuacoesUsuarios.put("tadeu", pontuacoesDoUsuarioTadeu);
+		
+		ArrayList<String> rankingEsperado = new ArrayList<String>();
+		rankingEsperado.add("guerra 10");
+		assertEquals(rankingEsperado, placar.ranking("estrela"));
+	}
 	
 	
 }
