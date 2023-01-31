@@ -13,13 +13,20 @@ public class PlacarTest {
 	MockArmazenamento mockArmazenamento;
 	Placar placar;
 	HashMap<String, HashMap<String, Integer>> pontuacoesUsuarios;
-	
+	HashMap<String, Integer> guerraPontuacoes;
+	HashMap<String, Integer> tadeuPontuacoes;
+	HashMap<String, Integer> marcoPontuacoes;
+	HashMap<String, Integer> mariaPontuacoes;
 	@Before
 	public void setUp() {
 		mockArmazenamento = new MockArmazenamento();
 		placar = new Placar(mockArmazenamento);
 		pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
+		guerraPontuacoes = new HashMap<String, Integer>();
+		marcoPontuacoes = new HashMap<String, Integer>();
+		tadeuPontuacoes = new HashMap<String, Integer>();
+		mariaPontuacoes = new HashMap<String, Integer>();
 	}
 	
 
@@ -36,17 +43,19 @@ public class PlacarTest {
 	@Test
 	public void adicionarMultiplasPontuacoes() {
 		placar.adicionarPontuacao("guerra", 10, "estrela");
-		placar.adicionarPontuacao("marco", 1, "moeda");
+		placar.adicionarPontuacao("guerra", 5, "estrela");
+		placar.adicionarPontuacao("guerra", 2, "moeda");
+		placar.adicionarPontuacao("marco", 1, "estrela");
 		placar.adicionarPontuacao("marco", 9, "moeda");
-		placar.adicionarPontuacao("maria", 4, "estrela");
 		placar.adicionarPontuacao("maria", 2, "curtida");
 		
 		
 		ArrayList<String> execucoesEsperadas = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela", 
-						  "marco 1 moeda", 
+						  "guerra 5 estrela",
+						  "guerra 2 moeda",
+						  "marco 1 estrela", 
 						  "marco 9 moeda",
-						  "maria 4 estrela",
 						  "maria 2 curtida")
 		);
 		mockArmazenamento.verificaChamadasGuardarPontuacao(execucoesEsperadas);
@@ -56,54 +65,53 @@ public class PlacarTest {
 	public void adicionarPontuacaoInvalida() {
 		mockArmazenamento.simulePontuacaoInvalida();
 		try {
-			placar.adicionarPontuacao("INVALIDA", 0, "INVALIDA");
+			placar.adicionarPontuacao("SIMULACAO", 0, "SIMULACAO");
 			fail();
 		} catch(PontuacaoInvalidaException e) {}
 	}
 	
 	@Test
 	public void pontuacoesDeUsuarioSemPontos() {
-		HashMap<String, Integer> pontuacaoVazia = new HashMap<String, Integer>();
-		assertEquals(pontuacaoVazia, placar.pontuacoes("jeremias"));
+		HashMap<String, Integer> semPontuacoes = new HashMap<String, Integer>();
+		assertEquals(semPontuacoes, placar.pontuacoes("jeremias"));
+		assertEquals(semPontuacoes, placar.pontuacoes("wanderlei"));
 	}
 	
 	@Test
 	public void pontuacoesDeUsuarioComUmTipoDePonto() {
-		HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
-		pontuacoesUsuarioGuerra.put("estrela", 10);
+		guerraPontuacoes.put("estrela", 10);
 		
-		
-		pontuacoesUsuarios.put("guerra", pontuacoesUsuarioGuerra);
+		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
 		
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
-		assertEquals(pontuacoesUsuarioGuerra, placar.pontuacoes("guerra"));
+		assertEquals(guerraPontuacoes, placar.pontuacoes("guerra"));
 	}
 	
 	@Test
-	public void pontuacoesDeUsuarioComMultiplosTiposDePontos() {
-		HashMap<String, Integer> pontuacoesUsuarioGuerra = new HashMap<String, Integer>();
-		pontuacoesUsuarioGuerra.put("estrela", 10);
-		pontuacoesUsuarioGuerra.put("moeda", 25);
-		pontuacoesUsuarioGuerra.put("curtida", 404);
+	public void pontuacoesDeUsuarioComMultiplosTiposDePonto() {
+		guerraPontuacoes.put("estrela", 10);
+		guerraPontuacoes.put("moeda", 25);
+		guerraPontuacoes.put("curtida", 404);
 		
-		pontuacoesUsuarios.put("guerra", pontuacoesUsuarioGuerra);
+		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
 
-		assertEquals(pontuacoesUsuarioGuerra, placar.pontuacoes("guerra"));
+		assertEquals(guerraPontuacoes, placar.pontuacoes("guerra"));
 	}
 	@Test
 	public void quandoNaoHaUsuariosEntaoNaoHaRanking() {
 		ArrayList<String> rankingVazio = new ArrayList<String>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
+		assertEquals(rankingVazio, placar.ranking("moeda"));
+		assertEquals(rankingVazio, placar.ranking("curtida"));
 	}
 	
 	@Test
 	public void quandoHaApenasUmUsuarioPoremEleNaoTemOTipoEstrelaEntaoNaoHaRankingEstrela() {
-		HashMap<String, Integer> pontuacoesDoUsuarioGuerra = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioGuerra.put("curtida", 10);
-		pontuacoesDoUsuarioGuerra.put("comentario", 1);
-		pontuacoesDoUsuarioGuerra.put("favorito", 5);
+		guerraPontuacoes.put("curtida", 10);
+		guerraPontuacoes.put("comentario", 10);
+		guerraPontuacoes.put("favorito", 10);
 		
-		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
+		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
 		
 		ArrayList<String> rankingVazio = new ArrayList<String>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
@@ -112,18 +120,17 @@ public class PlacarTest {
 	
 	@Test
 	public void quandoHaVariosUsuariosPoremNenhumTemOTipoEstrelaEntaoNaoHaRankingEstrela() {
-		HashMap<String, Integer> pontuacoesDoUsuarioGuerra = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioGuerra.put("curtida", 10);
-		pontuacoesDoUsuarioGuerra.put("comentario", 10);
-		pontuacoesDoUsuarioGuerra.put("favorito", 10);
+
+		guerraPontuacoes.put("curtida", 10);
+		guerraPontuacoes.put("comentario", 10);
+		guerraPontuacoes.put("favorito", 10);
+
+		tadeuPontuacoes.put("favorito", 10);
+		tadeuPontuacoes.put("curtida", 10);
+		tadeuPontuacoes.put("moeda", 10);
 		
-		HashMap<String, Integer> pontuacoesDoUsuarioTadeu = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioTadeu.put("favorito", 5);
-		pontuacoesDoUsuarioTadeu.put("curtida", 10);
-		pontuacoesDoUsuarioTadeu.put("moeda", 10);
-		
-		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
-		pontuacoesUsuarios.put("tadeu", pontuacoesDoUsuarioTadeu);
+		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
+		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
 
 		ArrayList<String> rankingVazio = new ArrayList<String>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
@@ -131,33 +138,29 @@ public class PlacarTest {
 	
 	@Test
 	public void quandoHaApenasUmUsuarioEEleTemOTipoEstrelaEntaoORankingEstrelaTemApenasEle() {
-		HashMap<String, Integer> pontuacoesDoUsuarioGuerra = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioGuerra.put("moeda", 2);
-		pontuacoesDoUsuarioGuerra.put("estrela", 10);
-		pontuacoesDoUsuarioGuerra.put("curtida", 3);
+		guerraPontuacoes.put("moeda", 2);
+		guerraPontuacoes.put("estrela", 10);
+		guerraPontuacoes.put("curtida", 3);
 		
-		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
+		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
 		
 		assertEquals(1, placar.ranking("estrela").size());
 		assertEquals("guerra 10", placar.ranking("estrela").get(0));
 	}
 	
 	
-	
 	@Test
 	public void quandoHaVariosUsuariosPoremApenasUmTemOTipoEstrelaEntaoORankingEstrelaTemApenasEle(){
-		HashMap<String, Integer> pontuacoesDoUsuarioGuerra = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioGuerra.put("estrela", 10);
-		pontuacoesDoUsuarioGuerra.put("comentario", 8);
-		pontuacoesDoUsuarioGuerra.put("favorito", 1);
+		guerraPontuacoes.put("estrela", 10);
+		guerraPontuacoes.put("comentario", 8);
+		guerraPontuacoes.put("favorito", 1);	
+
+		tadeuPontuacoes.put("favorito", 5);
+		tadeuPontuacoes.put("curtida", 11);
+		tadeuPontuacoes.put("moeda", 2);
 		
-		HashMap<String, Integer> pontuacoesDoUsuarioTadeu = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioTadeu.put("favorito", 5);
-		pontuacoesDoUsuarioTadeu.put("curtida", 11);
-		pontuacoesDoUsuarioTadeu.put("moeda", 2);
-		
-		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
-		pontuacoesUsuarios.put("tadeu", pontuacoesDoUsuarioTadeu);
+		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
+		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
 		
 		assertEquals(1, placar.ranking("estrela").size());
 		assertEquals("guerra 10", placar.ranking("estrela").get(0));
@@ -166,19 +169,17 @@ public class PlacarTest {
 	
 	@Test
 	public void quandoHaVariosUsuariosETodosTemOTipoEstrelaEntaoORankingEstrelaTemTodosOsUsuarios() {
-		HashMap<String, Integer> pontuacoesDoUsuarioGuerra = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioGuerra.put("estrela", 10);
-		pontuacoesDoUsuarioGuerra.put("comentario", 8);
-		pontuacoesDoUsuarioGuerra.put("favorito", 1);
+		guerraPontuacoes.put("estrela", 10);
+		guerraPontuacoes.put("comentario", 8);
+		guerraPontuacoes.put("favorito", 1);	
+
+		tadeuPontuacoes.put("favorito", 5);
+		tadeuPontuacoes.put("curtida", 11);
+		tadeuPontuacoes.put("moeda", 2);
+		tadeuPontuacoes.put("estrela", 25);
 		
-		HashMap<String, Integer> pontuacoesDoUsuarioTadeu = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioTadeu.put("favorito", 5);
-		pontuacoesDoUsuarioTadeu.put("curtida", 11);
-		pontuacoesDoUsuarioTadeu.put("moeda", 2);
-		pontuacoesDoUsuarioTadeu.put("estrela", 25);
-		
-		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
-		pontuacoesUsuarios.put("tadeu", pontuacoesDoUsuarioTadeu);
+		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
+		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
 		
 		assertEquals(2, placar.ranking("estrela").size());
 		assertEquals("tadeu 25", placar.ranking("estrela").get(0));// 1°
@@ -188,31 +189,27 @@ public class PlacarTest {
 	
 	@Test
 	public void quandoHaVariosUsuariosEAlgunsTemOTipoEstrelaEntaoORankingEstrelaTemApenasEssesUsuarios() {
-		HashMap<String, Integer> pontuacoesDoUsuarioGuerra = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioGuerra.put("estrela", 10);
-		pontuacoesDoUsuarioGuerra.put("comentario", 8);
-		pontuacoesDoUsuarioGuerra.put("favorito", 1);
+		guerraPontuacoes.put("estrela", 10);
+		guerraPontuacoes.put("comentario", 8);
+		guerraPontuacoes.put("favorito", 1);
 		
-		HashMap<String, Integer> pontuacoesDoUsuarioTadeu = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioTadeu.put("favorito", 5);
-		pontuacoesDoUsuarioTadeu.put("curtida", 11);
-		pontuacoesDoUsuarioTadeu.put("moeda", 2);
-		pontuacoesDoUsuarioTadeu.put("estrela", 25);
+		tadeuPontuacoes.put("favorito", 5);
+		tadeuPontuacoes.put("curtida", 11);
+		tadeuPontuacoes.put("moeda", 2);
+		tadeuPontuacoes.put("estrela", 25);
 		
-		HashMap<String, Integer> pontuacoesDoUsuarioMaria = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioMaria.put("estrela", 37);
-		pontuacoesDoUsuarioMaria.put("comentario", 8);
-		pontuacoesDoUsuarioMaria.put("favorito", 1);
+		mariaPontuacoes.put("estrela", 37);
+		mariaPontuacoes.put("comentario", 8);
+		mariaPontuacoes.put("favorito", 1);
 		
-		HashMap<String, Integer> pontuacoesDoUsuarioMarco = new HashMap<String, Integer>();
-		pontuacoesDoUsuarioMarco.put("favorito", 5);
-		pontuacoesDoUsuarioMarco.put("curtida", 11);
-		pontuacoesDoUsuarioMarco.put("moeda", 2);
+		marcoPontuacoes.put("favorito", 5);
+		marcoPontuacoes.put("curtida", 11);
+		marcoPontuacoes.put("moeda", 2);
 		
-		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
-		pontuacoesUsuarios.put("tadeu", pontuacoesDoUsuarioTadeu);
-		pontuacoesUsuarios.put("maria", pontuacoesDoUsuarioMaria);
-		pontuacoesUsuarios.put("marco", pontuacoesDoUsuarioMarco);
+		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
+		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
+		pontuacoesUsuarios.put("maria", mariaPontuacoes);
+		pontuacoesUsuarios.put("marco", marcoPontuacoes);
 		
 		assertEquals(3, placar.ranking("estrela").size());
 		assertEquals("maria 37", placar.ranking("estrela").get(0));// 1°
