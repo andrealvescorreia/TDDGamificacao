@@ -88,8 +88,16 @@ public class PlacarTest {
 		assertEquals(rankingVazio, placar.ranking("estrela"));
 	}
 	
-	
-	
+	@Test
+	public void quandoHaApenasUmUsuarioPoremEleNaoTemOTipoEstrelaEntaoNaoHaRankingEstrela() {
+		HashMap<String, Integer> pontuacaoUsuarioGuerra = new HashMap<String, Integer>();
+		pontuacaoUsuarioGuerra.put("curtida", 10);
+		
+		mockArmazenamento.setPontuacoesDoUsuario(pontuacaoUsuarioGuerra);
+		
+		HashMap<String, HashMap<String, Integer>> rankingVazio = new HashMap<String, HashMap<String, Integer>>();
+		assertEquals(rankingVazio, placar.ranking("estrela"));
+	}
 	
 	
 	
