@@ -45,7 +45,7 @@ public class MockArmazenamento implements Armazenamento {
 	}
 	
 	@Override
-	public ArrayList<String> recuperarTiposPontuacao(String usuario) {
+	public ArrayList<String> recuperarTiposDePonto(String usuario) {
 		if(usuarioNaoExiste(usuario))
 			return new ArrayList<String>();
 		

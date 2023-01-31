@@ -251,7 +251,7 @@ public class ArmazenamentoArquivoTest {
 	@Test
 	public void recuperaUmTipoDePontuacao() {
 		armazenamento.guardarPontuacao("guerra", 5, "estrela");
-		ArrayList<String> tiposRecuperados = armazenamento.recuperarTiposPontuacao("guerra");
+		ArrayList<String> tiposRecuperados = armazenamento.recuperarTiposDePonto("guerra");
 		assertEquals(1, tiposRecuperados.size());
 		assertEquals("estrela", tiposRecuperados.get(0));
 	}
@@ -265,7 +265,7 @@ public class ArmazenamentoArquivoTest {
 		
 		ArrayList<String> tiposEsperados = new ArrayList<>(Arrays.asList("estrela", "comentario", "moeda"));
 
-		ArrayList<String> tiposRecuperados = armazenamento.recuperarTiposPontuacao("guerra");
+		ArrayList<String> tiposRecuperados = armazenamento.recuperarTiposDePonto("guerra");
 		assertEquals(tiposEsperados, tiposRecuperados);
 	}
 	
@@ -282,15 +282,15 @@ public class ArmazenamentoArquivoTest {
 		armazenamento.guardarPontuacao("jose", 5, "compartilhamento");
 		
 		ArrayList<String> tiposEsperadosGuerra = new ArrayList<>(Arrays.asList("estrela", "comentario", "moeda"));
-		ArrayList<String> tiposRecuperadosGuerra = armazenamento.recuperarTiposPontuacao("guerra");
+		ArrayList<String> tiposRecuperadosGuerra = armazenamento.recuperarTiposDePonto("guerra");
 		assertEquals(tiposEsperadosGuerra, tiposRecuperadosGuerra);
 		
 		ArrayList<String> tiposEsperadosMaria = new ArrayList<>(Arrays.asList("curtida"));
-		ArrayList<String> tiposRecuperadosMaria = armazenamento.recuperarTiposPontuacao("maria");
+		ArrayList<String> tiposRecuperadosMaria = armazenamento.recuperarTiposDePonto("maria");
 		assertEquals(tiposEsperadosMaria, tiposRecuperadosMaria);
 		
 		ArrayList<String> tiposEsperadosJose = new ArrayList<>(Arrays.asList("moeda", "compartilhamento"));
-		ArrayList<String> tiposRecuperadosJose = armazenamento.recuperarTiposPontuacao("jose");
+		ArrayList<String> tiposRecuperadosJose = armazenamento.recuperarTiposDePonto("jose");
 		assertEquals(tiposEsperadosJose, tiposRecuperadosJose);
 	}
 }

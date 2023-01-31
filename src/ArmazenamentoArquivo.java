@@ -93,7 +93,7 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	}
 	
 	@Override
-	public ArrayList<String> recuperarTiposPontuacao(String usuario) {
+	public ArrayList<String> recuperarTiposDePonto(String usuario) {
 		ArrayList<String> tiposDePontuacaoDoUsuario = new ArrayList<>();
 		for (int i = 0; i < _cachePontuacoes.size(); i++) {
 			Pontuacao pontuacao = _cachePontuacoes.get(i);

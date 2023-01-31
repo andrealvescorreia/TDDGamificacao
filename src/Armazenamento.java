@@ -7,5 +7,5 @@ public interface Armazenamento {
 			throws PontuacaoInvalidaException;
 	public long recuperarPontos(String usuario, String tipo);
 	public ArrayList<String> recuperarUsuariosRegistrados();
-	public ArrayList<String> recuperarTiposPontuacao(String usuario);
+	public ArrayList<String> recuperarTiposDePonto(String usuario);
 }

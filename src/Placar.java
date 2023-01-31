@@ -18,7 +18,7 @@ public class Placar {
 
 	public HashMap<String, Integer> pontuacoes(String usuario) {
 		HashMap<String, Integer> pontuacoesDoUsuario = new HashMap<String, Integer>();
-		ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposPontuacao(usuario);
+		ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposDePonto(usuario);
 		for(String tipo: tiposDePontosDoUsuario) {
 			int pontos = (int) armazenamento.recuperarPontos(usuario, tipo);
 			pontuacoesDoUsuario.put(tipo, pontos);
@@ -31,7 +31,7 @@ public class Placar {
 		ArrayList<String> todosOsUsuarios = armazenamento.recuperarUsuariosRegistrados();
 		
 		for(String usuario: todosOsUsuarios) {
-			ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposPontuacao(usuario);
+			ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposDePonto(usuario);
 			if(tiposDePontosDoUsuario.contains(tipoDePonto)) {
 				long pontuacaoDoUsuario = armazenamento.recuperarPontos(usuario, tipoDePonto);
 				rankingDoTipoDePonto.add(usuario+" "+pontuacaoDoUsuario);
