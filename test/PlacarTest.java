@@ -138,9 +138,8 @@ public class PlacarTest {
 		
 		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
 		
-		ArrayList<String> rankingEsperado = new ArrayList<String>();
-		rankingEsperado.add("guerra 10");
-		assertEquals(rankingEsperado, placar.ranking("estrela"));
+		assertEquals(1, placar.ranking("estrela").size());
+		assertEquals("guerra 10", placar.ranking("estrela").get(0));
 	}
 	
 	
@@ -160,9 +159,8 @@ public class PlacarTest {
 		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
 		pontuacoesUsuarios.put("tadeu", pontuacoesDoUsuarioTadeu);
 		
-		ArrayList<String> rankingEsperado = new ArrayList<String>();
-		rankingEsperado.add("guerra 10");
-		assertEquals(rankingEsperado, placar.ranking("estrela"));
+		assertEquals(1, placar.ranking("estrela").size());
+		assertEquals("guerra 10", placar.ranking("estrela").get(0));
 	}
 	
 	
@@ -182,7 +180,43 @@ public class PlacarTest {
 		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
 		pontuacoesUsuarios.put("tadeu", pontuacoesDoUsuarioTadeu);
 		
+		assertEquals(2, placar.ranking("estrela").size());
 		assertEquals("tadeu 25", placar.ranking("estrela").get(0));// 1°
 		assertEquals("guerra 10", placar.ranking("estrela").get(1));// 2°
+		
+	}
+	
+	@Test
+	public void quandoHaVariosUsuariosEAlgunsTemOTipoEstrelaEntaoORankingEstrelaTemApenasEssesUsuarios() {
+		HashMap<String, Integer> pontuacoesDoUsuarioGuerra = new HashMap<String, Integer>();
+		pontuacoesDoUsuarioGuerra.put("estrela", 10);
+		pontuacoesDoUsuarioGuerra.put("comentario", 8);
+		pontuacoesDoUsuarioGuerra.put("favorito", 1);
+		
+		HashMap<String, Integer> pontuacoesDoUsuarioTadeu = new HashMap<String, Integer>();
+		pontuacoesDoUsuarioTadeu.put("favorito", 5);
+		pontuacoesDoUsuarioTadeu.put("curtida", 11);
+		pontuacoesDoUsuarioTadeu.put("moeda", 2);
+		pontuacoesDoUsuarioTadeu.put("estrela", 25);
+		
+		HashMap<String, Integer> pontuacoesDoUsuarioMaria = new HashMap<String, Integer>();
+		pontuacoesDoUsuarioMaria.put("estrela", 37);
+		pontuacoesDoUsuarioMaria.put("comentario", 8);
+		pontuacoesDoUsuarioMaria.put("favorito", 1);
+		
+		HashMap<String, Integer> pontuacoesDoUsuarioMarco = new HashMap<String, Integer>();
+		pontuacoesDoUsuarioMarco.put("favorito", 5);
+		pontuacoesDoUsuarioMarco.put("curtida", 11);
+		pontuacoesDoUsuarioMarco.put("moeda", 2);
+		
+		pontuacoesUsuarios.put("guerra", pontuacoesDoUsuarioGuerra);
+		pontuacoesUsuarios.put("tadeu", pontuacoesDoUsuarioTadeu);
+		pontuacoesUsuarios.put("maria", pontuacoesDoUsuarioMaria);
+		pontuacoesUsuarios.put("marco", pontuacoesDoUsuarioMarco);
+		
+		assertEquals(3, placar.ranking("estrela").size());
+		assertEquals("maria 37", placar.ranking("estrela").get(0));// 1°
+		assertEquals("tadeu 25", placar.ranking("estrela").get(1));// 2°
+		assertEquals("guerra 10", placar.ranking("estrela").get(2));// 3°
 	}
 }
