@@ -27,6 +27,10 @@ public class PlacarTest {
 		marcoPontuacoes = new HashMap<String, Integer>();
 		tadeuPontuacoes = new HashMap<String, Integer>();
 		mariaPontuacoes = new HashMap<String, Integer>();
+		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
+		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
+		pontuacoesUsuarios.put("maria", mariaPontuacoes);
+		pontuacoesUsuarios.put("marco", marcoPontuacoes);
 	}
 	
 
@@ -81,8 +85,6 @@ public class PlacarTest {
 	public void pontuacoesDeUsuarioComUmTipoDePonto() {
 		guerraPontuacoes.put("estrela", 10);
 		
-		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
-		
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
 		assertEquals(guerraPontuacoes, placar.pontuacoes("guerra"));
 	}
@@ -92,8 +94,6 @@ public class PlacarTest {
 		guerraPontuacoes.put("estrela", 10);
 		guerraPontuacoes.put("moeda", 25);
 		guerraPontuacoes.put("curtida", 404);
-		
-		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
 
 		assertEquals(guerraPontuacoes, placar.pontuacoes("guerra"));
 	}
@@ -111,8 +111,6 @@ public class PlacarTest {
 		guerraPontuacoes.put("comentario", 10);
 		guerraPontuacoes.put("favorito", 10);
 		
-		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
-		
 		ArrayList<String> rankingVazio = new ArrayList<String>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
 	}
@@ -120,7 +118,6 @@ public class PlacarTest {
 	
 	@Test
 	public void quandoHaVariosUsuariosPoremNenhumTemOTipoEstrelaEntaoNaoHaRankingEstrela() {
-
 		guerraPontuacoes.put("curtida", 10);
 		guerraPontuacoes.put("comentario", 10);
 		guerraPontuacoes.put("favorito", 10);
@@ -128,9 +125,6 @@ public class PlacarTest {
 		tadeuPontuacoes.put("favorito", 10);
 		tadeuPontuacoes.put("curtida", 10);
 		tadeuPontuacoes.put("moeda", 10);
-		
-		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
-		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
 
 		ArrayList<String> rankingVazio = new ArrayList<String>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
@@ -141,8 +135,6 @@ public class PlacarTest {
 		guerraPontuacoes.put("moeda", 2);
 		guerraPontuacoes.put("estrela", 10);
 		guerraPontuacoes.put("curtida", 3);
-		
-		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
 		
 		assertEquals(1, placar.ranking("estrela").size());
 		assertEquals("guerra 10", placar.ranking("estrela").get(0));
@@ -158,9 +150,6 @@ public class PlacarTest {
 		tadeuPontuacoes.put("favorito", 5);
 		tadeuPontuacoes.put("curtida", 11);
 		tadeuPontuacoes.put("moeda", 2);
-		
-		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
-		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
 		
 		assertEquals(1, placar.ranking("estrela").size());
 		assertEquals("guerra 10", placar.ranking("estrela").get(0));
@@ -178,13 +167,9 @@ public class PlacarTest {
 		tadeuPontuacoes.put("moeda", 2);
 		tadeuPontuacoes.put("estrela", 25);
 		
-		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
-		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
-		
 		assertEquals(2, placar.ranking("estrela").size());
 		assertEquals("tadeu 25", placar.ranking("estrela").get(0));// 1°
 		assertEquals("guerra 10", placar.ranking("estrela").get(1));// 2°
-		
 	}
 	
 	@Test
@@ -205,11 +190,6 @@ public class PlacarTest {
 		marcoPontuacoes.put("favorito", 5);
 		marcoPontuacoes.put("curtida", 11);
 		marcoPontuacoes.put("moeda", 2);
-		
-		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
-		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
-		pontuacoesUsuarios.put("maria", mariaPontuacoes);
-		pontuacoesUsuarios.put("marco", marcoPontuacoes);
 		
 		assertEquals(3, placar.ranking("estrela").size());
 		assertEquals("maria 37", placar.ranking("estrela").get(0));// 1°
