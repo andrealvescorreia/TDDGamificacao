@@ -41,7 +41,8 @@ public class Placar {
 			if(tiposDePontosDoUsuario.contains(tipoDePonto) == false) {
 				continue;
 			}
-			//rankingDoTipoDePonto.p
+			long pontuacaoDoUsuario = armazenamento.recuperarPontos(usuario, tipoDePonto);
+			rankingDoTipoDePonto.add(usuario+" "+pontuacaoDoUsuario);
 			
 		}
 
