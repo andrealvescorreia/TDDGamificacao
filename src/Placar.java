@@ -42,17 +42,19 @@ public class Placar {
 	
 	private ArrayList<String> ordenarRanking(ArrayList<String> ranking){
 		ArrayList<String> rankingOrdenado = ranking;
-		for(int i = 0; i < rankingOrdenado.size() - 1; i++) {
-	      for(int j = 0; j < rankingOrdenado.size() - 1 - i; j++) {
-	    	int valor1 = Integer.parseInt(rankingOrdenado.get(j).split(" ")[1]);
-	    	int valor2 = Integer.parseInt(rankingOrdenado.get(j + 1).split(" ")[1]);
-	        if(valor1 < valor2) {
-	          String aux = rankingOrdenado.get(j);
-	          rankingOrdenado.set(j, rankingOrdenado.get(j+1));
-	          rankingOrdenado.set(j+1, aux);
-	        }
-	      }
-	    }
+		// bubble sort
+		for (int i = 0; i < rankingOrdenado.size() - 1; i++) {
+			for (int j = 0; j < rankingOrdenado.size() - 1 - i; j++) {
+				int valor1 = Integer.parseInt(rankingOrdenado.get(j).split(" ")[1]);
+				int valor2 = Integer.parseInt(rankingOrdenado.get(j + 1).split(" ")[1]);
+				if (valor1 < valor2) {
+					String aux = rankingOrdenado.get(j);
+					rankingOrdenado.set(j, rankingOrdenado.get(j + 1));
+					rankingOrdenado.set(j + 1, aux);
+				}
+			}
+		}
 		return rankingOrdenado;
 	}
+	
 }
