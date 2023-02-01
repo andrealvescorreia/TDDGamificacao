@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import excecoes.PontuacaoInvalidaException;
 
@@ -26,31 +28,18 @@ public class Placar {
 	}
 
 	public ArrayList<String> ranking(String tipoDePonto) {
-		var rankingDoTipoDePonto = new ArrayList<String>();
+		var rankingAuxMap = new TreeMap<Integer, String> (Comparator.reverseOrder());
 		for(String usuario: armazenamento.recuperarUsuariosRegistrados()) {
 			ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposDePonto(usuario);
 			if(tiposDePontosDoUsuario.contains(tipoDePonto)) {
-				long pontuacaoDoUsuario = armazenamento.recuperarPontos(usuario, tipoDePonto);
-				rankingDoTipoDePonto.add(usuario+" "+pontuacaoDoUsuario);
+				int pontuacaoDoUsuario = (int) armazenamento.recuperarPontos(usuario, tipoDePonto);
+				rankingAuxMap.put(pontuacaoDoUsuario, usuario);
 			}
 		}
-		return ordenarRanking(rankingDoTipoDePonto);
-	}
-	
-	private ArrayList<String> ordenarRanking(ArrayList<String> ranking){
-		ArrayList<String> rankingOrdenado = ranking;
-		// bubble sort
-		for (int i = 0; i < rankingOrdenado.size() - 1; i++) {
-			for (int j = 0; j < rankingOrdenado.size() - 1 - i; j++) {
-				int valor1 = Integer.parseInt(rankingOrdenado.get(j).split(" ")[1]);
-				int valor2 = Integer.parseInt(rankingOrdenado.get(j + 1).split(" ")[1]);
-				if (valor1 < valor2) {
-					String aux = rankingOrdenado.get(j);
-					rankingOrdenado.set(j, rankingOrdenado.get(j + 1));
-					rankingOrdenado.set(j + 1, aux);
-				}
-			}
-		}
-		return rankingOrdenado;
+		
+		var rankingDoTipoDePonto = new ArrayList<String>();
+		for(var pontuacao : rankingAuxMap.entrySet())
+			rankingDoTipoDePonto.add(pontuacao.getValue()+" "+pontuacao.getKey());
+		return rankingDoTipoDePonto;
 	}
 }
