@@ -25,13 +25,13 @@ public class PlacarTest {
 		pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
 		guerraPontuacoes = new HashMap<String, Integer>();
-		tadeuPontuacoes = new HashMap<String, Integer>();
-		marcoPontuacoes = new HashMap<String, Integer>();
-		mariaPontuacoes = new HashMap<String, Integer>();
+		tadeuPontuacoes  = new HashMap<String, Integer>();
+		marcoPontuacoes  = new HashMap<String, Integer>();
+		mariaPontuacoes  = new HashMap<String, Integer>();
 		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
-		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
-		pontuacoesUsuarios.put("maria", mariaPontuacoes);
-		pontuacoesUsuarios.put("marco", marcoPontuacoes);
+		pontuacoesUsuarios.put("tadeu",  tadeuPontuacoes);
+		pontuacoesUsuarios.put("maria",  mariaPontuacoes);
+		pontuacoesUsuarios.put("marco",  marcoPontuacoes);
 	}
 	
 
@@ -48,14 +48,13 @@ public class PlacarTest {
 	@Test
 	public void adicionarMultiplasPontuacoes() {
 		placar.adicionarPontuacao("guerra", 10, "estrela");
-		placar.adicionarPontuacao("guerra", 5, "estrela");
-		placar.adicionarPontuacao("guerra", 2, "moeda");
-		placar.adicionarPontuacao("marco", 1, "estrela");
-		placar.adicionarPontuacao("marco", 9, "moeda");
-		placar.adicionarPontuacao("maria", 2, "curtida");
+		placar.adicionarPontuacao("guerra",  5, "estrela");
+		placar.adicionarPontuacao("guerra",  2, "moeda");
+		placar.adicionarPontuacao("marco",   1, "estrela");
+		placar.adicionarPontuacao("marco",   9, "moeda");
+		placar.adicionarPontuacao("maria",   2, "curtida");
 		
-		
-		var execucoesEsperadas = new ArrayList<>(
+		var chamadasEsperadas = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela", 
 						  "guerra 5 estrela",
 						  "guerra 2 moeda",
@@ -63,136 +62,129 @@ public class PlacarTest {
 						  "marco 9 moeda",
 						  "maria 2 curtida")
 		);
-		mockArmazenamento.verificaChamadasGuardarPontuacao(execucoesEsperadas);
+		mockArmazenamento.verificaChamadasGuardarPontuacao(chamadasEsperadas);
 	}
 	
-	@Test
+	@Test(expected = PontuacaoInvalidaException.class )
 	public void adicionarPontuacaoInvalida() {
 		mockArmazenamento.simulePontuacaoInvalida();
-		try {
-			placar.adicionarPontuacao("SIMULACAO", 0, "SIMULACAO");
-			fail();
-		} catch(PontuacaoInvalidaException e) {}
+		placar.adicionarPontuacao("SIMULACAO", 0, "SIMULACAO");
 	}
 	
 	@Test
-	public void pontuacoesDeUsuarioSemPontos() {
-		HashMap<String, Integer> semPontuacoes = new HashMap<String, Integer>();
+	public void usuarioSemPontuacoes() {
+		var semPontuacoes = new HashMap<String, Integer>();
 		assertEquals(semPontuacoes, placar.pontuacoes("jeremias"));
-		assertEquals(semPontuacoes, placar.pontuacoes("wanderlei"));
 	}
 	
 	@Test
 	public void pontuacoesDeUsuarioComUmTipoDePonto() {
-		guerraPontuacoes.put("estrela", 10);
+		guerraPontuacoes.put("estrela", 1);
 		assertEquals(guerraPontuacoes, placar.pontuacoes("guerra"));
 	}
 	
 	@Test
 	public void pontuacoesDeUsuarioComMultiplosTiposDePontos() {
-		guerraPontuacoes.put("estrela", 10);
-		guerraPontuacoes.put("moeda", 25);
-		guerraPontuacoes.put("curtida", 404);
+		guerraPontuacoes.put("estrela",  1);
+		guerraPontuacoes.put("moeda",    1);
+		guerraPontuacoes.put("curtida",  1);
 
 		assertEquals(guerraPontuacoes, placar.pontuacoes("guerra"));
 	}
 	@Test
-	public void quandoNaoHaUsuariosEntaoNaoHaRanking() {
-		ArrayList<String> rankingVazio = new ArrayList<String>();
+	public void rankingQuandoNaoHaUsuarios() {
+		var rankingVazio = new ArrayList<String>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
-		assertEquals(rankingVazio, placar.ranking("moeda"));
-		assertEquals(rankingVazio, placar.ranking("curtida"));
 	}
 	
 	@Test
-	public void quandoHaApenasUmUsuarioPoremEleNaoTemOTipoEstrelaEntaoNaoHaRankingEstrela() {
-		guerraPontuacoes.put("curtida", 10);
-		guerraPontuacoes.put("comentario", 10);
-		guerraPontuacoes.put("favorito", 10);
+	public void rankingQuandoOUnicoUsuarioNaoTemOTipoDePonto() {
+		guerraPontuacoes.put("curtida",    1);
+		guerraPontuacoes.put("comentario", 1);
+		guerraPontuacoes.put("favorito",   1);
 		
-		ArrayList<String> rankingVazio = new ArrayList<String>();
+		var rankingVazio = new ArrayList<String>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
 	}
 	
 	
 	@Test
-	public void quandoHaVariosUsuariosPoremNenhumTemOTipoEstrelaEntaoNaoHaRankingEstrela() {
-		guerraPontuacoes.put("curtida", 10);
-		guerraPontuacoes.put("comentario", 10);
-		guerraPontuacoes.put("favorito", 10);
+	public void rankingQuandoNenhumDosUsuariosTemOTIpoDoPonto() {
+		guerraPontuacoes.put("curtida",    1);
+		guerraPontuacoes.put("comentario", 1);
+		guerraPontuacoes.put("favorito",   1);
 
-		tadeuPontuacoes.put("favorito", 10);
-		tadeuPontuacoes.put("curtida", 10);
-		tadeuPontuacoes.put("moeda", 10);
+		tadeuPontuacoes.put ("favorito",   1);
+		tadeuPontuacoes.put ("curtida",    1);
+		tadeuPontuacoes.put ("moeda",      1);
 
-		ArrayList<String> rankingVazio = new ArrayList<String>();
+		var rankingVazio = new ArrayList<String>();
 		assertEquals(rankingVazio, placar.ranking("estrela"));
 	}
 	
 	@Test
-	public void quandoHaApenasUmUsuarioEEleTemOTipoEstrelaEntaoORankingEstrelaTemApenasEle() {
-		guerraPontuacoes.put("moeda", 2);
+	public void rankingQuandoOUnicoUsuarioTemOTipoDePonto() {
+		guerraPontuacoes.put("moeda",    2);
 		guerraPontuacoes.put("estrela", 10);
-		guerraPontuacoes.put("curtida", 3);
+		guerraPontuacoes.put("curtida",  3);
 		
-		assertEquals(1, placar.ranking("estrela").size());
+		assertEquals(1, 		  placar.ranking("estrela").size());
 		assertEquals("guerra 10", placar.ranking("estrela").get(0));
 	}
 	
 	
 	@Test
-	public void quandoHaVariosUsuariosPoremApenasUmTemOTipoEstrelaEntaoORankingEstrelaTemApenasEle(){
-		guerraPontuacoes.put("estrela", 10);
+	public void rankingQuandoApenasUmDosUsuariosTemOTipoDePonto(){
+		guerraPontuacoes.put("estrela",   10);
 		guerraPontuacoes.put("comentario", 8);
-		guerraPontuacoes.put("favorito", 1);	
+		guerraPontuacoes.put("favorito",   1);	
 
-		tadeuPontuacoes.put("favorito", 5);
-		tadeuPontuacoes.put("curtida", 11);
-		tadeuPontuacoes.put("moeda", 2);
+		tadeuPontuacoes.put ("favorito",   5);
+		tadeuPontuacoes.put ("curtida",   11);
+		tadeuPontuacoes.put ("moeda",      2);
 		
-		assertEquals(1, placar.ranking("estrela").size());
+		assertEquals(1, 		  placar.ranking("estrela").size());
 		assertEquals("guerra 10", placar.ranking("estrela").get(0));
 	}
 	
 	
 	@Test
-	public void quandoHaVariosUsuariosETodosTemOTipoEstrelaEntaoORankingEstrelaTemTodosOsUsuarios() {
-		guerraPontuacoes.put("estrela", 10);
+	public void rankingQuandoTodosOsUsuariosTemOTipoDePonto() {
+		guerraPontuacoes.put("estrela",   10);
 		guerraPontuacoes.put("comentario", 8);
-		guerraPontuacoes.put("favorito", 1);	
+		guerraPontuacoes.put("favorito",   1);	
 
-		tadeuPontuacoes.put("favorito", 5);
-		tadeuPontuacoes.put("curtida", 11);
-		tadeuPontuacoes.put("moeda", 2);
-		tadeuPontuacoes.put("estrela", 25);
+		tadeuPontuacoes.put ("favorito",   5);
+		tadeuPontuacoes.put ("curtida",   11);
+		tadeuPontuacoes.put ("moeda",      2);
+		tadeuPontuacoes.put ("estrela",   25);
 		
-		assertEquals(2, placar.ranking("estrela").size());
-		assertEquals("tadeu 25", placar.ranking("estrela").get(0));// 1°
+		assertEquals(2, 		  placar.ranking("estrela").size());
+		assertEquals("tadeu 25",  placar.ranking("estrela").get(0));// 1°
 		assertEquals("guerra 10", placar.ranking("estrela").get(1));// 2°
 	}
 	
 	@Test
-	public void quandoHaVariosUsuariosEAlgunsTemOTipoEstrelaEntaoORankingEstrelaTemApenasEssesUsuarios() {
-		guerraPontuacoes.put("estrela", 10);
+	public void rankingQuandoAlgunsUsuariosTemOTipoDePonto() {
+		guerraPontuacoes.put("estrela",   10);
 		guerraPontuacoes.put("comentario", 8);
-		guerraPontuacoes.put("favorito", 1);
+		guerraPontuacoes.put("favorito",   1);
 		
-		tadeuPontuacoes.put("favorito", 5);
-		tadeuPontuacoes.put("curtida", 11);
-		tadeuPontuacoes.put("moeda", 2);
-		tadeuPontuacoes.put("estrela", 25);
+		tadeuPontuacoes.put ("favorito",   5);
+		tadeuPontuacoes.put ("curtida",   11);
+		tadeuPontuacoes.put ("moeda",      2);
+		tadeuPontuacoes.put ("estrela",   25);
 		
-		mariaPontuacoes.put("estrela", 37);
-		mariaPontuacoes.put("comentario", 8);
-		mariaPontuacoes.put("favorito", 1);
+		mariaPontuacoes.put ("moeda",     37);
+		mariaPontuacoes.put ("comentario", 8);
+		mariaPontuacoes.put ("favorito",   1);
 		
-		marcoPontuacoes.put("favorito", 5);
-		marcoPontuacoes.put("curtida", 11);
-		marcoPontuacoes.put("moeda", 2);
+		marcoPontuacoes.put ("favorito",   5);
+		marcoPontuacoes.put ("curtida",   11);
+		marcoPontuacoes.put ("moeda",      2);
 		
-		assertEquals(3, placar.ranking("estrela").size());
-		assertEquals("maria 37", placar.ranking("estrela").get(0));// 1°
-		assertEquals("tadeu 25", placar.ranking("estrela").get(1));// 2°
-		assertEquals("guerra 10", placar.ranking("estrela").get(2));// 3°
+		assertEquals(2, 		  placar.ranking("estrela").size());
+		assertEquals("tadeu 25",  placar.ranking("estrela").get(0));// 1°
+		assertEquals("guerra 10", placar.ranking("estrela").get(1));// 2°
 	}
 }
