@@ -53,4 +53,7 @@ public class Pontuacao{
 		public long getPontos() {
 			return this.pontos;
 		}
+		public void addPontos(long pontos) {
+			this.pontos += pontos;
+		}
 	}

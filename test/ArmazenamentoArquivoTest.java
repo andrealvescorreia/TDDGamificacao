@@ -30,7 +30,7 @@ public class ArmazenamentoArquivoTest {
 	
 	public void escreverNoArquivoDeArmazenamento(String conteudo) {
 		try {
-			FileWriter fileWriter = new FileWriter(ArmazenamentoArquivo.CAMINHO_ARQUIVO);
+			var fileWriter = new FileWriter(ArmazenamentoArquivo.CAMINHO_ARQUIVO);
 			fileWriter.write(conteudo);
 			fileWriter.close();
 		} catch (IOException e) {
@@ -41,9 +41,9 @@ public class ArmazenamentoArquivoTest {
 	
 	
 	public String lerDadosBrutosArmazenamento() {
-		String dados = "";
+		var dados = "";
 		try {
-			Scanner leitor = new Scanner(new File(ArmazenamentoArquivo.CAMINHO_ARQUIVO));
+			var leitor = new Scanner(new File(ArmazenamentoArquivo.CAMINHO_ARQUIVO));
 			while (leitor.hasNextLine())
 				dados += leitor.nextLine();
 			leitor.close();
@@ -97,9 +97,7 @@ public class ArmazenamentoArquivoTest {
 		armazenamento.guardarPontuacao("guerra", 1, "estrela");
 		armazenamento.guardarPontuacao("guerra", 9, "estrela");
 
-		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
-				    + "{\"tipo\":\"estrela\",\"pontos\":1,\"usuario\":\"guerra\"},"
-				    + "{\"tipo\":\"estrela\",\"pontos\":9,\"usuario\":\"guerra\"}]"
+		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":20,\"usuario\":\"guerra\"}]"
 				    , lerDadosBrutosArmazenamento());
 	}
 
@@ -110,8 +108,7 @@ public class ArmazenamentoArquivoTest {
 		armazenamento.guardarPontuacao("guerra", 1, "curtida");
 		armazenamento.guardarPontuacao("guerra", 9, "favorito");
 
-		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":10,\"usuario\":\"guerra\"},"
-					+ "{\"tipo\":\"estrela\",\"pontos\":5,\"usuario\":\"guerra\"},"
+		assertEquals("[{\"tipo\":\"estrela\",\"pontos\":15,\"usuario\":\"guerra\"},"
 					+ "{\"tipo\":\"curtida\",\"pontos\":1,\"usuario\":\"guerra\"},"
 					+ "{\"tipo\":\"favorito\",\"pontos\":9,\"usuario\":\"guerra\"}]"
 					, lerDadosBrutosArmazenamento());
@@ -207,8 +204,9 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void recuperaUmUsuario() {
-		ArrayList<String> usuariosEsperados = new ArrayList<String>();
-		usuariosEsperados.add("guerra");
+		var usuariosEsperados = new ArrayList<String>(
+			Arrays.asList("guerra")
+		);
 		armazenamento.guardarPontuacao("guerra", 1, "estrela");
 		
 		assertEquals(usuariosEsperados, armazenamento.recuperarUsuariosRegistrados());
@@ -216,10 +214,10 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void recuperaVariosUsuarios() {
-		ArrayList<String> usuariosEsperados = new ArrayList<String>();
-		usuariosEsperados.add("guerra");
-		usuariosEsperados.add("maria");
-		usuariosEsperados.add("jose");
+		var usuariosEsperados = new ArrayList<String>(
+			Arrays.asList("guerra", "maria", "jose")
+		);
+
 		armazenamento.guardarPontuacao("guerra", 1, "estrela");
 		armazenamento.guardarPontuacao("maria", 1, "comentario");
 		armazenamento.guardarPontuacao("maria", 1, "comentario");
@@ -234,7 +232,7 @@ public class ArmazenamentoArquivoTest {
 	public void simularArquivoInvalido() {
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
 		assertEquals("Esse Texto É Invalido!", lerDadosBrutosArmazenamento());
-		armazenamento = new ArmazenamentoArquivo();
+		armazenamento = new ArmazenamentoArquivo();// força o armazenamento a tentar recuperar dados invalidos!
 		armazenamento.guardarPontuacao("guerra", 1, "estrela");
 		armazenamento.guardarPontuacao("maria", 1, "comentario");
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");

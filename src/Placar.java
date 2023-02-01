@@ -28,17 +28,18 @@ public class Placar {
 	}
 
 	public ArrayList<String> ranking(String tipoDePonto) {
-		var rankingAuxMap = new TreeMap<Integer, String> (Comparator.reverseOrder());
+		var rankingTreeMap = new TreeMap<Integer, String>(Comparator.reverseOrder());
+		
 		for(String usuario: armazenamento.recuperarUsuariosRegistrados()) {
 			ArrayList<String> tiposDePontosDoUsuario = armazenamento.recuperarTiposDePonto(usuario);
 			if(tiposDePontosDoUsuario.contains(tipoDePonto)) {
 				int pontuacaoDoUsuario = (int) armazenamento.recuperarPontos(usuario, tipoDePonto);
-				rankingAuxMap.put(pontuacaoDoUsuario, usuario);
+				rankingTreeMap.put(pontuacaoDoUsuario, usuario);
 			}
 		}
 		
 		var rankingDoTipoDePonto = new ArrayList<String>();
-		for(var pontuacao : rankingAuxMap.entrySet())
+		for(var pontuacao : rankingTreeMap.entrySet())
 			rankingDoTipoDePonto.add(pontuacao.getValue()+" "+pontuacao.getKey());
 		return rankingDoTipoDePonto;
 	}

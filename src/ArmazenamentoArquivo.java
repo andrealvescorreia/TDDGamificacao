@@ -43,8 +43,16 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) 
 			throws PontuacaoInvalidaException {
-		Pontuacao pontuacao = new Pontuacao(usuario, pontos, tipo);
-		_cachePontuacoes.add(pontuacao);
+		//Pontuacao pontuacao = new Pontuacao(usuario, pontos, tipo);
+		for(Pontuacao pontuacaoExistente : _cachePontuacoes) {
+			if(pontuacaoExistente.getUsuario().equals(usuario) && pontuacaoExistente.getTipo().equals(tipo)) {
+				pontuacaoExistente.addPontos(pontos);
+				salvarCacheNoArquivo();
+				return;
+			}
+		}
+		Pontuacao novaPontuacao = new Pontuacao(usuario, pontos, tipo);
+		_cachePontuacoes.add(novaPontuacao);
 		salvarCacheNoArquivo();
 	}
 	
@@ -69,12 +77,11 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	
 	@Override
 	public long recuperarPontos(String usuario, String tipo) {
-		long totalPontosRecuperados = 0;
 		for(Pontuacao pontuacao : _cachePontuacoes) {
 			if(usuario.equals(pontuacao.getUsuario()) && tipo.equals(pontuacao.getTipo()))
-				totalPontosRecuperados += pontuacao.getPontos();
+				return pontuacao.getPontos();
 		}
-		return totalPontosRecuperados;
+		return 0;
 	}
 	
 	@Override

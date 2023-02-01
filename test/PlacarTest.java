@@ -38,7 +38,7 @@ public class PlacarTest {
 	@Test
 	public void adicionarUmaPontuacao() {
 		placar.adicionarPontuacao("guerra", 10, "estrela");
-		ArrayList<String> execucaoEsperada = new ArrayList<>(
+		var execucaoEsperada = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela")
 		);
 		// assegura que a classe Placar realmente manda os dados para serem salvos pelo Armazenamento.
@@ -55,7 +55,7 @@ public class PlacarTest {
 		placar.adicionarPontuacao("maria", 2, "curtida");
 		
 		
-		ArrayList<String> execucoesEsperadas = new ArrayList<>(
+		var execucoesEsperadas = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela", 
 						  "guerra 5 estrela",
 						  "guerra 2 moeda",
