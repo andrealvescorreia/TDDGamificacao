@@ -1,7 +1,7 @@
 import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 import excecoes.PontuacaoInvalidaException;
 
@@ -20,24 +20,15 @@ public class MockArmazenamento implements Armazenamento {
 	}
 	
 	@Override
-	public long recuperarPontos(String usuario, String tipo) {
-		if(usuarioComTipoDePontoNaoExiste(usuario, tipo))
-			return 0;
-		return _pontuacoesUsuarios.get(usuario).get(tipo);
-		
-	}
-	
-	private boolean usuarioComTipoDePontoNaoExiste(String usuario, String tipoDePonto) {
-		if(usuarioNaoExiste(usuario)) return true;
-		return !_pontuacoesUsuarios.get(usuario).containsKey(tipoDePonto);
-	}
-	private boolean usuarioNaoExiste(String usuario) {
-		return !_pontuacoesUsuarios.containsKey(usuario);
+	public long recuperarPontos(String usuario, String tipo) {	
+		HashMap<String,Integer> pontuacoesDoUsuario = Optional.ofNullable(this._pontuacoesUsuarios.get(usuario))
+					  										  .orElse(new HashMap<String,Integer>());
+		return pontuacoesDoUsuario.get(tipo);
 	}
 	
 	@Override
 	public ArrayList<String> recuperarUsuariosRegistrados() {
-		ArrayList<String> usuarios = new ArrayList<String>();
+		var usuarios = new ArrayList<String>();
 		for (String usuario : _pontuacoesUsuarios.keySet())  
 		    usuarios.add(usuario);
 		return usuarios;
@@ -45,13 +36,11 @@ public class MockArmazenamento implements Armazenamento {
 	
 	@Override
 	public ArrayList<String> recuperarTiposDePonto(String usuario) {
-		ArrayList<String> tiposDePontoDoUsuario = new ArrayList<String>();
-		if(usuarioNaoExiste(usuario))
-			return tiposDePontoDoUsuario;// vazio
-		
-		for ( String tipo : this._pontuacoesUsuarios.get(usuario).keySet() )
+		var tiposDePontoDoUsuario = new ArrayList<String>();
+		HashMap<String,Integer> pontuacoesDoUsuario = Optional.ofNullable(this._pontuacoesUsuarios.get(usuario))
+                	   										  .orElse(new HashMap<String,Integer>());
+		for (String tipo : pontuacoesDoUsuario.keySet())
 			tiposDePontoDoUsuario.add(tipo);
-		
 		return tiposDePontoDoUsuario;
 	}
 	

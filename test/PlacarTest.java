@@ -10,13 +10,14 @@ import org.junit.Test;
 import excecoes.PontuacaoInvalidaException;
 
 public class PlacarTest {
-	MockArmazenamento mockArmazenamento;
 	Placar placar;
+	MockArmazenamento mockArmazenamento;
 	HashMap<String, HashMap<String, Integer>> pontuacoesUsuarios;
 	HashMap<String, Integer> guerraPontuacoes;
 	HashMap<String, Integer> tadeuPontuacoes;
 	HashMap<String, Integer> marcoPontuacoes;
 	HashMap<String, Integer> mariaPontuacoes;
+	
 	@Before
 	public void setUp() {
 		mockArmazenamento = new MockArmazenamento();
@@ -24,8 +25,8 @@ public class PlacarTest {
 		pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
 		guerraPontuacoes = new HashMap<String, Integer>();
-		marcoPontuacoes = new HashMap<String, Integer>();
 		tadeuPontuacoes = new HashMap<String, Integer>();
+		marcoPontuacoes = new HashMap<String, Integer>();
 		mariaPontuacoes = new HashMap<String, Integer>();
 		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
 		pontuacoesUsuarios.put("tadeu", tadeuPontuacoes);
