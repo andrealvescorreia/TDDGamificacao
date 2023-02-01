@@ -13,10 +13,12 @@ public class PlacarTest {
 	Placar placar;
 	MockArmazenamento mockArmazenamento;
 	HashMap<String, HashMap<String, Integer>> pontuacoesUsuarios;
+	
 	HashMap<String, Integer> guerraPontuacoes;
 	HashMap<String, Integer> tadeuPontuacoes;
 	HashMap<String, Integer> marcoPontuacoes;
 	HashMap<String, Integer> mariaPontuacoes;
+	
 	
 	@Before
 	public void setUp() {
@@ -24,10 +26,12 @@ public class PlacarTest {
 		placar = new Placar(mockArmazenamento);
 		pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
-		guerraPontuacoes = new HashMap<String, Integer>();
-		tadeuPontuacoes  = new HashMap<String, Integer>();
-		marcoPontuacoes  = new HashMap<String, Integer>();
-		mariaPontuacoes  = new HashMap<String, Integer>();
+		
+		guerraPontuacoes   = new HashMap<String, Integer>();
+		tadeuPontuacoes    = new HashMap<String, Integer>();
+		marcoPontuacoes    = new HashMap<String, Integer>();
+		mariaPontuacoes    = new HashMap<String, Integer>();
+		
 		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
 		pontuacoesUsuarios.put("tadeu",  tadeuPontuacoes);
 		pontuacoesUsuarios.put("maria",  mariaPontuacoes);
@@ -146,7 +150,6 @@ public class PlacarTest {
 		assertEquals(1, 		  placar.ranking("estrela").size());
 		assertEquals("guerra 10", placar.ranking("estrela").get(0));
 	}
-	
 	
 	@Test
 	public void rankingQuandoTodosOsUsuariosTemOTipoDePonto() {
