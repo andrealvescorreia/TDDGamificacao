@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import excecoes.PontuacaoInvalidaException;
 
 public interface Armazenamento {
