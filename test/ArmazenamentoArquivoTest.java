@@ -145,8 +145,8 @@ public class ArmazenamentoArquivoTest {
 	@Test
 	public void armazenaPontuacoesDiferentesUsuarios() {
 		arm.guardarPontuacao("guerra", 10, "estrela");
-		arm.guardarPontuacao("marco", 5, "estrela");
-		arm.guardarPontuacao("tadeu", 1, "curtida");
+		arm.guardarPontuacao("marco",   5, "estrela");
+		arm.guardarPontuacao("tadeu",   1, "curtida");
 		
 		assertEquals("["
 						+ jsonPontuacao("guerra", 10, "estrela")+","
@@ -248,10 +248,10 @@ public class ArmazenamentoArquivoTest {
 			Arrays.asList("guerra", "maria", "jose"));
 
 		arm.guardarPontuacao("guerra", 1, "estrela");
-		arm.guardarPontuacao("maria", 1, "comentario");
-		arm.guardarPontuacao("jose", 1, "estrela");
-		arm.guardarPontuacao("jose", 10, "curtida");
-		arm.guardarPontuacao("maria", 1, "comentario");
+		arm.guardarPontuacao("maria",  1, "comentario");
+		arm.guardarPontuacao("jose",   1, "estrela");
+		arm.guardarPontuacao("jose",  10, "curtida");
+		arm.guardarPontuacao("maria",  1, "comentario");
 		
 		assertEquals(usuariosEsperados, arm.recuperarUsuariosRegistrados());
 	}
@@ -266,7 +266,7 @@ public class ArmazenamentoArquivoTest {
 		arm.guardarPontuacao("guerra", 1, "favorito");
 		
 		assertEquals("["+jsonPontuacao("guerra", 1, "estrela")+","
-						+jsonPontuacao("maria", 1, "comentario")+","
+						+jsonPontuacao("maria",  1, "comentario")+","
 						+jsonPontuacao("guerra", 1, "favorito")+"]"
 			    	, lerDadosBrutosArmazenamento());
 	}
@@ -303,8 +303,8 @@ public class ArmazenamentoArquivoTest {
 		
 		arm.guardarPontuacao("maria", 1, "curtida");
 		arm.guardarPontuacao("tadeu", 1, "estrela");
-		arm.guardarPontuacao("jose", 1, "moeda");
-		arm.guardarPontuacao("jose", 1, "compartilhamento");
+		arm.guardarPontuacao("jose",  1, "moeda");
+		arm.guardarPontuacao("jose",  1, "compartilhamento");
 		
 		var tiposEsperadosGuerra = new ArrayList<>(
 				Arrays.asList("estrela", "comentario", "moeda"));
