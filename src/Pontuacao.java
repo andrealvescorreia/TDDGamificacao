@@ -31,8 +31,12 @@ public class Pontuacao{
 				throw new PontuacaoInvalidaException("Pontos não podem ser inferiores a 1");
 			if(usuario.equals("")) 
 				throw new PontuacaoInvalidaException("Usuário inválido (\"\") ");
+			if(usuario.contains(" "))
+				throw new PontuacaoInvalidaException("Usuário inválido (possui espaço(s)) ");
 			if(tipo.equals("")) 
 				throw new PontuacaoInvalidaException("Tipo inválido (\"\") ");
+			if(tipo.contains(" "))
+				throw new PontuacaoInvalidaException("Tipo inválido (possui espaço(s)) ");
 		}
 		
 		@SuppressWarnings("unchecked")

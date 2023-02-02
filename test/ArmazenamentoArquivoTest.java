@@ -16,10 +16,11 @@ import excecoes.PontuacaoInvalidaException;
 
 public class ArmazenamentoArquivoTest {
 	Armazenamento arm;
-
+	static final String CAMINHO_ARQUIVO = "saida.json";
+	
 	@Before
-	public void criarArmazenamento() {
-		arm = new ArmazenamentoArquivo();
+	public void inicializarArmazenamento() {
+		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 	}
 
 	@After
@@ -29,7 +30,7 @@ public class ArmazenamentoArquivoTest {
 	
 	public void escreverNoArquivoDeArmazenamento(String conteudo) {
 		try {
-			var fileWriter = new FileWriter(ArmazenamentoArquivo.CAMINHO_ARQUIVO);
+			var fileWriter = new FileWriter(CAMINHO_ARQUIVO);
 			fileWriter.write(conteudo);
 			fileWriter.close();
 			assertEquals(conteudo, lerDadosBrutosArmazenamento());
@@ -43,7 +44,7 @@ public class ArmazenamentoArquivoTest {
 	public String lerDadosBrutosArmazenamento() {
 		var dados = "";
 		try {
-			var leitor = new Scanner(new File(ArmazenamentoArquivo.CAMINHO_ARQUIVO));
+			var leitor = new Scanner(new File(CAMINHO_ARQUIVO));
 			while (leitor.hasNextLine())
 				dados += leitor.nextLine();
 			leitor.close();
@@ -78,31 +79,49 @@ public class ArmazenamentoArquivoTest {
 		assertEquals("", lerDadosBrutosArmazenamento());
 	}
 	
+	
+	
 	@Test
-	public void armazenaPontuacaoUsuarioInvalido() {
+	public void armazenaPontuacaoUsuarioVazio() {
 		try {
 			arm.guardarPontuacao("", 1, "estrela");
 			fail();
 		} catch (PontuacaoInvalidaException e) {}
-		
 		assertEquals("", lerDadosBrutosArmazenamento());
 	}
 	
 	@Test
-	public void armazenaPontuacaoTipoInvalido() {
+	public void armazenaPontuacaoUsuarioComEspaco() {
+		try {
+			arm.guardarPontuacao("eduardo guerra", 1, "estrela");
+			fail();
+		} catch (PontuacaoInvalidaException e) {}
+		assertEquals("", lerDadosBrutosArmazenamento());
+	}
+	
+	@Test
+	public void armazenaPontuacaoTipoVazio() {
 		try {
 			arm.guardarPontuacao("guerra", 1, "");
 			fail();
 		} catch (PontuacaoInvalidaException e) {}
-		
+		assertEquals("", lerDadosBrutosArmazenamento());
+	}
+	
+	@Test
+	public void armazenaPontuacaoTipoComEspaco() {
+		try {
+			arm.guardarPontuacao("guerra", 1, "estrela brilhante");
+			fail();
+		} catch (PontuacaoInvalidaException e) {}
 		assertEquals("", lerDadosBrutosArmazenamento());
 	}
 	
 	@Test
 	public void armazenaPontuacoes() {
 		arm.guardarPontuacao("guerra", 10, "estrela");
-		arm.guardarPontuacao("guerra", 1, "estrela");
-		arm.guardarPontuacao("guerra", 9, "estrela");
+		arm.guardarPontuacao("guerra",  1, "estrela");
+		arm.guardarPontuacao("guerra",  9, "estrela");
 
 		assertEquals("["+jsonPontuacao("guerra", 20, "estrela")+"]"
 				    , lerDadosBrutosArmazenamento());
@@ -111,14 +130,14 @@ public class ArmazenamentoArquivoTest {
 	@Test
 	public void armazenaPontuacoesDiferentesTipos() {
 		arm.guardarPontuacao("guerra", 10, "estrela");
-		arm.guardarPontuacao("guerra", 5, "estrela");
-		arm.guardarPontuacao("guerra", 1, "curtida");
-		arm.guardarPontuacao("guerra", 9, "favorito");
+		arm.guardarPontuacao("guerra",  5, "estrela");
+		arm.guardarPontuacao("guerra",  1, "curtida");
+		arm.guardarPontuacao("guerra",  9, "favorito");
 		
 		assertEquals("["
 						+ jsonPontuacao("guerra", 15, "estrela")+","
-						+ jsonPontuacao("guerra", 1, "curtida")+","
-						+ jsonPontuacao("guerra", 9, "favorito")
+						+ jsonPontuacao("guerra",  1, "curtida")+","
+						+ jsonPontuacao("guerra",  9, "favorito")
 					+"]"
 					, lerDadosBrutosArmazenamento());
 	}
@@ -131,8 +150,8 @@ public class ArmazenamentoArquivoTest {
 		
 		assertEquals("["
 						+ jsonPontuacao("guerra", 10, "estrela")+","
-						+ jsonPontuacao("marco", 5, "estrela")+","
-						+ jsonPontuacao("tadeu", 1, "curtida")
+						+ jsonPontuacao("marco",   5, "estrela")+","
+						+ jsonPontuacao("tadeu",   1, "curtida")
 					+"]"
 					, lerDadosBrutosArmazenamento());
 	}
@@ -146,17 +165,17 @@ public class ArmazenamentoArquivoTest {
 	@Test
 	public void recuperaPontosVariasPontuacoes() {
 		arm.guardarPontuacao("guerra", 10, "estrela");
-		arm.guardarPontuacao("guerra", 4, "estrela");
-		arm.guardarPontuacao("guerra", 7, "estrela");
+		arm.guardarPontuacao("guerra",  4, "estrela");
+		arm.guardarPontuacao("guerra",  7, "estrela");
 		assertEquals(21, arm.recuperarPontos("guerra", "estrela"));
 	}
 
 	@Test
 	public void recuperaPontosVariosTiposDePontuacoes() {
 		arm.guardarPontuacao("guerra", 10, "estrela");
-		arm.guardarPontuacao("guerra", 5, "estrela");
+		arm.guardarPontuacao("guerra",  5, "estrela");
 		arm.guardarPontuacao("guerra", 24, "comentario");
-		arm.guardarPontuacao("guerra", 1, "comentario");
+		arm.guardarPontuacao("guerra",  1, "comentario");
 		assertEquals(15, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals(25, arm.recuperarPontos("guerra", "comentario"));
 	}
@@ -166,13 +185,13 @@ public class ArmazenamentoArquivoTest {
 		arm.guardarPontuacao("guerra", 6, "estrela");
 		arm.guardarPontuacao("guerra", 3, "comentario");
 		arm.guardarPontuacao("marco", 24, "estrela");
-		arm.guardarPontuacao("tadeu", 1, "comentario");
-		arm.guardarPontuacao("marco", 5, "estrela");
+		arm.guardarPontuacao("tadeu",  1, "comentario");
+		arm.guardarPontuacao("marco",  5, "estrela");
 		arm.guardarPontuacao("guerra", 4, "estrela");
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
-		assertEquals(29, arm.recuperarPontos("marco", "estrela"));
-		assertEquals(3,  arm.recuperarPontos("guerra", "comentario"));
-		assertEquals(1,  arm.recuperarPontos("tadeu", "comentario"));
+		assertEquals(29, arm.recuperarPontos("marco",  "estrela"));
+		assertEquals( 3, arm.recuperarPontos("guerra", "comentario"));
+		assertEquals( 1, arm.recuperarPontos("tadeu",  "comentario"));
 	}
 	
 	@Test
@@ -184,7 +203,7 @@ public class ArmazenamentoArquivoTest {
 	public void recuperaPontosTipoInexistenteParaOUsuario() {
 		arm.guardarPontuacao("guerra", 1, "estrela");
 		arm.guardarPontuacao("guerra", 1, "comentario");
-		arm.guardarPontuacao("maria", 1, "moeda");
+		arm.guardarPontuacao("maria",  1, "moeda");
 		assertEquals(0, arm.recuperarPontos("guerra", "moeda"));
 	}
 	
@@ -193,24 +212,24 @@ public class ArmazenamentoArquivoTest {
 		arm.guardarPontuacao("guerra", 6, "estrela");
 		arm.guardarPontuacao("guerra", 3, "comentario");
 		arm.guardarPontuacao("marco", 24, "estrela");
-		arm.guardarPontuacao("tadeu", 1, "comentario");
-		arm.guardarPontuacao("marco", 5, "estrela");
+		arm.guardarPontuacao("tadeu",  1, "comentario");
+		arm.guardarPontuacao("marco",  5, "estrela");
 		arm.guardarPontuacao("guerra", 4, "estrela");
 		
 		// aqui ocorre a simulação:
 		// limpa o cache, forçando com que o "armazenamento" recupere dados do arquivo.
-		arm = new ArmazenamentoArquivo();
+		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
-		assertEquals(3, arm.recuperarPontos("guerra", "comentario"));
-		assertEquals(29, arm.recuperarPontos("marco", "estrela"));
+		assertEquals(3, arm.recuperarPontos("guerra",  "comentario"));
+		assertEquals(29, arm.recuperarPontos("marco",  "estrela"));
 		
 		arm.guardarPontuacao("guerra", 5, "estrela");
-		arm.guardarPontuacao("tadeu", 2, "comentario");
+		arm.guardarPontuacao("tadeu",  2, "comentario");
 		arm.guardarPontuacao("maria", 50, "estrela");
 		
 		assertEquals(15, arm.recuperarPontos("guerra", "estrela"));
-		assertEquals(3,  arm.recuperarPontos("tadeu", "comentario"));
-		assertEquals(50, arm.recuperarPontos("maria", "estrela"));
+		assertEquals(3,  arm.recuperarPontos("tadeu",  "comentario"));
+		assertEquals(50, arm.recuperarPontos("maria",  "estrela"));
 	}
 	
 	
@@ -240,7 +259,7 @@ public class ArmazenamentoArquivoTest {
 	@Test
 	public void simularArquivoInvalido() {
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
-		arm = new ArmazenamentoArquivo();// força o armazenamento a tentar recuperar dados invalidos!
+		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);// força o armazenamento a tentar recuperar dados invalidos!
 		arm.guardarPontuacao("guerra", 1, "estrela");
 		arm.guardarPontuacao("maria", 1, "comentario");
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");

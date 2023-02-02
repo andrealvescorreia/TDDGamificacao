@@ -12,9 +12,11 @@ import org.json.simple.JSONArray;
 
 
 public class ArmazenamentoArquivo implements Armazenamento {
-	public static final String CAMINHO_ARQUIVO = "saida.json";
+	private final String CAMINHO_ARQUIVO;
 	private ArrayList<Pontuacao> _cachePontuacoes = new ArrayList<Pontuacao>();// cache dos dados que também ficam no arquivo
-	public ArmazenamentoArquivo(){
+	public ArmazenamentoArquivo(String CAMINHO_ARQUIVO){
+		this.CAMINHO_ARQUIVO = CAMINHO_ARQUIVO;
+		
 		// recupera dados salvos em arquivo (se houver algum)
 		try {
 			JSONParser parser = new JSONParser();
@@ -43,7 +45,6 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) 
 			throws PontuacaoInvalidaException {
-		//Pontuacao pontuacao = new Pontuacao(usuario, pontos, tipo);
 		for(Pontuacao pontuacaoExistente : _cachePontuacoes) {
 			if(pontuacaoExistente.getUsuario().equals(usuario) && pontuacaoExistente.getTipo().equals(tipo)) {
 				pontuacaoExistente.addPontos(pontos);
