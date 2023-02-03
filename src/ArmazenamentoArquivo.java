@@ -12,15 +12,16 @@ import org.json.simple.JSONArray;
 
 
 public class ArmazenamentoArquivo implements Armazenamento {
-	private final String CAMINHO_ARQUIVO;
-	private ArrayList<Pontuacao> _cachePontuacoes = new ArrayList<Pontuacao>();// cache dos dados que também ficam no arquivo
+	private final String _CAMINHO_ARQUIVO;
+	private ArrayList<Pontuacao> _cachePontuacoes;
+	
 	public ArmazenamentoArquivo(String CAMINHO_ARQUIVO){
-		this.CAMINHO_ARQUIVO = CAMINHO_ARQUIVO;
-		
+		_cachePontuacoes = new ArrayList<Pontuacao>();
+		_CAMINHO_ARQUIVO = CAMINHO_ARQUIVO;
 		// recupera dados salvos em arquivo (se houver algum)
 		try {
 			JSONParser parser = new JSONParser();
-			JSONArray jsonPontuacoes = (JSONArray) parser.parse(new FileReader(CAMINHO_ARQUIVO));
+			JSONArray jsonPontuacoes = (JSONArray) parser.parse(new FileReader(_CAMINHO_ARQUIVO));
 			for (int i = 0; i < jsonPontuacoes.size(); i++) {
 				Pontuacao pontuacao = new Pontuacao( (JSONObject)jsonPontuacoes.get(i) );
 				_cachePontuacoes.add(pontuacao);
@@ -33,7 +34,7 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	
 	private void criarArquivoLimpo() {
 		try {
-			FileWriter fileWriter = new FileWriter(CAMINHO_ARQUIVO);
+			var fileWriter = new FileWriter(_CAMINHO_ARQUIVO);
 			fileWriter.write("");
 			fileWriter.close();
 		} catch (Exception e) {
@@ -58,10 +59,9 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	}
 	
 	private void salvarCacheNoArquivo() {
-		JSONArray jsonPontuacoes = jsonDoCachePontuacoes();
 		try {
-			FileWriter fileWriter = new FileWriter(CAMINHO_ARQUIVO);
-			fileWriter.write(jsonPontuacoes.toJSONString());
+			FileWriter fileWriter = new FileWriter(_CAMINHO_ARQUIVO);
+			fileWriter.write(jsonDoCacheDePontuacoes());
 			fileWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -69,11 +69,11 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private JSONArray jsonDoCachePontuacoes() {
+	private String jsonDoCacheDePontuacoes() {
 		JSONArray jsonArrayPontuacoes = new JSONArray();
 		for(Pontuacao pontuacao : _cachePontuacoes) 
 			jsonArrayPontuacoes.add(pontuacao.toJSONObject());
-		return jsonArrayPontuacoes;
+		return jsonArrayPontuacoes.toJSONString();
 	}
 	
 	@Override
