@@ -20,7 +20,13 @@ public class ArmazenamentoArquivoTest {
 	
 	@Before
 	public void inicializarArmazenamento() {
-		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
+		try {
+			arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
 	}
 
 	@After
@@ -216,7 +222,7 @@ public class ArmazenamentoArquivoTest {
 			+"]";
 		escreverNoArquivoDeArmazenamento(jsonPontuacoes);
 		
-		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
+		inicializarArmazenamento();
 		
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals( 5, arm.recuperarPontos("marco",  "estrela"));
@@ -234,7 +240,7 @@ public class ArmazenamentoArquivoTest {
 		
 		// aqui ocorre a simulação:
 		// limpa o cache, forçando com que o "armazenamento" recupere dados do arquivo.
-		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
+		inicializarArmazenamento();
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals( 3, arm.recuperarPontos("guerra", "comentario"));
 		assertEquals(29, arm.recuperarPontos("marco",  "estrela"));
@@ -275,7 +281,9 @@ public class ArmazenamentoArquivoTest {
 	@Test
 	public void simularArquivoInvalido() {
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
-		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);// força o armazenamento a tentar recuperar dados invalidos!
+		inicializarArmazenamento();// força o armazenamento a tentar recuperar dados invalidos!
+		
+		
 		arm.guardarPontuacao("guerra", 1, "estrela");
 		arm.guardarPontuacao("maria", 1, "comentario");
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");

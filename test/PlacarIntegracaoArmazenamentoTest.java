@@ -18,8 +18,14 @@ public class PlacarIntegracaoArmazenamentoTest {
 	static final String CAMINHO_ARQUIVO = "saida.json";
 	
 	@Before
-	public void inicializarArmazenamento() {
-		placar = new Placar(new ArmazenamentoArquivo(CAMINHO_ARQUIVO));
+	public void inicializarPlacar() {
+		try {
+			var arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
+			placar = new Placar(arm);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
 	}
 
 	@After
