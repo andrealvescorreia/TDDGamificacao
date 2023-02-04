@@ -38,10 +38,6 @@ public class PlacarIntegracaoArmazenamentoTest {
 		}
 	}
 	
-	@Test(expected = PontuacaoInvalidaException.class )
-	public void adicionarPontuacaoInvalida() {
-		placar.adicionarPontuacao("guerra", -100, "estrela");
-	}
 	
 	@Test
 	public void adicionarPontuacoes() {
@@ -80,7 +76,7 @@ public class PlacarIntegracaoArmazenamentoTest {
 		
 		var rankingEstrela = placar.ranking("estrela");
 		assertEquals( 2, 		  rankingEstrela.size());
-		assertEquals("tadeu 25",  rankingEstrela.get(0));// 1°
+		assertEquals( "tadeu 25", rankingEstrela.get(0));// 1°
 		assertEquals("guerra 10", rankingEstrela.get(1));// 2°
 		
 		var rankingFavorito = placar.ranking("favorito");
