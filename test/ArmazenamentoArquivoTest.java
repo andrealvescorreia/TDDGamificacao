@@ -208,6 +208,22 @@ public class ArmazenamentoArquivoTest {
 	}
 	
 	@Test
+	public void recuperarDadosDoArquivo() {
+		String jsonPontuacoes = "["
+				+ jsonPontuacao("guerra", 10, "estrela")+","
+				+ jsonPontuacao("marco",   5, "estrela")+","
+				+ jsonPontuacao("tadeu",   1, "curtida")
+			+"]";
+		escreverNoArquivoDeArmazenamento(jsonPontuacoes);
+		
+		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
+		
+		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
+		assertEquals( 5, arm.recuperarPontos("marco",  "estrela"));
+		assertEquals( 1, arm.recuperarPontos("tadeu",  "curtida"));
+	}
+	
+	@Test
 	public void simularArmazenamentoCaiu() {
 		arm.guardarPontuacao("guerra", 6, "estrela");
 		arm.guardarPontuacao("guerra", 3, "comentario");
@@ -220,7 +236,7 @@ public class ArmazenamentoArquivoTest {
 		// limpa o cache, forçando com que o "armazenamento" recupere dados do arquivo.
 		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
-		assertEquals(3, arm.recuperarPontos("guerra",  "comentario"));
+		assertEquals( 3, arm.recuperarPontos("guerra",  "comentario"));
 		assertEquals(29, arm.recuperarPontos("marco",  "estrela"));
 		
 		arm.guardarPontuacao("guerra", 5, "estrela");
@@ -228,7 +244,7 @@ public class ArmazenamentoArquivoTest {
 		arm.guardarPontuacao("maria", 50, "estrela");
 		
 		assertEquals(15, arm.recuperarPontos("guerra", "estrela"));
-		assertEquals(3,  arm.recuperarPontos("tadeu",  "comentario"));
+		assertEquals( 3, arm.recuperarPontos("tadeu",  "comentario"));
 		assertEquals(50, arm.recuperarPontos("maria",  "estrela"));
 	}
 	
