@@ -32,14 +32,14 @@ public class Pontuacao{
 			if(jsonPontuacao.get("pontos")  == null 
 			|| jsonPontuacao.get("usuario") == null 
 			|| jsonPontuacao.get("tipo")    == null) 
-				throw new ObjetoJsonIvalidoException("Objeto Json em formato incorreto");
+				throw new ObjetoJsonIvalidoException("Objeto Json em formato incorreto (faltando par chave-valor)");
 			
 			if(jsonPontuacao.get("usuario") instanceof String 
-			&& jsonPontuacao.get("pontos") instanceof Long
-			&& jsonPontuacao.get("tipo")   instanceof String)
+			&& jsonPontuacao.get("pontos")  instanceof Long
+			&& jsonPontuacao.get("tipo")    instanceof String)
 				return;
 			
-			throw new ObjetoJsonIvalidoException("Objeto Json em formato incorreto");
+			throw new ObjetoJsonIvalidoException("Objeto Json em formato incorreto (valor de tipo incorreto)");
 			
 		}
 		
