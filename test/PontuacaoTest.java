@@ -9,6 +9,14 @@ import excecoes.PontuacaoInvalidaException;
 
 public class PontuacaoTest {
 
+	@Test
+	public void criarPontuacao() {
+		var p = new Pontuacao("guerra", 10, "estrela");
+		assertEquals("guerra", p.getUsuario());
+		assertEquals(10, p.getPontos());
+		assertEquals("estrela", p.getTipo());
+	}
+	
 	@Test(expected = PontuacaoInvalidaException.class)
 	public void pontuacaoUsuarioVazio() {
 		new Pontuacao("", 10, "estrela");
@@ -149,5 +157,16 @@ public class PontuacaoTest {
 		jsonPontuacao.put("tipo",    999);
 		
 		new Pontuacao(jsonPontuacao);
+	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void toJSONObject() {
+		var p = new Pontuacao("guerra", 10, "estrela");
+		var jsonEsperado = new JSONObject();
+		jsonEsperado.put("usuario", "guerra");
+		jsonEsperado.put("pontos", (long)10);
+		jsonEsperado.put("tipo", "estrela");
+		assertEquals(jsonEsperado, p.toJSONObject());
 	}
 }
