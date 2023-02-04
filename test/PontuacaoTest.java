@@ -165,8 +165,8 @@ public class PontuacaoTest {
 		var p = new Pontuacao("guerra", 10, "estrela");
 		var jsonEsperado = new JSONObject();
 		jsonEsperado.put("usuario", "guerra");
-		jsonEsperado.put("pontos", (long)10);
-		jsonEsperado.put("tipo", "estrela");
+		jsonEsperado.put("pontos",  (long)10);
+		jsonEsperado.put("tipo",    "estrela");
 		assertEquals(jsonEsperado, p.toJSONObject());
 	}
 }
