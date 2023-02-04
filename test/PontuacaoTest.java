@@ -48,8 +48,8 @@ public class PontuacaoTest {
 	public void criarPontuacaoUsandoJSONObject() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", "guerra");
-		jsonPontuacao.put("pontos", (long)10);
-		jsonPontuacao.put("tipo", "estrela");
+		jsonPontuacao.put("pontos",  (long)10);
+		jsonPontuacao.put("tipo",    "estrela");
 		var p = new Pontuacao(jsonPontuacao);
 		assertEquals("guerra",  p.getUsuario());
 		assertEquals(10,        p.getPontos());
@@ -61,8 +61,8 @@ public class PontuacaoTest {
 	public void pontuacaoUsuarioVazioUsandoJSONObject() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", "");
-		jsonPontuacao.put("pontos", (long)10);
-		jsonPontuacao.put("tipo", "estrela");
+		jsonPontuacao.put("pontos",  (long)10);
+		jsonPontuacao.put("tipo",    "estrela");
 		new Pontuacao(jsonPontuacao);
 	}
 	
@@ -71,8 +71,8 @@ public class PontuacaoTest {
 	public void pontuacaoUsuarioComEspacoUsandoJSONObject() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", "eduardo guerra");
-		jsonPontuacao.put("pontos", (long)10);
-		jsonPontuacao.put("tipo", "estrela");
+		jsonPontuacao.put("pontos",  (long)10);
+		jsonPontuacao.put("tipo",    "estrela");
 		new Pontuacao(jsonPontuacao);
 	}
 	@Test(expected = PontuacaoInvalidaException.class)
@@ -80,8 +80,8 @@ public class PontuacaoTest {
 	public void pontuacaoTipoVazioUsandoJSONObject() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", "guerra");
-		jsonPontuacao.put("pontos", (long)10);
-		jsonPontuacao.put("tipo", "");
+		jsonPontuacao.put("pontos",  (long)10);
+		jsonPontuacao.put("tipo",    "");
 		new Pontuacao(jsonPontuacao);
 	}
 	@Test(expected = PontuacaoInvalidaException.class)
@@ -89,8 +89,8 @@ public class PontuacaoTest {
 	public void pontuacaoTipoComEspacoUsandoJSONObject() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", "guerra");
-		jsonPontuacao.put("pontos", (long)10);
-		jsonPontuacao.put("tipo", "estrela cadente");
+		jsonPontuacao.put("pontos",  (long)10);
+		jsonPontuacao.put("tipo",    "estrela cadente");
 		new Pontuacao(jsonPontuacao);
 	}
 	
@@ -98,7 +98,7 @@ public class PontuacaoTest {
 	@SuppressWarnings("unchecked")
 	public void pontuacaoUsandoJSONObjectSemUsuario() {
 		var jsonPontuacao = new JSONObject();
-		jsonPontuacao.put("tipo", "estrela");
+		jsonPontuacao.put("tipo",   "estrela");
 		jsonPontuacao.put("pontos", (long)10);
 		new Pontuacao(jsonPontuacao);
 	}
@@ -108,7 +108,7 @@ public class PontuacaoTest {
 	public void pontuacaoUsandoJSONObjectSemTipo() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", "guerra");
-		jsonPontuacao.put("pontos", (long)10);
+		jsonPontuacao.put("pontos",  (long)10);
 		new Pontuacao(jsonPontuacao);
 	}
 	
@@ -117,7 +117,7 @@ public class PontuacaoTest {
 	public void pontuacaoUsandoJSONObjectSemPontos() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", "guerra");
-		jsonPontuacao.put("tipo", "estrela");
+		jsonPontuacao.put("tipo",    "estrela");
 		new Pontuacao(jsonPontuacao);
 	}
 	@Test(expected = ObjetoJsonIvalidoException.class)
@@ -125,8 +125,8 @@ public class PontuacaoTest {
 	public void pontuacaoUsandoJSONObjectUsuarioNaoString() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", 999);
-		jsonPontuacao.put("pontos", (long)10);
-		jsonPontuacao.put("tipo", "estrela");
+		jsonPontuacao.put("pontos",  (long)10);
+		jsonPontuacao.put("tipo",    "estrela");
 		
 		new Pontuacao(jsonPontuacao);
 	}
@@ -135,8 +135,8 @@ public class PontuacaoTest {
 	public void pontuacaoUsandoJSONObjectPontosNaoNumerico() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", "guerra");
-		jsonPontuacao.put("pontos", "nao sou um numero");
-		jsonPontuacao.put("tipo", "estrela");
+		jsonPontuacao.put("pontos",  "nao sou um numero");
+		jsonPontuacao.put("tipo",    "estrela");
 		
 		new Pontuacao(jsonPontuacao);
 	}
@@ -145,8 +145,8 @@ public class PontuacaoTest {
 	public void pontuacaoUsandoJSONObjectTipoNaoString() {
 		var jsonPontuacao = new JSONObject();
 		jsonPontuacao.put("usuario", "guerra");
-		jsonPontuacao.put("pontos", (long)10);
-		jsonPontuacao.put("tipo", 999);
+		jsonPontuacao.put("pontos",  (long)10);
+		jsonPontuacao.put("tipo",    999);
 		
 		new Pontuacao(jsonPontuacao);
 	}
