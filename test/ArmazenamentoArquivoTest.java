@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import excecoes.PontuacaoInvalidaException;
+import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class ArmazenamentoArquivoTest {
 	Armazenamento arm;
@@ -56,8 +56,8 @@ public class ArmazenamentoArquivoTest {
 	}
 	
 	private String jsonPontuacao(String usuario, int pontos, String tipo) {
-		return "{\"tipo\":\"" + tipo + "\","+
-				"\"pontos\":" + pontos + ","+
+		return "{\"tipo\":\""    + tipo    + "\","+
+				"\"pontos\":"    + pontos  + ","+
 				"\"usuario\":\"" + usuario + "\"}";
 	}
 	
@@ -236,7 +236,7 @@ public class ArmazenamentoArquivoTest {
 		// limpa o cache, forçando com que o "armazenamento" recupere dados do arquivo.
 		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
-		assertEquals( 3, arm.recuperarPontos("guerra",  "comentario"));
+		assertEquals( 3, arm.recuperarPontos("guerra", "comentario"));
 		assertEquals(29, arm.recuperarPontos("marco",  "estrela"));
 		
 		arm.guardarPontuacao("guerra", 5, "estrela");
@@ -317,10 +317,10 @@ public class ArmazenamentoArquivoTest {
 		arm.guardarPontuacao("guerra", 1, "comentario");
 		arm.guardarPontuacao("guerra", 1, "moeda");
 		
-		arm.guardarPontuacao("maria", 1, "curtida");
-		arm.guardarPontuacao("tadeu", 1, "estrela");
-		arm.guardarPontuacao("jose",  1, "moeda");
-		arm.guardarPontuacao("jose",  1, "compartilhamento");
+		arm.guardarPontuacao("maria",  1, "curtida");
+		arm.guardarPontuacao("tadeu",  1, "estrela");
+		arm.guardarPontuacao("jose",   1, "moeda");
+		arm.guardarPontuacao("jose",   1, "compartilhamento");
 		
 		var tiposEsperadosGuerra = new ArrayList<>(
 				Arrays.asList("estrela", "comentario", "moeda"));

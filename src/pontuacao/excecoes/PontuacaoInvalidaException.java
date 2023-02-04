@@ -1,4 +1,4 @@
-package excecoes;
+package pontuacao.excecoes;
 
 public class PontuacaoInvalidaException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

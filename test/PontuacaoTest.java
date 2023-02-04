@@ -3,9 +3,9 @@ import static org.junit.Assert.*;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 
-import excecoes.AdicionarPontosInvalidosException;
-import excecoes.ObjetoJsonIvalidoException;
-import excecoes.PontuacaoInvalidaException;
+import pontuacao.excecoes.AdicionarPontosInvalidosException;
+import pontuacao.excecoes.ObjetoJsonIvalidoException;
+import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class PontuacaoTest {
 

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import excecoes.PontuacaoInvalidaException;
+import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class PlacarTest {
 	Placar placar;

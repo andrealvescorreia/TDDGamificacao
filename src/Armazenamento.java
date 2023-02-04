@@ -1,5 +1,6 @@
 import java.util.ArrayList;
-import excecoes.PontuacaoInvalidaException;
+
+import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public interface Armazenamento {
 	public void guardarPontuacao(String usuario, long pontos, String tipo) 

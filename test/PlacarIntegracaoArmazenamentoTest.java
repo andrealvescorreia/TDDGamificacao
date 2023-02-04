@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import excecoes.PontuacaoInvalidaException;
+import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class PlacarIntegracaoArmazenamentoTest {
 	Placar placar;

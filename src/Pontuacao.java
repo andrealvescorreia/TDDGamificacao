@@ -1,8 +1,9 @@
+
 import org.json.simple.JSONObject;
 
-import excecoes.AdicionarPontosInvalidosException;
-import excecoes.ObjetoJsonIvalidoException;
-import excecoes.PontuacaoInvalidaException;
+import pontuacao.excecoes.AdicionarPontosInvalidosException;
+import pontuacao.excecoes.ObjetoJsonIvalidoException;
+import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class Pontuacao{
 		private String usuario;
