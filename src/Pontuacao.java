@@ -1,5 +1,7 @@
 import org.json.simple.JSONObject;
 
+import excecoes.AdicionarPontosInvalidosException;
+import excecoes.ObjetoJsonIvalidoException;
 import excecoes.PontuacaoInvalidaException;
 
 public class Pontuacao{
@@ -16,13 +18,29 @@ public class Pontuacao{
 		}
 		Pontuacao(JSONObject jsonPontuacao) 
 				throws PontuacaoInvalidaException {
-			long pontos = (long) jsonPontuacao.get("pontos");
+			validarJSONObject(jsonPontuacao);
+			long pontos = (long)jsonPontuacao.get("pontos");
 			String usuario = (String) jsonPontuacao.get("usuario");
 			String tipo = (String) jsonPontuacao.get("tipo");
 			validarPontuacao(usuario, pontos, tipo);
 			this.usuario = usuario;
 			this.pontos = pontos;
 			this.tipo = tipo;
+		}
+		
+		private void validarJSONObject(JSONObject jsonPontuacao) {
+			if(jsonPontuacao.get("pontos")  == null 
+			|| jsonPontuacao.get("usuario") == null 
+			|| jsonPontuacao.get("tipo")    == null) 
+				throw new ObjetoJsonIvalidoException("Objeto Json em formato incorreto");
+			
+			if(jsonPontuacao.get("usuario") instanceof String 
+			&& jsonPontuacao.get("pontos") instanceof Long
+			&& jsonPontuacao.get("tipo")   instanceof String)
+				return;
+			
+			throw new ObjetoJsonIvalidoException("Objeto Json em formato incorreto");
+			
 		}
 		
 		private void validarPontuacao(String usuario, long pontos, String tipo) 
@@ -58,6 +76,8 @@ public class Pontuacao{
 			return this.pontos;
 		}
 		public void addPontos(long pontos) {
+			if(pontos < 1) 
+				throw new AdicionarPontosInvalidosException("Pontos não podem ser inferiores a 1");
 			this.pontos += pontos;
 		}
 	}
