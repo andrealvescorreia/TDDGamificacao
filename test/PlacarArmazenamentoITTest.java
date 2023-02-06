@@ -11,9 +11,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import armazenamento.excecoes.FalhaNoArmazenamentoException;
 import pontuacao.excecoes.PontuacaoInvalidaException;
 
-public class PlacarIntegracaoArmazenamentoTest {
+public class PlacarArmazenamentoITTest {
 	Placar placar;
 	static final String CAMINHO_ARQUIVO = "saida.json";
 	
@@ -22,7 +23,7 @@ public class PlacarIntegracaoArmazenamentoTest {
 		try {
 			var arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 			placar = new Placar(arm);
-		} catch (IOException e) {
+		} catch (FalhaNoArmazenamentoException e) {
 			e.printStackTrace();
 			fail();
 		}

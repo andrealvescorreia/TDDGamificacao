@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import armazenamento.excecoes.FalhaNoArmazenamentoException;
 import pontuacao.excecoes.PontuacaoInvalidaException;
 
 import org.json.simple.JSONArray;
@@ -16,43 +17,41 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	private final String _CAMINHO_ARQUIVO;
 	private ArrayList<Pontuacao> _cachePontuacoes;
 	
-	public ArmazenamentoArquivo(String CAMINHO_ARQUIVO) throws IOException{
+	public ArmazenamentoArquivo(String CAMINHO_ARQUIVO) throws FalhaNoArmazenamentoException{
 		_cachePontuacoes = new ArrayList<Pontuacao>();
 		_CAMINHO_ARQUIVO = CAMINHO_ARQUIVO;
-		// recupera dados salvos em arquivo (se houver algum)
-		
-			JSONParser parser = new JSONParser();
-			JSONArray jsonPontuacoes;
-			try {
-				jsonPontuacoes = (JSONArray) parser.parse(new FileReader(_CAMINHO_ARQUIVO));
-				for (int i = 0; i < jsonPontuacoes.size(); i++) {
-					Pontuacao pontuacao = new Pontuacao( (JSONObject)jsonPontuacoes.get(i) );
-					_cachePontuacoes.add(pontuacao);
-				}
-			} catch (IOException e) {
-				throw e;
-			} catch( ParseException e) {
-				criarArquivoLimpo();
-			}
-			
+		try {
+			recuperarDadosSalvosEmArquivo();
+		} catch (IOException e) {
+			throw new FalhaNoArmazenamentoException(e.getMessage());
+		}
 		
 	}
 	
-	private void criarArquivoLimpo() throws IOException {
+	private void recuperarDadosSalvosEmArquivo() throws IOException{
+		JSONParser parser = new JSONParser();
+		JSONArray jsonPontuacoes;
 		try {
-			var fileWriter = new FileWriter(_CAMINHO_ARQUIVO);
-			fileWriter.write("");
-			fileWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw e;
+			jsonPontuacoes = (JSONArray) parser.parse(new FileReader(_CAMINHO_ARQUIVO));
+			for (int i = 0; i < jsonPontuacoes.size(); i++) {
+				Pontuacao pontuacao = new Pontuacao( (JSONObject)jsonPontuacoes.get(i) );
+				_cachePontuacoes.add(pontuacao);
+			}
+		} catch(ParseException e) {
+			criarArquivoLimpo();
 		}
+	}
+	
+	private void criarArquivoLimpo() throws IOException {
+		var fileWriter = new FileWriter(_CAMINHO_ARQUIVO);
+		fileWriter.write("");
+		fileWriter.close();
 	}
 	
 	
 	@Override
 	public void guardarPontuacao(String usuario, long pontos, String tipo) 
-			throws PontuacaoInvalidaException {
+			throws PontuacaoInvalidaException, FalhaNoArmazenamentoException {
 		for(Pontuacao pontuacaoExistente : _cachePontuacoes) {
 			if(pontuacaoExistente.getUsuario().equals(usuario) && pontuacaoExistente.getTipo().equals(tipo)) {
 				pontuacaoExistente.addPontos(pontos);
@@ -65,13 +64,13 @@ public class ArmazenamentoArquivo implements Armazenamento {
 		salvarCacheNoArquivo();
 	}
 	
-	private void salvarCacheNoArquivo() {
+	private void salvarCacheNoArquivo(){
 		try {
 			FileWriter fileWriter = new FileWriter(_CAMINHO_ARQUIVO);
 			fileWriter.write(jsonDoCacheDePontuacoes());
 			fileWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new FalhaNoArmazenamentoException(e.getMessage());
 		}
 	}
 	

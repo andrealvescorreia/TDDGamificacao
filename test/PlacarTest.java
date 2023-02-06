@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class PlacarTest {
 	
 
 	@Test
-	public void adicionarUmaPontuacao() {
+	public void adicionarUmaPontuacao() throws IOException {
 		placar.adicionarPontuacao("guerra", 10, "estrela");
 		var execucaoEsperada = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela")

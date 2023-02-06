@@ -3,6 +3,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import armazenamento.excecoes.FalhaNoArmazenamentoException;
 import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class Placar {
@@ -14,7 +15,7 @@ public class Placar {
 	}
 
 	public void adicionarPontuacao(String usuario, long pontos, String tipo) 
-			throws PontuacaoInvalidaException {
+			throws PontuacaoInvalidaException, FalhaNoArmazenamentoException {
 		armazenamento.guardarPontuacao(usuario, pontos, tipo);
 	}
 

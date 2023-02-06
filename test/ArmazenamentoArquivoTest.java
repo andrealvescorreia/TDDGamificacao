@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import armazenamento.excecoes.FalhaNoArmazenamentoException;
 import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class ArmazenamentoArquivoTest {
@@ -22,11 +23,10 @@ public class ArmazenamentoArquivoTest {
 	public void inicializarArmazenamento() {
 		try {
 			arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
-		} catch (IOException e) {
+		} catch (FalhaNoArmazenamentoException e) {
 			e.printStackTrace();
 			fail();
 		}
-		
 	}
 
 	@After
