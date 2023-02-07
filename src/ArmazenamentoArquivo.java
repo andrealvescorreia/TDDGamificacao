@@ -25,7 +25,6 @@ public class ArmazenamentoArquivo implements Armazenamento {
 		} catch (IOException e) {
 			throw new FalhaNoArmazenamentoException(e.getMessage());
 		}
-		
 	}
 	
 	private void recuperarDadosSalvosEmArquivo() throws IOException{
@@ -50,16 +49,15 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	
 	
 	@Override
-	public void guardarPontuacao(String usuario, long pontos, String tipo) 
-			throws PontuacaoInvalidaException, FalhaNoArmazenamentoException {
+	public void guardarPontuacao(Pontuacao novaPontuacao) 
+			throws FalhaNoArmazenamentoException {
 		for(Pontuacao pontuacaoExistente : _cachePontuacoes) {
-			if(pontuacaoExistente.getUsuario().equals(usuario) && pontuacaoExistente.getTipo().equals(tipo)) {
-				pontuacaoExistente.addPontos(pontos);
+			if(pontuacaoExistente.getUsuario().equals(novaPontuacao.getUsuario()) && pontuacaoExistente.getTipo().equals(novaPontuacao.getTipo())) {
+				pontuacaoExistente.addPontos(novaPontuacao.getPontos());
 				salvarCacheNoArquivo();
 				return;
 			}
 		}
-		Pontuacao novaPontuacao = new Pontuacao(usuario, pontos, tipo);
 		_cachePontuacoes.add(novaPontuacao);
 		salvarCacheNoArquivo();
 	}

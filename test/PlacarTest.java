@@ -42,7 +42,7 @@ public class PlacarTest {
 
 	@Test
 	public void adicionarUmaPontuacao() throws IOException {
-		placar.adicionarPontuacao("guerra", 10, "estrela");
+		placar.adicionarPontuacao(new Pontuacao("guerra", 10, "estrela"));
 		var execucaoEsperada = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela")
 		);
@@ -52,12 +52,12 @@ public class PlacarTest {
 	
 	@Test
 	public void adicionarMultiplasPontuacoes() {
-		placar.adicionarPontuacao("guerra", 10, "estrela");
-		placar.adicionarPontuacao("guerra",  5, "estrela");
-		placar.adicionarPontuacao("guerra",  2, "moeda");
-		placar.adicionarPontuacao("marco",   1, "estrela");
-		placar.adicionarPontuacao("marco",   9, "moeda");
-		placar.adicionarPontuacao("maria",   2, "curtida");
+		placar.adicionarPontuacao(new Pontuacao("guerra", 10, "estrela"));
+		placar.adicionarPontuacao(new Pontuacao("guerra",  5, "estrela"));
+		placar.adicionarPontuacao(new Pontuacao("guerra",  2, "moeda"));
+		placar.adicionarPontuacao(new Pontuacao("marco",   1, "estrela"));
+		placar.adicionarPontuacao(new Pontuacao("marco",   9, "moeda"));
+		placar.adicionarPontuacao(new Pontuacao("maria",   2, "curtida"));
 		
 		var chamadasEsperadas = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela", 
@@ -70,11 +70,6 @@ public class PlacarTest {
 		mockArmazenamento.verificaChamadasGuardarPontuacao(chamadasEsperadas);
 	}
 	
-	@Test(expected = PontuacaoInvalidaException.class )
-	public void adicionarPontuacaoInvalida() {
-		mockArmazenamento.simulePontuacaoInvalida();
-		placar.adicionarPontuacao("SIMULACAO", 0, "SIMULACAO");
-	}
 	
 	@Test
 	public void usuarioSemPontuacoes() {

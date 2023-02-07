@@ -48,12 +48,12 @@ public class PlacarArmazenamentoITTest {
 	
 	@Test
 	public void adicionarPontuacoes() {
-		placar.adicionarPontuacao("guerra", 10, "estrela");
-		placar.adicionarPontuacao("guerra", 30, "estrela");
-		placar.adicionarPontuacao("guerra", 15, "estrela");
-		placar.adicionarPontuacao("guerra", 15, "curtida");
-		placar.adicionarPontuacao("guerra",  2, "comentario");
-		placar.adicionarPontuacao("guerra",  3, "comentario");
+		placar.adicionarPontuacao(new Pontuacao("guerra", 10, "estrela"));
+		placar.adicionarPontuacao(new Pontuacao("guerra", 30, "estrela"));
+		placar.adicionarPontuacao(new Pontuacao("guerra", 15, "estrela"));
+		placar.adicionarPontuacao(new Pontuacao("guerra", 15, "curtida"));
+		placar.adicionarPontuacao(new Pontuacao("guerra",  2, "comentario"));
+		placar.adicionarPontuacao(new Pontuacao("guerra",  3, "comentario"));
 		var pontuacoesEsperadas = new HashMap<String, Integer>();
 		pontuacoesEsperadas.put("estrela",   55);
 		pontuacoesEsperadas.put("curtida",   15);
@@ -63,23 +63,23 @@ public class PlacarArmazenamentoITTest {
 	
 	@Test
 	public void ranking() {
-		placar.adicionarPontuacao("guerra", 10, "estrela");
-		placar.adicionarPontuacao("guerra",  8, "comentario");
-		placar.adicionarPontuacao("guerra",  1, "favorito");
+		placar.adicionarPontuacao(new Pontuacao("guerra", 10, "estrela"));
+		placar.adicionarPontuacao(new Pontuacao("guerra",  8, "comentario"));
+		placar.adicionarPontuacao(new Pontuacao("guerra",  1, "favorito"));
 		
-		placar.adicionarPontuacao("tadeu",   6, "favorito");
-		placar.adicionarPontuacao("tadeu",  12, "curtida");
-		placar.adicionarPontuacao("tadeu",   2, "moeda");
-		placar.adicionarPontuacao("tadeu",  25, "estrela");
+		placar.adicionarPontuacao(new Pontuacao("tadeu",   6, "favorito"));
+		placar.adicionarPontuacao(new Pontuacao("tadeu",  12, "curtida"));
+		placar.adicionarPontuacao(new Pontuacao("tadeu",   2, "moeda"));
+		placar.adicionarPontuacao(new Pontuacao("tadeu",  25, "estrela"));
 		
-		placar.adicionarPontuacao("maria",  37, "moeda");
-		placar.adicionarPontuacao("maria",   8, "comentario");
-		placar.adicionarPontuacao("maria",   1, "favorito");
+		placar.adicionarPontuacao(new Pontuacao("maria",  37, "moeda"));
+		placar.adicionarPontuacao(new Pontuacao("maria",   8, "comentario"));
+		placar.adicionarPontuacao(new Pontuacao("maria",   1, "favorito"));
 		
-		placar.adicionarPontuacao("marco",   5, "favorito");
-		placar.adicionarPontuacao("marco",  11, "curtida");
-		placar.adicionarPontuacao("marco",  10, "moeda");
-		placar.adicionarPontuacao("marco",   1, "energia");
+		placar.adicionarPontuacao(new Pontuacao("marco",   5, "favorito"));
+		placar.adicionarPontuacao(new Pontuacao("marco",  11, "curtida"));
+		placar.adicionarPontuacao(new Pontuacao("marco",  10, "moeda"));
+		placar.adicionarPontuacao(new Pontuacao("marco",   1, "energia"));
 		
 		var rankingEstrela = placar.ranking("estrela");
 		assertEquals( 2, 		  rankingEstrela.size());
@@ -101,7 +101,7 @@ public class PlacarArmazenamentoITTest {
 		assertEquals( 3, 		  rankingMoeda.size());
 		assertEquals("maria 37",  rankingMoeda.get(0));// 1°
 		assertEquals("marco 10",  rankingMoeda.get(1));// 2°
-		assertEquals("tadeu 2",   rankingMoeda.get(2));// 3°
+		assertEquals( "tadeu 2",  rankingMoeda.get(2));// 3°
 		
 		var rankingEnergia = placar.ranking("energia");
 		assertEquals( 1, 		  rankingEnergia.size());

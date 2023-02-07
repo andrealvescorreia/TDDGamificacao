@@ -14,9 +14,9 @@ public class Placar {
 		this.armazenamento = armazenamento;
 	}
 
-	public void adicionarPontuacao(String usuario, long pontos, String tipo) 
-			throws PontuacaoInvalidaException, FalhaNoArmazenamentoException {
-		armazenamento.guardarPontuacao(usuario, pontos, tipo);
+	public void adicionarPontuacao(Pontuacao pontuacao) 
+			throws FalhaNoArmazenamentoException {
+		armazenamento.guardarPontuacao(pontuacao);
 	}
 
 	public HashMap<String, Integer> pontuacoes(String usuario) {
