@@ -40,8 +40,8 @@ public class Placar {
 		}
 		
 		var rankingDoTipoDePonto = new ArrayList<String>();
-		for(var pontuacao : rankingTreeMap.entrySet())
-			rankingDoTipoDePonto.add(pontuacao.getValue()+" "+pontuacao.getKey());
+		for(var pontuacaoEntry : rankingTreeMap.entrySet())
+			rankingDoTipoDePonto.add(pontuacaoEntry.getValue()+" "+pontuacaoEntry.getKey());
 		return rankingDoTipoDePonto;
 	}
 }

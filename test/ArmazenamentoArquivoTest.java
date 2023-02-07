@@ -20,7 +20,7 @@ public class ArmazenamentoArquivoTest {
 	static final String CAMINHO_ARQUIVO = "saida.json";
 	
 	@Before
-	public void inicializarArmazenamento() {
+	public void reinicializarArmazenamento() {
 		try {
 			arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 		} catch (FalhaNoArmazenamentoException e) {
@@ -106,19 +106,18 @@ public class ArmazenamentoArquivoTest {
 		pontuacoesEsperadas.add(new Pontuacao("guerra",  9, "favorito"));
 
 		guardar(pontuacoesEsperadas);
-		assertEquals(json(pontuacoesEsperadas)
-				, lerDadosBrutosArmazenamento());
+		assertEquals(json(pontuacoesEsperadas), lerDadosBrutosArmazenamento());
 	}
 
 	@Test
 	public void armazenaPontuacoesDiferentesUsuarios() {
 		var pontuacoesEsperadas = new ArrayList<Pontuacao>();
 		pontuacoesEsperadas.add(new Pontuacao("guerra", 10, "estrela"));
-		pontuacoesEsperadas.add( new Pontuacao("marco",   5, "estrela"));
-		pontuacoesEsperadas.add( new Pontuacao("tadeu",   1, "curtida"));
+		pontuacoesEsperadas.add(new Pontuacao("marco",   5, "estrela"));
+		pontuacoesEsperadas.add(new Pontuacao("tadeu",   1, "curtida"));
+		
 		guardar(pontuacoesEsperadas);
-		assertEquals(json(pontuacoesEsperadas)
-					, lerDadosBrutosArmazenamento());
+		assertEquals(json(pontuacoesEsperadas), lerDadosBrutosArmazenamento());
 	}
 
 	@Test
@@ -128,7 +127,7 @@ public class ArmazenamentoArquivoTest {
 	}
 
 	@Test
-	public void recuperaPontosVariasPontuacoes() {
+	public void recuperaPontosVariasPontuacoesMesmoUsuarioETipo() {
 		arm.guardar(new Pontuacao("guerra", 10, "estrela"));
 		arm.guardar(new Pontuacao("guerra",  4, "estrela"));
 		arm.guardar(new Pontuacao("guerra",  7, "estrela"));
@@ -179,7 +178,7 @@ public class ArmazenamentoArquivoTest {
 		
 		escreverNoArquivoDeArmazenamento(json(pontuacoes));
 		
-		inicializarArmazenamento();
+		reinicializarArmazenamento();
 		
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals( 5, arm.recuperarPontos("marco",  "estrela"));
@@ -188,16 +187,13 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void simularArmazenamentoCaiu() {
-		arm.guardar(new Pontuacao("guerra", 6, "estrela"));
-		arm.guardar(new Pontuacao("guerra", 3, "comentario"));
-		arm.guardar(new Pontuacao("marco", 24, "estrela"));
-		arm.guardar(new Pontuacao("tadeu",  1, "comentario"));
-		arm.guardar(new Pontuacao("marco",  5, "estrela"));
-		arm.guardar(new Pontuacao("guerra", 4, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 10, "estrela"));
+		arm.guardar(new Pontuacao("guerra",  3, "comentario"));
+		arm.guardar(new Pontuacao("marco",  29, "estrela"));
+		arm.guardar(new Pontuacao("tadeu",   1, "comentario"));
+
+		reinicializarArmazenamento();
 		
-		// aqui ocorre a simulação:
-		// limpa o cache, forçando com que o "armazenamento" recupere dados do arquivo.
-		inicializarArmazenamento();
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals( 3, arm.recuperarPontos("guerra", "comentario"));
 		assertEquals(29, arm.recuperarPontos("marco",  "estrela"));
@@ -214,11 +210,8 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void recuperaUmUsuario() {
-		var usuariosEsperados = new ArrayList<String>(
-			Arrays.asList("guerra"));
 		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
-		
-		assertEquals(usuariosEsperados, arm.recuperarUsuariosRegistrados());
+		assertEquals(Arrays.asList("guerra"), arm.recuperarUsuariosRegistrados());
 	}
 	
 	@Test
@@ -238,15 +231,15 @@ public class ArmazenamentoArquivoTest {
 	@Test
 	public void simularArquivoInvalido() {
 		var p1 = new Pontuacao("guerra", 1, "estrela");
-		var p2 = new Pontuacao("maria", 1, "comentario");
+		var p2 = new Pontuacao("maria",  1, "comentario");
 		var p3 = new Pontuacao("guerra", 1, "favorito");
 		var pontuacoesEsperadas = new ArrayList<Pontuacao>();
 		pontuacoesEsperadas.add(p1);
 		pontuacoesEsperadas.add(p2);
 		pontuacoesEsperadas.add(p3);
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
-		inicializarArmazenamento();// força o armazenamento a tentar recuperar dados invalidos!
 		
+		reinicializarArmazenamento();
 		
 		arm.guardar(p1);
 		arm.guardar(p2);
@@ -281,7 +274,6 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void recuperaVariosTiposDePontosUsuariosDiferentes() {
-		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
 		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
 		arm.guardar(new Pontuacao("guerra", 1, "comentario"));
 		arm.guardar(new Pontuacao("guerra", 1, "moeda"));

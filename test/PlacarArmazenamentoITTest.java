@@ -1,18 +1,14 @@
 import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import armazenamento.excecoes.FalhaNoArmazenamentoException;
-import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class PlacarArmazenamentoITTest {
 	Placar placar;
@@ -54,11 +50,11 @@ public class PlacarArmazenamentoITTest {
 		placar.adicionar(new Pontuacao("guerra", 15, "curtida"));
 		placar.adicionar(new Pontuacao("guerra",  2, "comentario"));
 		placar.adicionar(new Pontuacao("guerra",  3, "comentario"));
-		var pontuacoesEsperadas = new HashMap<String, Integer>();
-		pontuacoesEsperadas.put("estrela",   55);
-		pontuacoesEsperadas.put("curtida",   15);
-		pontuacoesEsperadas.put("comentario", 5);
-		assertEquals(pontuacoesEsperadas, placar.pontuacoes("guerra"));
+		var guerraPontuacoesEsperadas = new HashMap<String, Integer>();
+		guerraPontuacoesEsperadas.put("estrela",   55);
+		guerraPontuacoesEsperadas.put("curtida",   15);
+		guerraPontuacoesEsperadas.put("comentario", 5);
+		assertEquals(guerraPontuacoesEsperadas, placar.pontuacoes("guerra"));
 	}
 	
 	@Test
