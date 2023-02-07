@@ -42,7 +42,7 @@ public class PlacarTest {
 
 	@Test
 	public void adicionarUmaPontuacao() throws IOException {
-		placar.adicionarPontuacao(new Pontuacao("guerra", 10, "estrela"));
+		placar.adicionar(new Pontuacao("guerra", 10, "estrela"));
 		var execucaoEsperada = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela")
 		);
@@ -52,12 +52,12 @@ public class PlacarTest {
 	
 	@Test
 	public void adicionarMultiplasPontuacoes() {
-		placar.adicionarPontuacao(new Pontuacao("guerra", 10, "estrela"));
-		placar.adicionarPontuacao(new Pontuacao("guerra",  5, "estrela"));
-		placar.adicionarPontuacao(new Pontuacao("guerra",  2, "moeda"));
-		placar.adicionarPontuacao(new Pontuacao("marco",   1, "estrela"));
-		placar.adicionarPontuacao(new Pontuacao("marco",   9, "moeda"));
-		placar.adicionarPontuacao(new Pontuacao("maria",   2, "curtida"));
+		placar.adicionar(new Pontuacao("guerra", 10, "estrela"));
+		placar.adicionar(new Pontuacao("guerra",  5, "estrela"));
+		placar.adicionar(new Pontuacao("guerra",  2, "moeda"));
+		placar.adicionar(new Pontuacao("marco",   1, "estrela"));
+		placar.adicionar(new Pontuacao("marco",   9, "moeda"));
+		placar.adicionar(new Pontuacao("maria",   2, "curtida"));
 		
 		var chamadasEsperadas = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela", 

@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import armazenamento.excecoes.FalhaNoArmazenamentoException;
-import pontuacao.excecoes.PontuacaoInvalidaException;
+
 
 public class ArmazenamentoArquivoTest {
 	Armazenamento arm;
@@ -34,7 +34,7 @@ public class ArmazenamentoArquivoTest {
 		escreverNoArquivoDeArmazenamento("");
 	}
 	
-	public void escreverNoArquivoDeArmazenamento(String conteudo) {
+	private void escreverNoArquivoDeArmazenamento(String conteudo) {
 		try {
 			var fileWriter = new FileWriter(CAMINHO_ARQUIVO);
 			fileWriter.write(conteudo);
@@ -47,7 +47,7 @@ public class ArmazenamentoArquivoTest {
 	}
 	
 	
-	public String lerDadosBrutosArmazenamento() {
+	private String lerDadosBrutosArmazenamento() {
 		var dados = "";
 		try {
 			var leitor = new Scanner(new File(CAMINHO_ARQUIVO));
@@ -61,139 +61,96 @@ public class ArmazenamentoArquivoTest {
 		return dados;
 	}
 	
-	private String jsonPontuacao(String usuario, int pontos, String tipo) {
-		return "{\"tipo\":\""    + tipo    + "\","+
-				"\"pontos\":"    + pontos  + ","+
-				"\"usuario\":\"" + usuario + "\"}";
+	private String json(ArrayList<Pontuacao> pontuacoes) {
+		String jsonPontuacoes = "[";
+		for (Pontuacao p: pontuacoes) {
+			jsonPontuacoes += p.toJSONString();
+			if(p != pontuacoes.get(pontuacoes.size()-1)) {
+				jsonPontuacoes += ",";
+			}
+		}
+		return jsonPontuacoes + "]";
+	}
+	
+	private void guardar(ArrayList<Pontuacao> pontuacoes) {
+		for (Pontuacao p : pontuacoes) {
+			arm.guardar(p);
+		}
 	}
 	
 	@Test
 	public void armazenaPontuacao() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 10, "estrela"));
+		var pontuacao = new Pontuacao("guerra", 10, "estrela");
+		arm.guardar(pontuacao);
 		
-		assertEquals("["+jsonPontuacao("guerra", 10, "estrela")+"]"
+		assertEquals("["+pontuacao.toJSONString()+"]"
 					, lerDadosBrutosArmazenamento());
 	}
-
+	
 	@Test
-	public void armazenaPontuacaoPontosInvalidos() {
-		try {
-			arm.guardarPontuacao(new Pontuacao("guerra", -1, "estrela"));
-			fail();
-		} catch (PontuacaoInvalidaException e) {}
+	public void armazenaPontuacoesMesmoUsuarioETipo() {
+		arm.guardar(new Pontuacao("guerra", 10, "estrela"));
+		arm.guardar(new Pontuacao("guerra",  1, "estrela"));
+		arm.guardar(new Pontuacao("guerra",  9, "estrela"));
 		
-		assertEquals("", lerDadosBrutosArmazenamento());
-	}
-	
-	
-	
-	@Test
-	public void armazenaPontuacaoUsuarioVazio() {
-		try {
-			arm.guardarPontuacao(new Pontuacao("", 1, "estrela"));
-			fail();
-		} catch (PontuacaoInvalidaException e) {}
-		assertEquals("", lerDadosBrutosArmazenamento());
-	}
-	
-	@Test
-	public void armazenaPontuacaoUsuarioComEspaco() {
-		try {
-			arm.guardarPontuacao(new Pontuacao("eduardo guerra", 1, "estrela"));
-			fail();
-		} catch (PontuacaoInvalidaException e) {}
-		assertEquals("", lerDadosBrutosArmazenamento());
-	}
-	
-	@Test
-	public void armazenaPontuacaoTipoVazio() {
-		try {
-			arm.guardarPontuacao(new Pontuacao("guerra", 1, ""));
-			fail();
-		} catch (PontuacaoInvalidaException e) {}
-		assertEquals("", lerDadosBrutosArmazenamento());
-	}
-	
-	@Test
-	public void armazenaPontuacaoTipoComEspaco() {
-		try {
-			arm.guardarPontuacao(new Pontuacao("guerra", 1, "estrela brilhante"));
-			fail();
-		} catch (PontuacaoInvalidaException e) {}
-		assertEquals("", lerDadosBrutosArmazenamento());
-	}
-	
-	@Test
-	public void armazenaPontuacoes() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 10, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra",  1, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra",  9, "estrela"));
-
-		assertEquals("["+jsonPontuacao("guerra", 20, "estrela")+"]"
+		var pontuacaoEsperada = new Pontuacao("guerra", 20, "estrela");
+		assertEquals("["+pontuacaoEsperada.toJSONString()+"]"
 				    , lerDadosBrutosArmazenamento());
 	}
 
 	@Test
-	public void armazenaPontuacoesDiferentesTipos() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 10, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra",  5, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra",  1, "curtida"));
-		arm.guardarPontuacao(new Pontuacao("guerra",  9, "favorito"));
-		
-		assertEquals("["
-						+ jsonPontuacao("guerra", 15, "estrela")+","
-						+ jsonPontuacao("guerra",  1, "curtida")+","
-						+ jsonPontuacao("guerra",  9, "favorito")
-					+"]"
-					, lerDadosBrutosArmazenamento());
+	public void armazenaPontuacoesMesmoUsuarioTiposDiferentes() {
+		var pontuacoesEsperadas = new ArrayList<Pontuacao>();
+		pontuacoesEsperadas.add(new Pontuacao("guerra", 10, "estrela"));
+		pontuacoesEsperadas.add(new Pontuacao("guerra",  1, "curtida"));
+		pontuacoesEsperadas.add(new Pontuacao("guerra",  9, "favorito"));
+
+		guardar(pontuacoesEsperadas);
+		assertEquals(json(pontuacoesEsperadas)
+				, lerDadosBrutosArmazenamento());
 	}
 
 	@Test
 	public void armazenaPontuacoesDiferentesUsuarios() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 10, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("marco",   5, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("tadeu",   1, "curtida"));
-		
-		assertEquals("["
-						+ jsonPontuacao("guerra", 10, "estrela")+","
-						+ jsonPontuacao("marco",   5, "estrela")+","
-						+ jsonPontuacao("tadeu",   1, "curtida")
-					+"]"
+		var pontuacoesEsperadas = new ArrayList<Pontuacao>();
+		pontuacoesEsperadas.add(new Pontuacao("guerra", 10, "estrela"));
+		pontuacoesEsperadas.add( new Pontuacao("marco",   5, "estrela"));
+		pontuacoesEsperadas.add( new Pontuacao("tadeu",   1, "curtida"));
+		guardar(pontuacoesEsperadas);
+		assertEquals(json(pontuacoesEsperadas)
 					, lerDadosBrutosArmazenamento());
 	}
 
 	@Test
 	public void recuperaPontosUmaPontuacao() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 10, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 10, "estrela"));
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
 	}
 
 	@Test
 	public void recuperaPontosVariasPontuacoes() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 10, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra",  4, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra",  7, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 10, "estrela"));
+		arm.guardar(new Pontuacao("guerra",  4, "estrela"));
+		arm.guardar(new Pontuacao("guerra",  7, "estrela"));
 		assertEquals(21, arm.recuperarPontos("guerra", "estrela"));
 	}
 
 	@Test
 	public void recuperaPontosVariosTiposDePontuacoes() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 10, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra",  5, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 24, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("guerra",  1, "comentario"));
+		arm.guardar(new Pontuacao("guerra", 15, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 25, "comentario"));
+
 		assertEquals(15, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals(25, arm.recuperarPontos("guerra", "comentario"));
 	}
 	
 	@Test
 	public void recuperaPontosVariosUsuariosETiposDePontuacoes() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 6, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 3, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("marco", 24, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("tadeu",  1, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("marco",  5, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 4, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 10, "estrela"));
+		arm.guardar(new Pontuacao("marco", 29, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 3, "comentario"));
+		arm.guardar(new Pontuacao("tadeu",  1, "comentario"));
+
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals(29, arm.recuperarPontos("marco",  "estrela"));
 		assertEquals( 3, arm.recuperarPontos("guerra", "comentario"));
@@ -207,20 +164,20 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void recuperaPontosTipoInexistenteParaOUsuario() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("maria",  1, "moeda"));
+		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 1, "comentario"));
+		arm.guardar(new Pontuacao("maria",  1, "moeda"));
 		assertEquals(0, arm.recuperarPontos("guerra", "moeda"));
 	}
 	
 	@Test
 	public void recuperarDadosDoArquivo() {
-		String jsonPontuacoes = "["
-				+ jsonPontuacao("guerra", 10, "estrela")+","
-				+ jsonPontuacao("marco",   5, "estrela")+","
-				+ jsonPontuacao("tadeu",   1, "curtida")
-			+"]";
-		escreverNoArquivoDeArmazenamento(jsonPontuacoes);
+		var pontuacoes = new ArrayList<Pontuacao>();
+		pontuacoes.add(new Pontuacao("guerra", 10, "estrela"));
+		pontuacoes.add(new Pontuacao("marco",   5, "estrela"));
+		pontuacoes.add(new Pontuacao("tadeu",   1, "curtida"));
+		
+		escreverNoArquivoDeArmazenamento(json(pontuacoes));
 		
 		inicializarArmazenamento();
 		
@@ -231,12 +188,12 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void simularArmazenamentoCaiu() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 6, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 3, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("marco", 24, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("tadeu",  1, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("marco",  5, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 4, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 6, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 3, "comentario"));
+		arm.guardar(new Pontuacao("marco", 24, "estrela"));
+		arm.guardar(new Pontuacao("tadeu",  1, "comentario"));
+		arm.guardar(new Pontuacao("marco",  5, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 4, "estrela"));
 		
 		// aqui ocorre a simulação:
 		// limpa o cache, forçando com que o "armazenamento" recupere dados do arquivo.
@@ -245,9 +202,9 @@ public class ArmazenamentoArquivoTest {
 		assertEquals( 3, arm.recuperarPontos("guerra", "comentario"));
 		assertEquals(29, arm.recuperarPontos("marco",  "estrela"));
 		
-		arm.guardarPontuacao(new Pontuacao("guerra", 5, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("tadeu",  2, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("maria", 50, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 5, "estrela"));
+		arm.guardar(new Pontuacao("tadeu",  2, "comentario"));
+		arm.guardar(new Pontuacao("maria", 50, "estrela"));
 		
 		assertEquals(15, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals( 3, arm.recuperarPontos("tadeu",  "comentario"));
@@ -259,7 +216,7 @@ public class ArmazenamentoArquivoTest {
 	public void recuperaUmUsuario() {
 		var usuariosEsperados = new ArrayList<String>(
 			Arrays.asList("guerra"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
 		
 		assertEquals(usuariosEsperados, arm.recuperarUsuariosRegistrados());
 	}
@@ -269,36 +226,40 @@ public class ArmazenamentoArquivoTest {
 		var usuariosEsperados = new ArrayList<String>(
 			Arrays.asList("guerra", "maria", "jose"));
 
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("maria",  1, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("jose",   1, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("jose",  10, "curtida"));
-		arm.guardarPontuacao(new Pontuacao("maria",  1, "comentario"));
+		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
+		arm.guardar(new Pontuacao("maria",  1, "comentario"));
+		arm.guardar(new Pontuacao("jose",   1, "estrela"));
+		arm.guardar(new Pontuacao("jose",  10, "curtida"));
+		arm.guardar(new Pontuacao("maria",  1, "comentario"));
 		
 		assertEquals(usuariosEsperados, arm.recuperarUsuariosRegistrados());
 	}
 	
 	@Test
 	public void simularArquivoInvalido() {
+		var p1 = new Pontuacao("guerra", 1, "estrela");
+		var p2 = new Pontuacao("maria", 1, "comentario");
+		var p3 = new Pontuacao("guerra", 1, "favorito");
+		var pontuacoesEsperadas = new ArrayList<Pontuacao>();
+		pontuacoesEsperadas.add(p1);
+		pontuacoesEsperadas.add(p2);
+		pontuacoesEsperadas.add(p3);
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
 		inicializarArmazenamento();// força o armazenamento a tentar recuperar dados invalidos!
 		
 		
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("maria", 1, "comentario"));
+		arm.guardar(p1);
+		arm.guardar(p2);
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "favorito"));
+		arm.guardar(p3);
 		
-		assertEquals("["+jsonPontuacao("guerra", 1, "estrela")+","
-						+jsonPontuacao("maria",  1, "comentario")+","
-						+jsonPontuacao("guerra", 1, "favorito")+"]"
-			    	, lerDadosBrutosArmazenamento());
+		assertEquals(json(pontuacoesEsperadas), lerDadosBrutosArmazenamento());
 	}
 	
 	
 	@Test
 	public void recuperaUmTipoDePonto() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 5, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 5, "estrela"));
 		ArrayList<String> tiposRecuperados = arm.recuperarTiposDePonto("guerra");
 		assertEquals(1, tiposRecuperados.size());
 		assertEquals("estrela", tiposRecuperados.get(0));
@@ -306,10 +267,10 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void recuperaVariosTiposDePontos() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 5, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 5, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 5, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 5, "moeda"));
+		arm.guardar(new Pontuacao("guerra", 5, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 5, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 5, "comentario"));
+		arm.guardar(new Pontuacao("guerra", 5, "moeda"));
 		
 		var tiposEsperados = new ArrayList<>(Arrays.asList(
 				"estrela", "comentario", "moeda"));
@@ -320,15 +281,15 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void recuperaVariosTiposDePontosUsuariosDiferentes() {
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "comentario"));
-		arm.guardarPontuacao(new Pontuacao("guerra", 1, "moeda"));
+		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 1, "comentario"));
+		arm.guardar(new Pontuacao("guerra", 1, "moeda"));
 		
-		arm.guardarPontuacao(new Pontuacao("maria",  1, "curtida"));
-		arm.guardarPontuacao(new Pontuacao("tadeu",  1, "estrela"));
-		arm.guardarPontuacao(new Pontuacao("jose",   1, "moeda"));
-		arm.guardarPontuacao(new Pontuacao("jose",   1, "compartilhamento"));
+		arm.guardar(new Pontuacao("maria",  1, "curtida"));
+		arm.guardar(new Pontuacao("tadeu",  1, "estrela"));
+		arm.guardar(new Pontuacao("jose",   1, "moeda"));
+		arm.guardar(new Pontuacao("jose",   1, "compartilhamento"));
 		
 		var tiposEsperadosGuerra = new ArrayList<>(
 				Arrays.asList("estrela", "comentario", "moeda"));

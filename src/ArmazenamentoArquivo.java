@@ -8,7 +8,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import armazenamento.excecoes.FalhaNoArmazenamentoException;
-import pontuacao.excecoes.PontuacaoInvalidaException;
 
 import org.json.simple.JSONArray;
 
@@ -49,7 +48,7 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	
 	
 	@Override
-	public void guardarPontuacao(Pontuacao novaPontuacao) 
+	public void guardar(Pontuacao novaPontuacao) 
 			throws FalhaNoArmazenamentoException {
 		for(Pontuacao pontuacaoExistente : _cachePontuacoes) {
 			if(pontuacaoExistente.getUsuario().equals(novaPontuacao.getUsuario()) && pontuacaoExistente.getTipo().equals(novaPontuacao.getTipo())) {

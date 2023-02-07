@@ -14,16 +14,16 @@ public class Placar {
 		this.armazenamento = armazenamento;
 	}
 
-	public void adicionarPontuacao(Pontuacao pontuacao) 
+	public void adicionar(Pontuacao pontuacao) 
 			throws FalhaNoArmazenamentoException {
-		armazenamento.guardarPontuacao(pontuacao);
+		armazenamento.guardar(pontuacao);
 	}
 
 	public HashMap<String, Integer> pontuacoes(String usuario) {
 		var pontuacoesDoUsuario = new HashMap<String, Integer>();
-		for(String tipo: armazenamento.recuperarTiposDePonto(usuario)) {
-			int pontos = (int) armazenamento.recuperarPontos(usuario, tipo);
-			pontuacoesDoUsuario.put(tipo, pontos);
+		for(String tipoPontuacao: armazenamento.recuperarTiposDePonto(usuario)) {
+			int pontos = (int) armazenamento.recuperarPontos(usuario, tipoPontuacao);
+			pontuacoesDoUsuario.put(tipoPontuacao, pontos);
 		}
 		return pontuacoesDoUsuario;
 	}

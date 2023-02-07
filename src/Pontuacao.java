@@ -67,6 +67,11 @@ public class Pontuacao{
 			this.pontos += pontos;
 		}
 		
+		
+		public String toJSONString() {
+			return this.toJSONObject().toJSONString();
+		}
+		
 		@SuppressWarnings("unchecked")
 		public JSONObject toJSONObject() {
 			JSONObject jsonObj = new JSONObject();

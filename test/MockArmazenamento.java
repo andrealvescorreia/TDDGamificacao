@@ -13,7 +13,7 @@ public class MockArmazenamento implements Armazenamento {
 	
 	
 	@Override
-	public void guardarPontuacao(Pontuacao pontuacao){
+	public void guardar(Pontuacao pontuacao){
 		if(_simulacaoPontuacaoInvalida) 
 			throw new PontuacaoInvalidaException("Simulação do mock de pontuacao invalida");
 		_chamadasRecebidasParaGuardarPontuacao.add(pontuacao.getUsuario() + " " + pontuacao.getPontos() + " " + pontuacao.getTipo());
