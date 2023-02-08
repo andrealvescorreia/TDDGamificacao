@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +19,8 @@ public class ArmazenamentoArquivoTest {
 	static final String CAMINHO_ARQUIVO = "saida.json";
 	
 	@Before
-	public void reinicializarArmazenamento() {
+	public void inicializarArmazenamento() {
+		escreverNoArquivoDeArmazenamento("");
 		try {
 			arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 		} catch (FalhaNoArmazenamentoException e) {
@@ -28,12 +28,6 @@ public class ArmazenamentoArquivoTest {
 			fail();
 		}
 	}
-
-	@After
-	public void limparArquivoDeArmazenamento() {
-		escreverNoArquivoDeArmazenamento("");
-	}
-	
 	
 	
 	@Test
@@ -136,7 +130,7 @@ public class ArmazenamentoArquivoTest {
 		
 		escreverNoArquivoDeArmazenamento(json(pontuacoes));
 		
-		reinicializarArmazenamento();
+		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 		
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals( 5, arm.recuperarPontos("marco",  "estrela"));
@@ -150,7 +144,8 @@ public class ArmazenamentoArquivoTest {
 		arm.guardar(new Pontuacao("marco",  29, "estrela"));
 		arm.guardar(new Pontuacao("tadeu",   1, "comentario"));
 
-		reinicializarArmazenamento();
+		
+		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 		
 		assertEquals(10, arm.recuperarPontos("guerra", "estrela"));
 		assertEquals( 3, arm.recuperarPontos("guerra", "comentario"));
@@ -190,7 +185,7 @@ public class ArmazenamentoArquivoTest {
 	@Test
 	public void simularArquivoInvalido() {
 		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
-		reinicializarArmazenamento();
+		arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 		
 		var p1 = new Pontuacao("guerra", 1, "estrela");
 		var p2 = new Pontuacao("maria",  1, "comentario");

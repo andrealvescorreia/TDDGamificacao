@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,17 +18,13 @@ public class PlacarArmazenamentoITTest {
 	@Before
 	public void inicializarPlacar() {
 		try {
+			escreverNoArquivoDeArmazenamento("");
 			var arm = new ArmazenamentoArquivo(CAMINHO_ARQUIVO);
 			placar = new Placar(arm);
 		} catch (FalhaNoArmazenamentoException e) {
 			e.printStackTrace();
 			fail();
 		}
-	}
-
-	@After
-	public void limparArquivoDeArmazenamento() {
-		escreverNoArquivoDeArmazenamento("");
 	}
 	
 	private void escreverNoArquivoDeArmazenamento(String conteudo) {
