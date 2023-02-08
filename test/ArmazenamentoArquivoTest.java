@@ -34,49 +34,7 @@ public class ArmazenamentoArquivoTest {
 		escreverNoArquivoDeArmazenamento("");
 	}
 	
-	private void escreverNoArquivoDeArmazenamento(String conteudo) {
-		try {
-			var fileWriter = new FileWriter(CAMINHO_ARQUIVO);
-			fileWriter.write(conteudo);
-			fileWriter.close();
-			assertEquals(conteudo, lerDadosBrutosArmazenamento());
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
 	
-	
-	private String lerDadosBrutosArmazenamento() {
-		var dados = "";
-		try {
-			var leitor = new Scanner(new File(CAMINHO_ARQUIVO));
-			while (leitor.hasNextLine())
-				dados += leitor.nextLine();
-			leitor.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			fail();
-		}
-		return dados;
-	}
-	
-	private String json(ArrayList<Pontuacao> pontuacoes) {
-		String jsonPontuacoes = "[";
-		for (Pontuacao p: pontuacoes) {
-			jsonPontuacoes += p.toJSONString();
-			if(p != pontuacoes.get(pontuacoes.size()-1)) {
-				jsonPontuacoes += ",";
-			}
-		}
-		return jsonPontuacoes + "]";
-	}
-	
-	private void guardar(ArrayList<Pontuacao> pontuacoes) {
-		for (Pontuacao p : pontuacoes) {
-			arm.guardar(p);
-		}
-	}
 	
 	@Test
 	public void armazenaPontuacao() {
@@ -95,7 +53,7 @@ public class ArmazenamentoArquivoTest {
 		
 		var pontuacaoEsperada = new Pontuacao("guerra", 20, "estrela");
 		assertEquals("["+pontuacaoEsperada.toJSONString()+"]"
-				    , lerDadosBrutosArmazenamento());
+				    , this.lerDadosBrutosArmazenamento());
 	}
 
 	@Test
@@ -220,9 +178,10 @@ public class ArmazenamentoArquivoTest {
 			Arrays.asList("guerra", "maria", "jose"));
 
 		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
 		arm.guardar(new Pontuacao("maria",  1, "comentario"));
 		arm.guardar(new Pontuacao("jose",   1, "estrela"));
-		arm.guardar(new Pontuacao("jose",  10, "curtida"));
+		arm.guardar(new Pontuacao("jose",   1, "curtida"));
 		arm.guardar(new Pontuacao("maria",  1, "comentario"));
 		
 		assertEquals(usuariosEsperados, arm.recuperarUsuariosRegistrados());
@@ -230,6 +189,9 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void simularArquivoInvalido() {
+		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
+		reinicializarArmazenamento();
+		
 		var p1 = new Pontuacao("guerra", 1, "estrela");
 		var p2 = new Pontuacao("maria",  1, "comentario");
 		var p3 = new Pontuacao("guerra", 1, "favorito");
@@ -237,9 +199,6 @@ public class ArmazenamentoArquivoTest {
 		pontuacoesEsperadas.add(p1);
 		pontuacoesEsperadas.add(p2);
 		pontuacoesEsperadas.add(p3);
-		escreverNoArquivoDeArmazenamento("Esse Texto É Invalido!");
-		
-		reinicializarArmazenamento();
 		
 		arm.guardar(p1);
 		arm.guardar(p2);
@@ -253,7 +212,7 @@ public class ArmazenamentoArquivoTest {
 	@Test
 	public void recuperaUmTipoDePonto() {
 		arm.guardar(new Pontuacao("guerra", 5, "estrela"));
-		ArrayList<String> tiposRecuperados = arm.recuperarTiposDePonto("guerra");
+		var tiposRecuperados = arm.recuperarTiposDePonto("guerra");
 		assertEquals(1, tiposRecuperados.size());
 		assertEquals("estrela", tiposRecuperados.get(0));
 	}
@@ -274,28 +233,71 @@ public class ArmazenamentoArquivoTest {
 	
 	@Test
 	public void recuperaVariosTiposDePontosUsuariosDiferentes() {
-		arm.guardar(new Pontuacao("guerra", 1, "estrela"));
-		arm.guardar(new Pontuacao("guerra", 1, "comentario"));
-		arm.guardar(new Pontuacao("guerra", 1, "moeda"));
+		arm.guardar(new Pontuacao("guerra", 5, "estrela"));
+		arm.guardar(new Pontuacao("guerra", 5, "comentario"));
+		arm.guardar(new Pontuacao("guerra", 5, "moeda"));
 		
-		arm.guardar(new Pontuacao("maria",  1, "curtida"));
-		arm.guardar(new Pontuacao("tadeu",  1, "estrela"));
-		arm.guardar(new Pontuacao("jose",   1, "moeda"));
-		arm.guardar(new Pontuacao("jose",   1, "compartilhamento"));
+		arm.guardar(new Pontuacao("maria",  5, "curtida"));
+		arm.guardar(new Pontuacao("tadeu",  5, "estrela"));
+		arm.guardar(new Pontuacao("jose",   5, "moeda"));
+		arm.guardar(new Pontuacao("jose",   5, "compartilhamento"));
 		
 		var tiposEsperadosGuerra = new ArrayList<>(
 				Arrays.asList("estrela", "comentario", "moeda"));
-		var tiposRecuperadosGuerra = arm.recuperarTiposDePonto("guerra");
-		assertEquals(tiposEsperadosGuerra, tiposRecuperadosGuerra);
-		
-		var tiposEsperadosJose = new ArrayList<>(
+		var tiposEsperadosJose   = new ArrayList<>(
 				Arrays.asList("moeda", "compartilhamento"));
-		var tiposRecuperadosJose = arm.recuperarTiposDePonto("jose");
-		assertEquals(tiposEsperadosJose, tiposRecuperadosJose);
-		
-		var tiposEsperadosMaria = new ArrayList<>(
+		var tiposEsperadosMaria  = new ArrayList<>(
 				Arrays.asList("curtida"));
-		var tiposRecuperadosMaria = arm.recuperarTiposDePonto("maria");
-		assertEquals(tiposEsperadosMaria, tiposRecuperadosMaria);
+		
+		var tiposRecuperadosGuerra = arm.recuperarTiposDePonto("guerra");
+		var tiposRecuperadosJose   = arm.recuperarTiposDePonto("jose");
+		var tiposRecuperadosMaria  = arm.recuperarTiposDePonto("maria");
+		
+		assertEquals(tiposEsperadosGuerra, tiposRecuperadosGuerra);
+		assertEquals(tiposEsperadosJose,   tiposRecuperadosJose);
+		assertEquals(tiposEsperadosMaria,  tiposRecuperadosMaria);
+	}
+	
+	
+	private void escreverNoArquivoDeArmazenamento(String conteudo) {
+		try {
+			var fileWriter = new FileWriter(CAMINHO_ARQUIVO);
+			fileWriter.write(conteudo);
+			fileWriter.close();
+			assertEquals(conteudo, lerDadosBrutosArmazenamento());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	private String lerDadosBrutosArmazenamento() {
+		String dados = "";
+		try {
+			var leitor = new Scanner(new File(CAMINHO_ARQUIVO));
+			while (leitor.hasNextLine())
+				dados += leitor.nextLine();
+			leitor.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			fail();
+		}
+		return dados;
+	}
+	
+	private String json(ArrayList<Pontuacao> pontuacoes) {
+		String jsonPontuacoes = "[";
+		Pontuacao ultimaPontuacao = pontuacoes.get(pontuacoes.size() - 1);
+		for (Pontuacao p: pontuacoes) {
+			jsonPontuacoes += p.toJSONString();
+			if(p == ultimaPontuacao) break;
+			jsonPontuacoes += ",";
+		}
+		return jsonPontuacoes + "]";
+	}
+	
+	private void guardar(ArrayList<Pontuacao> pontuacoes) {
+		for (Pontuacao p : pontuacoes) 
+			arm.guardar(p);
 	}
 }
