@@ -16,7 +16,7 @@ import armazenamento.excecoes.FalhaNoArmazenamentoException;
 
 public class ArmazenamentoArquivoTest {
 	Armazenamento arm;
-	static final String CAMINHO_ARQUIVO = "saida.json";
+	static final String CAMINHO_ARQUIVO = "dados.json";
 	
 	@Before
 	public void inicializarArmazenamento() {

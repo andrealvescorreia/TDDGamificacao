@@ -13,7 +13,7 @@ import armazenamento.excecoes.FalhaNoArmazenamentoException;
 
 public class PlacarArmazenamentoITTest {
 	Placar placar;
-	static final String CAMINHO_ARQUIVO = "saida.json";
+	static final String CAMINHO_ARQUIVO = "dados.json";
 	
 	@Before
 	public void inicializarPlacar() {
