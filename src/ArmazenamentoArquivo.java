@@ -8,7 +8,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import armazenamento.excecoes.FalhaNoArmazenamentoException;
-import pontuacao.excecoes.PontuacaoInvalidaException;
 
 import org.json.simple.JSONArray;
 
@@ -25,10 +24,9 @@ public class ArmazenamentoArquivo implements Armazenamento {
 		} catch (IOException e) {
 			throw new FalhaNoArmazenamentoException(e.getMessage());
 		}
-		
 	}
 	
-	private void recuperarDadosSalvosEmArquivo() throws IOException{
+	private void recuperarDadosSalvosEmArquivo() throws IOException {
 		JSONParser parser = new JSONParser();
 		JSONArray jsonPontuacoes;
 		try {
@@ -50,19 +48,24 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	
 	
 	@Override
-	public void guardarPontuacao(String usuario, long pontos, String tipo) 
-			throws PontuacaoInvalidaException, FalhaNoArmazenamentoException {
-		for(Pontuacao pontuacaoExistente : _cachePontuacoes) {
-			if(pontuacaoExistente.getUsuario().equals(usuario) && pontuacaoExistente.getTipo().equals(tipo)) {
-				pontuacaoExistente.addPontos(pontos);
+	public void guardar(Pontuacao novaPontuacao) 
+			throws FalhaNoArmazenamentoException {
+		for (Pontuacao pontuacaoExistente : _cachePontuacoes) {
+			if (mesmoUsuarioETipo(pontuacaoExistente, novaPontuacao)) {
+				pontuacaoExistente.addPontos(novaPontuacao.getPontos());
 				salvarCacheNoArquivo();
 				return;
 			}
 		}
-		Pontuacao novaPontuacao = new Pontuacao(usuario, pontos, tipo);
 		_cachePontuacoes.add(novaPontuacao);
 		salvarCacheNoArquivo();
 	}
+	
+	private boolean mesmoUsuarioETipo(Pontuacao p1, Pontuacao p2) {
+		return (p1.getUsuario().equals(p2.getUsuario()) 
+			 && p1.getTipo().equals(p2.getTipo()));
+	}
+	
 	
 	private void salvarCacheNoArquivo(){
 		try {
@@ -76,16 +79,16 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	
 	@SuppressWarnings("unchecked")
 	private String jsonDoCacheDePontuacoes() {
-		JSONArray jsonArrayPontuacoes = new JSONArray();
+		JSONArray jsonPontuacoes = new JSONArray();
 		for(Pontuacao pontuacao : _cachePontuacoes) 
-			jsonArrayPontuacoes.add(pontuacao.toJSONObject());
-		return jsonArrayPontuacoes.toJSONString();
+			jsonPontuacoes.add(pontuacao.toJSONObject());
+		return jsonPontuacoes.toJSONString();
 	}
 	
 	@Override
 	public long recuperarPontos(String usuario, String tipo) {
-		for(Pontuacao pontuacao : _cachePontuacoes) {
-			if(usuario.equals(pontuacao.getUsuario()) && tipo.equals(pontuacao.getTipo()))
+		for (Pontuacao pontuacao : _cachePontuacoes) {
+			if (usuario.equals(pontuacao.getUsuario()) && tipo.equals(pontuacao.getTipo()))
 				return pontuacao.getPontos();
 		}
 		return 0;
@@ -94,9 +97,9 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	@Override
 	public ArrayList<String> recuperarUsuariosRegistrados() {
 		var usuarios = new ArrayList<String>();
-		for(Pontuacao pontuacao : _cachePontuacoes) {
+		for (Pontuacao pontuacao : _cachePontuacoes) {
 			String usuario = pontuacao.getUsuario();
-			if(usuarios.contains(usuario)) continue;
+			if (usuarios.contains(usuario)) continue;
 			usuarios.add(usuario);
 		}
 		return usuarios;
@@ -105,10 +108,10 @@ public class ArmazenamentoArquivo implements Armazenamento {
 	@Override
 	public ArrayList<String> recuperarTiposDePonto(String usuario) {
 		var tiposDePontosDoUsuario = new ArrayList<String>();
-		for(Pontuacao pontuacao : _cachePontuacoes) {
-			if(tiposDePontosDoUsuario.contains(pontuacao.getTipo())) 
+		for (Pontuacao pontuacao : _cachePontuacoes) {
+			if (tiposDePontosDoUsuario.contains(pontuacao.getTipo())) 
 				continue;
-			if(usuario.equals(pontuacao.getUsuario()))
+			if (usuario.equals(pontuacao.getUsuario()))
 				tiposDePontosDoUsuario.add(pontuacao.getTipo());
 		}
 		return tiposDePontosDoUsuario;

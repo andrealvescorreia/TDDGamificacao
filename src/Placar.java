@@ -14,16 +14,16 @@ public class Placar {
 		this.armazenamento = armazenamento;
 	}
 
-	public void adicionarPontuacao(String usuario, long pontos, String tipo) 
-			throws PontuacaoInvalidaException, FalhaNoArmazenamentoException {
-		armazenamento.guardarPontuacao(usuario, pontos, tipo);
+	public void adicionar(Pontuacao pontuacao) 
+			throws FalhaNoArmazenamentoException {
+		armazenamento.guardar(pontuacao);
 	}
 
 	public HashMap<String, Integer> pontuacoes(String usuario) {
 		var pontuacoesDoUsuario = new HashMap<String, Integer>();
-		for(String tipo: armazenamento.recuperarTiposDePonto(usuario)) {
-			int pontos = (int) armazenamento.recuperarPontos(usuario, tipo);
-			pontuacoesDoUsuario.put(tipo, pontos);
+		for(String tipoPontuacao: armazenamento.recuperarTiposDePonto(usuario)) {
+			int pontos = (int) armazenamento.recuperarPontos(usuario, tipoPontuacao);
+			pontuacoesDoUsuario.put(tipoPontuacao, pontos);
 		}
 		return pontuacoesDoUsuario;
 	}
@@ -40,8 +40,8 @@ public class Placar {
 		}
 		
 		var rankingDoTipoDePonto = new ArrayList<String>();
-		for(var pontuacao : rankingTreeMap.entrySet())
-			rankingDoTipoDePonto.add(pontuacao.getValue()+" "+pontuacao.getKey());
+		for(var pontuacaoEntry : rankingTreeMap.entrySet())
+			rankingDoTipoDePonto.add(pontuacaoEntry.getValue()+" "+pontuacaoEntry.getKey());
 		return rankingDoTipoDePonto;
 	}
 }

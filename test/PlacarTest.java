@@ -28,10 +28,10 @@ public class PlacarTest {
 		pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 		mockArmazenamento.setPontuacoesUsuarios(pontuacoesUsuarios);
 		
-		guerraPontuacoes   = new HashMap<String, Integer>();
-		tadeuPontuacoes    = new HashMap<String, Integer>();
-		marcoPontuacoes    = new HashMap<String, Integer>();
-		mariaPontuacoes    = new HashMap<String, Integer>();
+		guerraPontuacoes = new HashMap<String, Integer>();
+		tadeuPontuacoes  = new HashMap<String, Integer>();
+		marcoPontuacoes  = new HashMap<String, Integer>();
+		mariaPontuacoes  = new HashMap<String, Integer>();
 		
 		pontuacoesUsuarios.put("guerra", guerraPontuacoes);
 		pontuacoesUsuarios.put("tadeu",  tadeuPontuacoes);
@@ -42,26 +42,28 @@ public class PlacarTest {
 
 	@Test
 	public void adicionarUmaPontuacao() throws IOException {
-		placar.adicionarPontuacao("guerra", 10, "estrela");
-		var execucaoEsperada = new ArrayList<>(
+		placar.adicionar(new Pontuacao("guerra", 10, "estrela"));
+		var chamadaEsperada = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela")
 		);
 		// assegura que a classe Placar realmente manda os dados para serem salvos pelo Armazenamento.
-		mockArmazenamento.verificaChamadasGuardarPontuacao(execucaoEsperada);
+		mockArmazenamento.verificaChamadasGuardarPontuacao(chamadaEsperada);
 	}
 	
 	@Test
 	public void adicionarMultiplasPontuacoes() {
-		placar.adicionarPontuacao("guerra", 10, "estrela");
-		placar.adicionarPontuacao("guerra",  5, "estrela");
-		placar.adicionarPontuacao("guerra",  2, "moeda");
-		placar.adicionarPontuacao("marco",   1, "estrela");
-		placar.adicionarPontuacao("marco",   9, "moeda");
-		placar.adicionarPontuacao("maria",   2, "curtida");
+		placar.adicionar(new Pontuacao("guerra", 10, "estrela"));
+		placar.adicionar(new Pontuacao("guerra",  5, "estrela"));
+		placar.adicionar(new Pontuacao("guerra",  2, "estrela"));
+		placar.adicionar(new Pontuacao("guerra",  2, "moeda"));
+		placar.adicionar(new Pontuacao("marco",   1, "estrela"));
+		placar.adicionar(new Pontuacao("marco",   9, "moeda"));
+		placar.adicionar(new Pontuacao("maria",   2, "curtida"));
 		
 		var chamadasEsperadas = new ArrayList<>(
 			Arrays.asList("guerra 10 estrela", 
 						  "guerra 5 estrela",
+						  "guerra 2 estrela",
 						  "guerra 2 moeda",
 						  "marco 1 estrela", 
 						  "marco 9 moeda",
@@ -70,11 +72,6 @@ public class PlacarTest {
 		mockArmazenamento.verificaChamadasGuardarPontuacao(chamadasEsperadas);
 	}
 	
-	@Test(expected = PontuacaoInvalidaException.class )
-	public void adicionarPontuacaoInvalida() {
-		mockArmazenamento.simulePontuacaoInvalida();
-		placar.adicionarPontuacao("SIMULACAO", 0, "SIMULACAO");
-	}
 	
 	@Test
 	public void usuarioSemPontuacoes() {
@@ -84,15 +81,15 @@ public class PlacarTest {
 	
 	@Test
 	public void pontuacoesDeUsuarioComUmTipoDePonto() {
-		guerraPontuacoes.put("estrela",   1);
+		guerraPontuacoes.put("estrela", 1);
 		assertEquals(guerraPontuacoes, placar.pontuacoes("guerra"));
 	}
 	
 	@Test
 	public void pontuacoesDeUsuarioComMultiplosTiposDePontos() {
-		guerraPontuacoes.put("estrela",   1);
-		guerraPontuacoes.put("moeda",     1);
-		guerraPontuacoes.put("curtida",   1);
+		guerraPontuacoes.put("estrela", 1);
+		guerraPontuacoes.put("moeda",   1);
+		guerraPontuacoes.put("curtida", 1);
 
 		assertEquals(guerraPontuacoes, placar.pontuacoes("guerra"));
 	}

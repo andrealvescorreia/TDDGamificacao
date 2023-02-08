@@ -9,14 +9,12 @@ public class MockArmazenamento implements Armazenamento {
 	
 	private HashMap<String, HashMap<String, Integer>> _pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
 	private ArrayList<String> _chamadasRecebidasParaGuardarPontuacao = new ArrayList<String>();
-	private boolean _simulacaoPontuacaoInvalida;
+	
 	
 	
 	@Override
-	public void guardarPontuacao(String usuario, long pontos, String tipo) throws PontuacaoInvalidaException {
-		if(_simulacaoPontuacaoInvalida) 
-			throw new PontuacaoInvalidaException("Simulação do mock de pontuacao invalida");
-		_chamadasRecebidasParaGuardarPontuacao.add(usuario + " " + pontos + " " + tipo);
+	public void guardar(Pontuacao pontuacao){
+		_chamadasRecebidasParaGuardarPontuacao.add(pontuacao.getUsuario() + " " + pontuacao.getPontos() + " " + pontuacao.getTipo());
 	}
 	
 	@Override
@@ -47,9 +45,7 @@ public class MockArmazenamento implements Armazenamento {
 	public void verificaChamadasGuardarPontuacao(ArrayList<String> chamadasEsperadas) {
 		assertEquals(chamadasEsperadas, _chamadasRecebidasParaGuardarPontuacao);
 	}
-	public void simulePontuacaoInvalida() {
-		_simulacaoPontuacaoInvalida = true;
-	}
+
 	//                          <usuario (ex:"guerra"), <tipo (ex:"moeda"), pontos (ex: 2)>>
 	public void setPontuacoesUsuarios(HashMap<String, HashMap<String, Integer>> pontuacoesDoUsuario) {
 		this._pontuacoesUsuarios = pontuacoesDoUsuario;
