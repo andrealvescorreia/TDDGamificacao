@@ -7,14 +7,22 @@ import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class MockArmazenamento implements Armazenamento {
 	
-	private HashMap<String, HashMap<String, Integer>> _pontuacoesUsuarios = new HashMap<String, HashMap<String, Integer>>();
+	private HashMap<String, HashMap<String, Integer>> _pontuacoesUsuarios;
 	private ArrayList<String> _chamadasRecebidasParaGuardarPontuacao = new ArrayList<String>();
 	
-	
+	public void setPontuacoesUsuarios(HashMap<String, HashMap<String, Integer>> pontuacoesUsuarios) {
+		this._pontuacoesUsuarios = pontuacoesUsuarios;
+	}
 	
 	@Override
 	public void guardar(Pontuacao pontuacao){
-		_chamadasRecebidasParaGuardarPontuacao.add(pontuacao.getUsuario() + " " + pontuacao.getPontos() + " " + pontuacao.getTipo());
+		_chamadasRecebidasParaGuardarPontuacao.add(
+				pontuacao.getUsuario() + " " + pontuacao.getPontos() + " " + pontuacao.getTipo()
+		);
+	}
+	
+	public void verificaChamadasGuardarPontuacao(ArrayList<String> chamadasEsperadas) {
+		assertEquals(chamadasEsperadas, _chamadasRecebidasParaGuardarPontuacao);
 	}
 	
 	@Override
@@ -40,14 +48,5 @@ public class MockArmazenamento implements Armazenamento {
 		for (String tipo : pontuacoesDoUsuario.keySet())
 			tiposDePontoDoUsuario.add(tipo);
 		return tiposDePontoDoUsuario;
-	}
-	
-	public void verificaChamadasGuardarPontuacao(ArrayList<String> chamadasEsperadas) {
-		assertEquals(chamadasEsperadas, _chamadasRecebidasParaGuardarPontuacao);
-	}
-
-	//                          <usuario (ex:"guerra"), <tipo (ex:"moeda"), pontos (ex: 2)>>
-	public void setPontuacoesUsuarios(HashMap<String, HashMap<String, Integer>> pontuacoesDoUsuario) {
-		this._pontuacoesUsuarios = pontuacoesDoUsuario;
 	}
 }
