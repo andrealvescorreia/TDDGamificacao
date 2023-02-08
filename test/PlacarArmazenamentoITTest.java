@@ -1,3 +1,5 @@
+// TESTE DE INTEGRACAO ENTRE PLACAR E ARMAZENAMENTO.
+
 import static org.junit.Assert.*;
 
 import java.io.FileWriter;
@@ -50,10 +52,12 @@ public class PlacarArmazenamentoITTest {
 		placar.adicionar(new Pontuacao("guerra", 15, "curtida"));
 		placar.adicionar(new Pontuacao("guerra",  2, "comentario"));
 		placar.adicionar(new Pontuacao("guerra",  3, "comentario"));
+		
 		var guerraPontuacoesEsperadas = new HashMap<String, Integer>();
 		guerraPontuacoesEsperadas.put("estrela",   55);
 		guerraPontuacoesEsperadas.put("curtida",   15);
 		guerraPontuacoesEsperadas.put("comentario", 5);
+		
 		assertEquals(guerraPontuacoesEsperadas, placar.pontuacoes("guerra"));
 	}
 	
@@ -93,7 +97,7 @@ public class PlacarArmazenamentoITTest {
 		assertEquals("tadeu 12",  rankingCurtida.get(0));// 1°
 		assertEquals("marco 11",  rankingCurtida.get(1));// 2°
 		
-		var rankingMoeda   = placar.ranking("moeda");
+		var rankingMoeda = placar.ranking("moeda");
 		assertEquals( 3, 		  rankingMoeda.size());
 		assertEquals("maria 37",  rankingMoeda.get(0));// 1°
 		assertEquals("marco 10",  rankingMoeda.get(1));// 2°
