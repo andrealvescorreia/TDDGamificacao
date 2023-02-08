@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-import pontuacao.excecoes.PontuacaoInvalidaException;
 
 public class MockArmazenamento implements Armazenamento {
 	
